@@ -1,0 +1,254 @@
+:root {
+    --light-primary: #8981d8;
+    --dark-primary: #8965DC;
+}
+.mt-40 {
+    margin-top: 40px;
+}
+.mb-40 {
+    margin-bottom: 40px;
+}
+.mt-50 {
+    margin-top: 50px;
+}
+.mt-20 {
+    margin-top: 20px;
+}
+.mb-20 {
+    margin-bottom: 20px;
+}
+/* HEADER */
+h1.text-logo {
+    color:#fff;
+    margin-bottom: 0px;
+}
+/* END HEADER */
+
+/* BREADCRUMBS */
+.breadcrumbs {
+    margin-bottom: 30px;
+}
+.breadcrumbs-no-mb {
+    margin-bottom: 0px;
+}
+.breadcrumbs-content {
+    padding: 20px 20px;
+    background: #fff;
+}
+.breadcrumbs-link {
+    text-align: right;
+}
+.breadcrumbs-link a, .breadcrumbs-link i{
+    color: #333;
+}
+.breadcrumbs-link a:hover {
+    color: var(--light-primary);
+}
+.breadcrumbs-link b {
+    color: var(--dark-primary);
+} 
+.header-btn button {
+    width: 100%;
+    margin: 10px auto;
+    padding: 10px;
+}
+.header-btn-adminutil {
+    text-align:right;
+    margin-top:10px;
+}
+.header-btn-adminutil a button {
+    padding: 10px 20px;
+}
+/* END BREADCRUMBS */
+/* FORM/FIELDS */
+.datepicker-days .table-condensed thead tr {
+    background: var(--dark-primary);
+    color: #fff;
+}
+.datepicker-days .table-condensed thead tr:last-child {
+    background: var(--light-primary);
+    height: 40px;
+}
+.bootstrap-select.btn-group .dropdown-menu {
+    top: 93%;
+}
+.bootstrap-select .dropdown-toggle:focus {
+    outline: none !important;
+    outline-offset: 0;
+    border-bottom: 1px solid #8981d8;
+}
+.btn-light {
+    color: #fff;
+    background-color: #b6bfe3;
+    border-color: #b6bfe3;
+}
+.btn-light:hover {
+    color: #fff;
+    background-color: var(--light-primary);
+    border-color: var(--light-primary);
+}
+.btn-primary {
+    color: #fff;
+    background-color: var(--dark-primary);
+    border-color: var(--dark-primary);
+   
+}
+.form-btn .btn-primary, .form-btn .btn-light{
+    padding: 10px 40px;
+}
+
+.btn-primary:hover {
+    color: #fff;
+    background-color: var(--light-primary);
+    border-color: var(--light-primary);
+}
+
+/* TABLE */
+table.dataTable.no-footer {
+    border-bottom: none;
+}
+/* END TABLE */
+
+/* SECTION */
+.section-content {
+    background:#fff;
+    padding:20px;
+}
+/* END SECTION */
+h3.title {
+    position: relative;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+}
+h4.title-header {
+    position: relative;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+    width: fit-content;
+}
+h4.title-header::after {
+    content: "";
+    width: 100%;
+    height: .2em;
+    background: #8981d8;
+    position: absolute;
+    top: 20px;
+    left: 0;
+    margin: 0 auto;
+}
+.divider-left {
+    border-right: 1px solid #c8c8c8;
+}
+.empty-div {
+    height: 45px;
+}
+
+@media(max-width:767px) {
+    .divider-left {
+        border-right: none;
+    }
+    .empty-div {
+        height: 0px;
+    }
+
+}
+
+@media (min-width:768px) and (max-width:991px) {
+    .title-header-md {
+        margin-bottom: 45px !important;
+    }
+    .empty-div {
+        height: 65px;
+    }
+    h4.title-header::after {
+        display: none;
+    }
+    
+}
+
+.form-btn{
+    /* width: 15%; */
+    margin: 10px auto;
+    padding: 10px 40px ;}
+.form-cancel-btn{
+    background-color:#8981d8 ;
+    /* border:3px solid #8981d8 */
+}
+
+
+
+/* TABS */
+.nav-tabs {
+    border-bottom: none;
+}
+ul.nav.nav-tabs.order-tabs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+ul.order-tabs li {
+    margin: 10px 5px;
+    padding: 5px;
+    /* border: 2px solid var(--dark-primary); */
+}
+ul.order-tabs li a {
+    font-size: 15px;
+    color: var(--dark-primary) !important;
+}
+ul.order-tabs li.active, .order-tabs li.active a, .order-tabs li.active a:focus, .order-tabs li.active a:hover{ 
+    background: var(--dark-primary) !important;
+}
+.order-tabs li:focus, .order-tabs li:hover{ 
+    background: var(--dark-primary) !important;
+}
+.order-tabs li a:focus, .order-tabs li a:hover {
+    background-color: transparent !important;
+}
+ul.order-tabs li.active a, .order-tabs li:focus a, .order-tabs li:hover a{
+    color: #fff !important;
+}
+.order-tabs:not([data-tab-color]) li a:after {
+    background:transparent !important;
+}
+
+/* JOB DETAILS */
+.job-details-field {
+    border: 1px solid #cdcdcd;
+    padding: 30px 20px 20px 20px;
+    border-radius: 5px;
+}
+
+/* END JOB DETAILS */
+
+/* DOCUMENT */
+.document-field {
+    border: 1px solid #cdcdcd;
+    padding: 30px 20px 20px 20px;
+    border-radius: 5px;
+}
+
+/* END DOCUMENT */
+
+/* LOGIN */
+.login-title {
+    color:#fff;
+    font-size:40px;
+}
+.login-desc {
+    color:#fff;
+}
+.error-login {
+    color:red;
+    margin-bottom:20px;
+}
+/* END LOGIN */
+
+/* CONTACT */
+.contact-content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height:100vh;
+    text-align:center;
+    background-color:#8981d8;
+}
