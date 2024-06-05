@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('account_postings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained();
-            $table->foreignId('payment_type_id')->constrained();
-            $table->float('payment', 10, 2);
+            $table->foreignId('payment_type_id')->nullable()->constrained();
+            $table->float('payment', 10, 2)->nullable();
             $table->foreignId('account_type_id')->constrained();
-            $table->string('invoice_number');
-            $table->float('debit', 10, 2);
-            $table->float('credit', 10, 2);
+            $table->string('invoice_number')->nullable();
+            $table->float('debit', 10, 2)->nullable();
+            $table->float('credit', 10, 2)->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users');
             $table->foreignId('updated_by')->nullable()->constrained('users');
             $table->foreignId('deleted_by')->nullable()->constrained('users');
