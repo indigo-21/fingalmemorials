@@ -37,6 +37,11 @@ Route::group(['middleware'=> 'auth'], function(){
 	Route::get('/order/create/{tab?}', [OrderController::class, 'create']);
 	Route::match(['put', 'post'], 'order/create/modifyGeneralDetails', [OrderController::class, 'modifyGeneralDetails']);
 	Route::match(['put', 'post'], 'order/create/modifyJobDetails', [OrderController::class, 'modifyJobDetails']);
+	Route::match(['put', 'post'], 'order/create/modifyInscriptionDetails', [OrderController::class, 'modifyInscriptionDetails']);
+	Route::match(['put', 'post'], 'order/create/getInscriptionData', [OrderController::class, 'getInscriptionData']);
+	Route::match(['post', 'put'], 'order/create/modifyAccountPosting', [OrderController::class, 'modifyAccountPosting']);
+	Route::match(['post', 'put'], 'order/create/modifyDocument', [OrderController::class, 'modifyDocument']);
+	
 	Route::get('/order/edit/{tab?}/{order_id?}', [OrderController::class, 'edit']);
 	// Route::get('/',[UserController::class, 'index']);
 	
