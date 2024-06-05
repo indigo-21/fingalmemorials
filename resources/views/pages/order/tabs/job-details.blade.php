@@ -7,15 +7,15 @@
                 <div class="col-12 col-md-3">
                     <div class="nk-int-st mb-20">
                         <label>Details of work</label>
-                        <input type="text" class="form-control" placeholder="Details of work" id="test"
-                                name="details_of_work" value="fample">
+                        <input type="text" class="form-control" placeholder="Details of work"
+                                name="details_of_work" value="">
                     </div>
-                    <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;" name="analysis_id">
+                    <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;" >
                         <label>Analysis:</label>
-                        <select class="selectpicker">
+                        <select class="selectpicker" name="analysis_id">
                             <option selected disabled>- Analysis</option>
                             @foreach($analyses as $analysis)
-                                <option value="{{$analysis->id}}">{{$analysis->code}}</option>
+                                <option class="option-analysis" value="{{$analysis->id}}">{{$analysis->code}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -26,9 +26,9 @@
                         <label>Gross</label>
                         <input type="text" class="form-control" placeholder="Gross" name="gross">
                     </div>
-                    <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;" name="vat_code_id">
+                    <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;" >
                         <label>VC:</label>
-                        <select class="selectpicker">
+                        <select class="selectpicker" name="vat_code_id">
                             <option disabled selected>- Vat Code</option>
                             @foreach($vatCodes as $vatCode)
                                 <option value="{{$vatCode->id}}">{{$vatCode->vat_description}}</option>
@@ -82,18 +82,18 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody class="job-details-body">>
+                        <tbody class="job-details-body" orderid="{{$order->id}}">
                             @if(count($jobDetails) > 0)
                                 @foreach($jobDetails as $jobDetail)
-                                    <tr class="job-details-row">
-                                        <td>{{$loop->index + 1 }}</td>
-                                        <td>{{$jobDetail->details_of_work}}</td>
-                                        <td>{{$jobDetail->net}}</td>
-                                        <td>{{$jobDetail->vatCode->vat_description}}</td>
-                                        <td>{{$jobDetail->analysis->description}}</td>
-                                        <td>{{$jobDetail->discount}}</td>
-                                        <td>{{$jobDetail->vat}}</td>
-                                        <td>{{$jobDetail->gross}}</td>
+                                    <tr class="job-details-row job-details-row-{{$jobDetail->id}}">
+                                        <td class="">{{$loop->index + 1 }}</td>
+                                        <td class="details_of_work">{{$jobDetail->details_of_work}}</td>
+                                        <td class="net">{{$jobDetail->net}}</td>
+                                        <td class="vat_code_id" id="{{$jobDetail->vat_code_id}}">{{$jobDetail->vatCode->vat_description}}</td>
+                                        <td class="analysis_id" id="{{$jobDetail->analysis_id}}">{{$jobDetail->analysis->description}}</td>
+                                        <td class="discount">{{$jobDetail->discount}}</td>
+                                        <td class="vat">{{$jobDetail->vat}}</td>
+                                        <td class="gross">{{$jobDetail->gross}}</td>
                                         <td class="popover-cl-pro">
                                             <button class="btn btn-primary edit-job-detail" data-trigger="hover" 
                                                     data-toggle="popover" data-placement="bottom" 

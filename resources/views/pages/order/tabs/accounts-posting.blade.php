@@ -1,113 +1,105 @@
 @extends ('pages.order.form')
 @section('tab-accounts-posting')
-    <div>
+    <div id="account-posting-container" orderid="{{$order->id}}">
         <div class="row mt-40 mb-40">
             <h3 class="title text-center">Accounts Posting</h3>
             <div class="col-12 col-md-4">
                 <div class="chosen-select-act fm-cmp-mg mb-40">
                     <label>Type</label>
-                    <select class="chosen" data-placeholder="Choose a Country...">
-                        <option value="United States">Payments</option>
-                        <option value="United Kingdom">Refunds</option>
-                        <option value="Afghanistan">Invoices</option>
-                        <option value="Aland Islands">Credits</option>
-                        <option value="Aland Islands">Additional</option>
+                    <select class="chosen" id="payment_type" name="account_type_id">
+                        @foreach($accountTypes as $accountType)
+                            <option value="{{$accountType->id}}" code="{{strtolower($accountType->code)}}">{{$accountType->name}}</option>
+                        @endforeach
                     </select>
                 </div>
-                <div id="type-payment">
+                <div class="tab-form-content" id="tab-form-content-1">
                     <h4 class="title-header title-header-md">Payment Details</h4>
                     <div class="nk-datapk-ctm form-elet-mg bv-20" id="data_1" style="margin-bottom:20px;">
                         <label>Date Payment Received</label>
                         <div class="input-group date nk-int-st">
                             <span class="input-group-addon"></span>
-                            <input type="text" class="form-control" value="03/19/2018">
+                            <input type="text" class="form-control" value="{{date('m/d/Y')}}" name="date_received">
                         </div>
                     </div>
                     <div class="chosen-select-act fm-cmp-mg mb-20">
                         <label>Payment Type</label>
-                        <select class="chosen" data-placeholder="Choose a Country...">
-                            <option value="United States">United States</option>
-                            <option value="United Kingdom">United Kingdom</option>
-                            <option value="Afghanistan">Afghanistan</option>
-                            <option value="Aland Islands">Aland Islands</option>
-                            <option value="Albania">Albania</option>
-                            <option value="Algeria">Algeria</option>
-                            <option value="American Samoa">American Samoa</option>
+                        <select class="chosen payment-type" data-placeholder="Choose a Payment Type..." name="payment_type_id">
+                            <option disabled selected>- Select Payment Type</option>
+                            @foreach($paymentTypes as $paymentType)
+                                <option value="{{$paymentType->id}}" reason="Deposit paid by {{$paymentType->name}}">{{$paymentType->name}}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="nk-int-st mb-20">
                         <label>Reason</label>
-                        <input type="text" class="form-control" placeholder="Reason">
+                        <input type="text" class="form-control" placeholder="Reason" disabled name="reason">
                     </div>
                     <div class="nk-int-st" style="margin-bottom:20px;">
                         <label>Payment</label>
-                        <input type="text" class="form-control" placeholder="Payment">
+                        <input type="text" class="form-control" placeholder="Payment" name="payment">
                     </div>
                     <div class="row mt-20">
                         <div class="col-md-12 text-center">
                             <div class="form-btn">
-                                <button class="btn btn-light btn-icon-notika waves-effect">Cancel</button>
-                                <button class="btn btn-primary btn-icon-notika waves-effect">Add</button>
+                                <button class="btn btn-light btn-icon-notika waves-effect cancel-account-posting" type="button">Cancel</button>
+                                <button class="btn btn-primary btn-icon-notika waves-effect add-account-posting" orderid="{{$order->id}}" type="button">Add</button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="type-refund">
+                <div class="tab-form-content" id="tab-form-content-2" style="display:none;">
                     <h4 class="title-header title-header-md">Refund Details</h4>
                     <div class="nk-datapk-ctm form-elet-mg bv-20" id="data_1" style="margin-bottom:20px;">
                         <label>Date of Refund</label>
                         <div class="input-group date nk-int-st">
                             <span class="input-group-addon"></span>
-                            <input type="text" class="form-control" value="03/19/2018">
+                            <input type="text" class="form-control" value="{{date('m/d/Y')}}" name="date_received">
                         </div>
                     </div>
                     <div class="chosen-select-act fm-cmp-mg mb-20">
                         <label>Payment Type</label>
-                        <select class="chosen" data-placeholder="Choose a Country...">
-                            <option value="United States">United States</option>
-                            <option value="United Kingdom">United Kingdom</option>
-                            <option value="Afghanistan">Afghanistan</option>
-                            <option value="Aland Islands">Aland Islands</option>
-                            <option value="Albania">Albania</option>
-                            <option value="Algeria">Algeria</option>
-                            <option value="American Samoa">American Samoa</option>
+                        <select class="chosen payment-type" data-placeholder="Choose a Country..." name="payment_type_id">
+                            <option disabled selected>- Select Payment Type</option>
+                            @foreach($paymentTypes as $paymentType)
+                                <option value="{{$paymentType->id}}" reason="Deposit paid by {{$paymentType->name}}">{{$paymentType->name}}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="nk-int-st mb-20">
                         <label>Reason</label>
-                        <input type="text" class="form-control" placeholder="Reason">
+                        <input type="text" class="form-control" placeholder="Reason" disabled name="reason">
                     </div>
                     <div class="nk-int-st" style="margin-bottom:20px;">
                         <label>Payment</label>
-                        <input type="text" class="form-control" placeholder="Payment">
+                        <input type="text" class="form-control" placeholder="Payment" name="payment">
                     </div>
                     <div class="row mt-20">
                         <div class="col-md-12 text-center">
                             <div class="form-btn">
-                                <button class="btn btn-light btn-icon-notika waves-effect">Cancel</button>
-                                <button class="btn btn-primary btn-icon-notika waves-effect">Add</button>
+                                <button class="btn btn-light btn-icon-notika waves-effect cancel-account-posting" type="button">Cancel</button>
+                                <button class="btn btn-primary btn-icon-notika waves-effect add-account-posting" orderid="{{$order->id}}" type="button">Add</button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="type-invoice">
+                <div class="tab-form-content" id="tab-form-content-3" style="display:none;">
                     <h4 class="title-header title-header-md">Invoice Details</h4>
                     <div class="nk-datapk-ctm form-elet-mg bv-20" id="data_1" style="margin-bottom:20px;">
                         <label>Date of the Invoice</label>
                         <div class="input-group date nk-int-st">
                             <span class="input-group-addon"></span>
-                            <input type="text" class="form-control" value="03/19/2018">
+                            <input type="text" class="form-control" value="{{date('m/d/Y')}}" name="date_received">
                         </div>
                     </div>
                     <div class="nk-int-st mb-20">
-                        <label>Invoice to</label>
-                        <input type="text" class="form-control" placeholder="Reason">
+                        <label>Invoice To</label>
+                        <input type="text" class="form-control" disabled placeholder="Reason" name="invoice_to" value="{{$customer->title->name}} {{$customer->firstname}} {{$customer->middlename}} {{$customer->surname}}">
                     </div>
                     <div class="row mt-20">
                         <div class="col-md-12 text-center">
                             <div class="form-btn">
-                                <button class="btn btn-light btn-icon-notika waves-effect">Cancel</button>
-                                <button class="btn btn-primary btn-icon-notika waves-effect">Add</button>
+                                <button class="btn btn-light btn-icon-notika waves-effect cancel-account-posting" type="button">Cancel</button>
+                                <button class="btn btn-primary btn-icon-notika waves-effect add-account-posting" orderid="{{$order->id}}" type="button">Add</button>
                             </div>
                         </div>
                     </div>
@@ -129,22 +121,37 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Renovation</td>
-                                    <td>234.43</td>
-                                    <td>T1</td>
-                                    <td>Renovation</td>
-                                    <td>0</td>
-                                    <td class="popover-cl-pro">
-                                        <button class="btn btn-primary" data-trigger="hover" data-toggle="popover"
-                                            data-placement="bottom" data-content="Edit"><i
-                                                class="fa fa-pencil"></i></button>
-                                        <button class="btn btn-primary" data-trigger="hover" data-toggle="popover"
-                                            data-placement="bottom" data-content="Print"><i
-                                                class="fa fa-print"></i></button>
-                                    </td>
-                                </tr>
+                                @foreach($accountPostings as $accountPosting)
+                                    <tr>
+                                        <td>{{$loop->index + 1 }}</td>
+                                        <td>{{$accountPosting->account_type->code}}</td>
+                                        <td>{{$accountPosting->invoice_number ? $accountPosting->invoice_number : "0"}}</td>
+                                        <td>
+                                            @if(isset($accountPosting->payment_type->name))
+                                                <span class="reason">Deposit paid by {{$accountPosting->payment_type->name}}<span>
+                                            @else
+                                                
+                                            @endif
+                                        </td>
+                                        <td>{{$accountPosting->debit}}</td>
+                                        <td>{{$accountPosting->credit}}</td>
+                                        <td class="popover-cl-pro">
+                                            <button class="btn btn-primary edit-account-posting" data-trigger="hover" data-toggle="popover"
+                                                    orderid="{{$accountPosting->order_id}}" 
+                                                    accountpostingid="{{$accountPosting->account_type->id}}"
+                                                    accounttypeid="{{$accountPosting->account_type_id}}"
+                                                    datereceived="{{ date('m/d/Y', strtotime($accountPosting->created_at)) }}"
+                                                    paymenttypeid="{{$accountPosting->payment_type_id}}"
+                                                    payment="{{$accountPosting->payment}}"
+                                            
+                                                data-placement="bottom" data-content="Edit"><i
+                                                    class="fa fa-pencil"></i></button>
+                                            <button class="btn btn-primary" data-trigger="hover" data-toggle="popover"
+                                                data-placement="bottom" data-content="Print"><i
+                                                    class="fa fa-print"></i></button>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -152,4 +159,9 @@
             </div>
         </div>
     </div>
+@endsection
+
+
+@section('page-scripts')
+    <script src="{{ asset('js/tabs/accounting-posting.js') }}"></script>
 @endsection

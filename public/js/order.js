@@ -1,3 +1,5 @@
+const  SYSTEM_URL = $("body").attr("url");
+
 $(document).on("change","#input-cemetery",function(){
     let area = $(this).find(":selected").attr("area");
     $("#cemetery_area").val(area);
@@ -97,7 +99,6 @@ $(document).on("click",".edit-submit",function(){
         data,
         url: "/order/create/modifyGeneralDetails",
         success:function(data){
-            alert(data);
             let order_id  = data;
 
             Swal.fire({

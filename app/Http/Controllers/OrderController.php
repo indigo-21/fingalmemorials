@@ -16,6 +16,13 @@ use App\Models\JobDetail;
 use App\Models\VatCode;
 use App\Models\Analysis;
 use App\Models\AccountPosting;
+use App\Models\Inscription;
+use App\Models\AccountType;
+use App\Models\PaymentType;
+use App\Models\DocumentType;
+use App\Models\Document;
+
+
 use Auth;
 
 
@@ -177,6 +184,18 @@ class OrderController extends Controller
         $analyses       = Analysis::All();
         $vatCodes       = VatCode::All();
 
+
+        // ACCOUNT POSTING DATA
+        $accountTypes       = AccountType::All();
+        $paymentTypes       = PaymentType::All();
+        $accountPostings    = AccountPosting::where("order_id",$order_id)->get();
+
+
+        // DOCUMENT DATA
+        $documentTypes  = DocumentType::All();
+        $documents      = Document::where("order_id", $order_id)->get();
+
+        
         switch ($tab) {
             case 'general-details':
                 return view($url)
@@ -211,7 +230,8 @@ class OrderController extends Controller
                     ->withOrderTypes($orderTypes)
                     ->withBranches($branches)
                     ->withOrder($order)
-                    ->withCustomer($customer);
+                    ->withCustomer($customer)
+                    ->withOrder($order);
                 break;
             case 'accounts-posting':
                 return view($url)
@@ -220,7 +240,10 @@ class OrderController extends Controller
                     ->withOrderTypes($orderTypes)
                     ->withBranches($branches)
                     ->withOrder($order)
-                    ->withCustomer($customer);
+                    ->withCustomer($customer)
+                    ->withAccountTypes($accountTypes)
+                    ->withPaymentTypes($paymentTypes)
+                    ->withAccountPostings($accountPostings);
                 break;
             case 'document':
                 return view($url)
@@ -229,7 +252,9 @@ class OrderController extends Controller
                     ->withOrderTypes($orderTypes)
                     ->withBranches($branches)
                     ->withOrder($order)
-                    ->withCustomer($customer);
+                    ->withCustomer($customer)
+                    ->withDocumentTypes($documentTypes)
+                    ->withDocuments($documents);
                 break;
             default:
                 break;
@@ -319,9 +344,8 @@ class OrderController extends Controller
 
     }
 
-    // CONTROLLER OF `modifyCustomer` AND `modifyOrder` FUNCTION
+    // CONTROLLER FOR `modifyCustomer` AND `modifyOrder` FUNCTION
     public function modifyGeneralDetails(Request $request){
-        // dd($request->isMethod('put'));
         $order_id       = isset($request->order_id) ? $request->order_id : false;
         $customer_id    = isset($request->customer_id) ? $request->customer_id : false;
 
@@ -335,7 +359,7 @@ class OrderController extends Controller
        return response()->json($orderID);
     }
 
-
+    // THIS METHOD IS FOR JOB DETAILS SECTION
     public function modifyJobDetails(Request $request){
 
         $isInsert       = $request->job_detail_id ? false : true;
@@ -369,18 +393,139 @@ class OrderController extends Controller
         $result     = JobDetail::find($job_id);
 
         $data   = [
-            "job_detail_id"     => $result->id,
-            "details_of_work"   => $result->details_of_work,
-            "net"               => $result->net,
-            "vat_code_id"       => $result->vatCode->vat_description,
-            "analysis_id"       => $result->analysis->description,
-            "discount"          => $result->discount,
-            "vat"               => $result->vat,
-            "gross"             => $result->gross,
+            "job_detail_id"         => $result->id,
+            "details_of_work"       => $result->details_of_work,
+            "net"                   => $result->net,
+            "vat_code_id"           => $result->vat_code_id,
+            "analysis_id"           => $result->analysis_id,
+            "vat_code_description"  => $result->vatCode->vat_description,
+            "analysis_description"  => $result->analysis->description,
+            "discount"              => $result->discount,
+            "vat"                   => $result->vat,
+            "gross"                 => $result->gross,
         ];
 
         return response()->json($data);
 
     }
+
+
+    // THIS METHOD IS FOR INSCRIPTION SECTION
+    public function getInscriptionData(Request $request){
+        $order_id   = $request->order_id;
+        $result     = Inscription::where("order_id", $order_id)->get();
+        
+        return response()->json($result);
+    }
+
+    public function modifyInscriptionDetails(Request $request){
+      
+        $isInsert           = $request->inscription_detail_id ? false : true;
+        
+        $inscriptionData    = $isInsert ? new Inscription : Inscription::find($request->inscription_detail_id);
+        
+        $inscriptionData->order_id              = $request->order_id;
+        $inscriptionData->inscription_details   = $request->inscription_details;
+
+        if($isInsert){
+            $inscriptionData->created_by = Auth::id();
+        }else{
+            $inscriptionData->updated_by = Auth::id();
+        }
+        
+        $inscriptionData->save();
+
+        $inscription_id = $isInsert ? $inscriptionData->id : $request->inscription_detail_id;
+        $result         = Inscription::find($inscription_id);
+
+        $data = [
+            "inscription_id"        => $inscription_id,
+            "order_id"              => $result->order_id,
+            "inscription_details"   => $result->inscription_details 
+        ];
+
+        return response()->json($data);
+    }
+
+
+    // THIS METHOD IS FOR ACCOUNT POSTING SECTION
+    public function modifyAccountPosting(Request $request){
+        $isInsert           = $request->account_posting_id ? false : true;
+        
+        $accountPostingData = $isInsert ? new AccountPosting : AccountPosting::find($request->account_posting_id);
+        
+        $accountPostingData->order_id           = $request->order_id;
+        $accountPostingData->payment_type_id    = $request->payment_type_id;
+        $accountPostingData->payment            = $request->payment;
+        
+        if($request->account_type_id != "3"){
+            // PAYMENT = CREDIT
+            $accountPostingData->credit          = $request->payment; 
+        }else{
+             // INVOICE = DEBIT
+            $accountPostingData->debit         = $request->payment; 
+        }
+        $accountPostingData->account_type_id    = $request->account_type_id;
+
+        if($request->invoice_to){
+            $getInvoice     = AccountPosting::whereNotNull('invoice_number')->orderBy("id","desc")->first();
+
+            $lastInvoice    = floatval($getInvoice ? $getInvoice->invoice_number : "0") + 1;
+
+            $accountPostingData->invoice_number     = $lastInvoice; 
+        }
+
+        $accountPostingData->created_at    = date('Y-m-d H:i:s', strtotime($request->date_received));
+
+        if($isInsert){
+            $accountPostingData->created_by = Auth::id();
+        }else{
+            $accountPostingData->updated_by = Auth::id();
+        }
+
+        $accountPostingData->save();
+
+        $inscription_id = $isInsert ? $accountPostingData->id : $request->account_posting_id;
+        $result         = AccountPosting::find($inscription_id);
+
+        return response()->json($result);
+        
+    }
+
+
+
+    // THIS METHOD IS FOR DOCUMENT SECTION
+    public function modifyDocument(Request $request){
+    
+        if($request->file('file')->isValid()){
+            $file           = $request->file("file");
+            $originalName   = $file->getClientOriginalName();
+            $extension      = $file->getClientOriginalExtension();
+            $filename       = pathinfo($originalName, PATHINFO_FILENAME);
+
+            $newName        = $filename.'_'.date("YmdHis").".".$extension;
+
+            $request->file->move(public_path('documents'), $newName);
+
+
+            $documentData   = new Document;
+
+            $documentData->order_id         = $request->order_id;
+            $documentData->document_type_id = $request->document_type_id;
+            $documentData->description      = $request->description;
+            $documentData->filename         = $newName;
+            $documentData->created_by       = Auth::id();
+
+            $documentData->save();
+
+            return response()->json($documentData->id);
+
+
+
+        }
+
+
+    }
+
 
 }
