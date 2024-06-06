@@ -10,7 +10,7 @@
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                             <p class="breadcrumbs-link"><a href="">Dashboard</a> / <b>
-                                    {{ isset($id) ? 'Update' : 'Create' }} Account Types </b></p>
+                                     Account Types </b></p>
                         </div>
                     </div>
 
@@ -38,7 +38,7 @@
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Code</label>
                                     <input type="text" name="code" class="form-control"
-                                        value="{{ isset($accountType) ? $accountType->code : old('code') }}" placeholder="Town">
+                                        value="{{ isset($accountType) ? $accountType->code : old('code') }}" placeholder="Code">
                                 </div>
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Name</label>
@@ -50,7 +50,7 @@
                         </div>
                         <div class="row mt-20">
                             <div class="col-md-12 text-center ">
-                                <a href="account-types"
+                                <a href="/account-types"
                                     class="btn btn-primary btn-icon-notika waves-effect form-btn form-cancel-btn ">
                                     Cancel</a>
                                 <button type="submit"

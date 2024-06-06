@@ -38,7 +38,7 @@
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Name</label>
                                     <input type="text" name="name" class="form-control"
-                                        value="{{ isset($documentType) ? $documentType->name : '' }}" placeholder="Town">
+                                        value="{{ isset($documentType) ? $documentType->name : '' }}" placeholder="Name">
                                 </div>
 
                             </div>

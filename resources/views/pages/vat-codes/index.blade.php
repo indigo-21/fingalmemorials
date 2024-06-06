@@ -5,58 +5,18 @@
             <div class="breadcrumbs-content">
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <h3>Analysis</h3>
+                        <h3>Vat Codes</h3>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <p class="breadcrumbs-link"><a href="">Dashboard</a> / <b>Analysis</b></p>
+                        <p class="breadcrumbs-link"><a href="">Dashboard</a> / <b>Vat Codes</b></p>
                     </div>
                 </div>
-                <form>
-                    <div class="row" style="margin-top:20px;">
-                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                            <div class="nk-int-mk sl-dp-mn">
-                                <h2>Search:</h2>
-                            </div>
-                            <div class="bootstrap-select fm-cmp-mg">
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <select class="selectpicker">
-                                            <option>Search Field</option>
-                                            <option>Code</option>
-                                            <option>Description</option>
-                                            <option>Nominal</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-8">
-                                        <div class="nk-int-st">
-                                            <input type="text" class="form-control" placeholder="Search">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <div class="row">
-                                <div>
-                                    <div class="col-lg-6">
-                                        <div class="header-btn">
-                                            <button class="btn btn-primary btn-icon-notika waves-effect"><i
-                                                    class="fa fa-search" aria-hidden="true"></i> SEARCH</button>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="header-btn">
-                                            <a href="/vat-codes/create"><button type="button"
-                                                    class="btn btn-primary btn-icon-notika waves-effect"><i
-                                                        class="fa fa-plus-circle" aria-hidden="true"></i>
-                                                    CREATE</button></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+                <div class="header-btn-adminutil">
+                    <a href="/vat-codes/create"><button type="button"
+                            class="btn btn-primary btn-icon-notika waves-effect"><i class="fa fa-plus-circle"
+                                aria-hidden="true"></i>
+                            CREATE</button></a>
+                </div>
             </div>
         </div>
     </div>

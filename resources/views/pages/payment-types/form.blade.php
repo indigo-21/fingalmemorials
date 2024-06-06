@@ -10,7 +10,7 @@
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                             <p class="breadcrumbs-link"><a href="">Dashboard</a> / <b>
-                                    {{ isset($id) ? 'Update' : 'Create' }} Payment Types </b></p>
+                                   Payment Types </b></p>
                         </div>
                     </div>
 
@@ -38,7 +38,7 @@
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Name</label>
                                     <input type="text" name="name" class="form-control"
-                                        value="{{ isset($paymentType) ? $paymentType->name : old('name') }}" placeholder="Town">
+                                        value="{{ isset($paymentType) ? $paymentType->name : old('name') }}" placeholder="Name">
                                 </div>
 
                             </div>

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Analysis extends Model
 {
@@ -19,4 +20,8 @@ class Analysis extends Model
         'updated_by',
         'deleted_by'
     ];
+
+    public function branch():BelongsTo{
+        return $this->belongsTo(Branch::class);
+    }
 }

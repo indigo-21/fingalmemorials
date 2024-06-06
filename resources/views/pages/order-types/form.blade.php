@@ -38,7 +38,7 @@
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Name</label>
                                     <input type="text" name="name" class="form-control"
-                                        value="{{ isset($orderType) ? $orderType->name : old('name') }}" placeholder="Town">
+                                        value="{{ isset($orderType) ? $orderType->name : old('name') }}" placeholder="Name">
                                 </div>
                                 <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;">
                                     <label>Access Level</label>

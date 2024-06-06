@@ -38,12 +38,12 @@
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Code</label>
                                     <input type="text" name="code" class="form-control"
-                                        value="{{ isset($category) ? $category->code : old('code') }}" placeholder="Town">
+                                        value="{{ isset($category) ? $category->code : old('code') }}" placeholder="Code">
                                 </div>
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Name</label>
                                     <input type="text" name="name" class="form-control"
-                                        value="{{ isset($category) ? $category->name : old('name') }}" placeholder="Town">
+                                        value="{{ isset($category) ? $category->name : old('name') }}" placeholder="Name">
                                 </div>
 
                             </div>

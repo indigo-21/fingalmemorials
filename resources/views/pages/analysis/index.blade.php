@@ -11,52 +11,11 @@
                         <p class="breadcrumbs-link"><a href="">Dashboard</a> / <b>Analysis</b></p>
                     </div>
                 </div>
-                <form>
-                    <div class="row" style="margin-top:20px;">
-                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                            <div class="nk-int-mk sl-dp-mn">
-                                <h2>Search:</h2>
-                            </div>
-                            <div class="bootstrap-select fm-cmp-mg">
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <select class="selectpicker">
-                                            <option>Search Field</option>
-                                            <option>Code</option>
-                                            <option>Description</option>
-                                            <option>Nominal</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-8">
-                                        <div class="nk-int-st">
-                                            <input type="text" class="form-control" placeholder="Search">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <div class="row">
-                                <div>
-                                    <div class="col-lg-6">
-                                        <div class="header-btn">
-                                            <button class="btn btn-primary btn-icon-notika waves-effect"><i
-                                                    class="fa fa-search" aria-hidden="true"></i> SEARCH</button>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="header-btn">
-                                            <a href="/analysis/create"><button type="button"
-                                                    class="btn btn-primary btn-icon-notika waves-effect"><i
-                                                        class="fa fa-plus-circle" aria-hidden="true"></i>
-                                                    CREATE</button></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+                <div class="header-btn-adminutil">
+                    <a href="/analysis/create"><button type="button" class="btn btn-primary btn-icon-notika waves-effect"><i
+                                class="fa fa-plus-circle" aria-hidden="true"></i>
+                            CREATE</button></a>
+                </div>                
             </div>
         </div>
     </div>
@@ -71,6 +30,7 @@
                                 <thead>
                                     <tr>
                                         <th>No.</th>
+                                        <th>Branch</th>
                                         <th>Code</th>
                                         <th>Description</th>
                                         <th>Nominal</th>
@@ -82,6 +42,7 @@
                                     @foreach ($analyses as $analysis)
                                         <tr>
                                             <td id="tr {{ $analysis->id }}">{{ $loop->iteration }}</td>
+                                            <td>{{ $analysis->branch->code }}</td>
                                             <td>{{ $analysis->code }}</td>
                                             <td>{{ $analysis->description }}</td>
                                             <td>{{ $analysis->nominal }}</td>

@@ -19,6 +19,7 @@ use App\Http\Controllers\CemeteryGroupController;
 use App\Http\Controllers\CemeteryAreaController;
 use App\Http\Controllers\SourceController;
 use App\Http\Controllers\TitleController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -127,6 +128,9 @@ Route::group(['middleware'=> 'auth'], function(){
 	Route::put('updateVatCodes/{id}',[VatCodeController::class,'update'])->name('updateVatCodes');
 	Route::delete('deleteVatCodes',[VatCodeController::class,'destroy'])->name('deleteVatCodes');
 
+		// Dashboard
+	Route::resource('dashboard',DashboardController::class);
+
 	
 	// Customer
 	Route::resource('customer', CustomerController::class);
@@ -142,9 +146,13 @@ Route::middleware('guest')->group(function(){
        return view("login");
     })->name("login");
    
-    Route::get("/forgot-password", function(){
-       return view("forgot-password");
-    });
+    Route::get("/forgot-password", function(){ return view("forgot-password");    });
+	Route::post("/requestNewPassword",[AuthController::class, 'requestNewPassword'])->name('requestNewPassword');
+	Route::get("/reset-password/{id}", [AuthController::class, 'resetPassword'])->name('resetPassword');
+	Route::get("/recoverPassword/{id}", [AuthController::class, 'recoverPassword'])->name('recoverPassword');
+
+	// Route::get("/requestPasswordTemplate", function(){ return view("emailTemplates.request-new-password" ); });
+	
     Route::get("/contact-us", function(){
        return view("contact");
     });

@@ -29,7 +29,7 @@ class AuthController extends Controller
 
             $user           = User::where('username', $request->username)->first();
 
-            return Redirect::intended('/order')
+            return Redirect::intended('/dashboard')
                         ->withSuccess('Signed in');
             
         }
@@ -43,24 +43,21 @@ class AuthController extends Controller
 
     public function requestNewPassword(Request $request){
 
-        $user     = User::where('email', $request->email)->first();
+        // $user     = User::where('email', $request->email)->first();
 
-        $email = $request->email;
-        $email_content = array(
-            'link' => 'https://dev-beautyguild.indigo21.com/resetPassword/' . $user->id
-        );
+        // $email = $request->email;
+        // $email_content = array(
+        //     'link' => 'https://dev-beautyguild.indigo21.com/resetPassword/' . $user->id
+        // );
 
-        // dd($email_content);
+        // Mail::send(('/emailTemplates.request-new-password'), $email_content,function($message) use ($email) {
+        //     $message->to($email, 'user_name')
+        //     ->subject('Request for Reset Password');
+        // });
+        return redirect('/');
 
-        Mail::send(('/emailTemplates.requestNewPassword'), $email_content,function($message) use ($email) {
-            $message->to($email, 'user_name')
-            ->subject('Request for Reset Password');
-        });
-
-        // return Response::json($email);
-        return redirect('/login');
-
-        // dd($user->id);
+        // dd($request->email);
+        
 
     }
 
@@ -75,8 +72,9 @@ class AuthController extends Controller
         $user     = User::where('id', $id)->first();
 
         // dd($user->email);
-        return view('pages.forgot_password.resetPassword')
-                ->withUser($user);
+        return view('reset-password')
+            ->with('id',$id)
+            ->withUser($user);
     }
 
     public function recoverPassword(String $id , Request $request){
