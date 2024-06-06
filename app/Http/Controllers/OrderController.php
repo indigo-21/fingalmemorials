@@ -21,6 +21,7 @@ use App\Models\AccountType;
 use App\Models\PaymentType;
 use App\Models\DocumentType;
 use App\Models\Document;
+use App\Models\PrintHistory;
 
 
 use Auth;
@@ -30,7 +31,8 @@ class OrderController extends Controller
 {
 
 
-    public function retriveData($tab = null, $order_id){
+    public function retriveData($tab = null, $order_id)
+    {
 
     }
 
@@ -57,6 +59,7 @@ class OrderController extends Controller
             'inscription-details',
             'accounts-posting',
             'document',
+            'print-history',
         ];
 
         $icons = [
@@ -65,18 +68,19 @@ class OrderController extends Controller
             'fa-text-height',
             'fa-calculator',
             'fa-file-o',
+            'fa-print',
         ];
 
         $url = 'pages.order.tabs.' . $tab;
 
-        $orderTypes     = OrderType::All();
-        $branches       = Branch::All();
-        $cemeteries     = Cemetery::All();
-        $sources        = Source::All();
-        $categories     = Category::All();
-        $graveSpaces    = GraveSpace::All();
-        $titles         = Title::All();
-    
+        $orderTypes = OrderType::All();
+        $branches = Branch::All();
+        $cemeteries = Cemetery::All();
+        $sources = Source::All();
+        $categories = Category::All();
+        $graveSpaces = GraveSpace::All();
+        $titles = Title::All();
+
 
         switch ($tab) {
             case 'general-details':
@@ -119,6 +123,10 @@ class OrderController extends Controller
                     ->withOrderTypes($orderTypes)
                     ->withBranches($branches);
                 break;
+            case 'print-history':
+                return view($url)
+                    ->withTabs($tabs);
+                break;
             default:
                 break;
         }
@@ -155,6 +163,7 @@ class OrderController extends Controller
             'inscription-details',
             'accounts-posting',
             'document',
+            'print-history',
         ];
 
         $icons = [
@@ -163,8 +172,9 @@ class OrderController extends Controller
             'fa-text-height',
             'fa-calculator',
             'fa-file-o',
+            'fa-print',
         ];
-        
+
         $url = 'pages.order.tabs.' . $tab;
 
         $order          = Order::findOrFail($order_id);
@@ -192,8 +202,12 @@ class OrderController extends Controller
 
 
         // DOCUMENT DATA
-        $documentTypes  = DocumentType::All();
-        $documents      = Document::where("order_id", $order_id)->get();
+        $documentTypes = DocumentType::All();
+        $documents = Document::where("order_id", $order_id)->get();
+
+        // PRINT HISTORY 
+        $printHistories = PrintHistory::All();
+
 
         
         switch ($tab) {
@@ -256,6 +270,17 @@ class OrderController extends Controller
                     ->withDocumentTypes($documentTypes)
                     ->withDocuments($documents);
                 break;
+            case 'print-history':
+                return view($url)
+                    ->withTabs($tabs)
+                    ->withIcons($icons)
+                    ->withOrderTypes($orderTypes)
+                    ->withBranches($branches)
+                    ->withOrder($order)
+                    ->withCustomer($customer)
+                    ->withOrder($order)
+                    ->withPrintHistories($printHistories);
+                break;
             default:
                 break;
         }
@@ -311,7 +336,8 @@ class OrderController extends Controller
     }
 
     // INSERT OR UPDATE IN `order` TABLE
-    public function modifyOrder($data, $customer_id, $order_id = false){
+    public function modifyOrder($data, $customer_id, $order_id = false)
+    {
         // Indenty the function what will be the action taken
         $isInsert                           = !$order_id ? true : false;
         $orderData                          = $isInsert ? new Order : Order::findOrFail($order_id);

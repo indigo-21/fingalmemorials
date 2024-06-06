@@ -106,7 +106,7 @@
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div class="widget-tabs-int">
                                             <div class="widget-tabs-list">
-                                                <ul class="nav nav-tabs">
+                                                <ul class="nav nav-tabs order-tabs" style="{{ Request::segment(2) === 'create' ? 'display:none;' : 'display:flex;'}}">
                                                     @foreach ($tabs as $key => $tab)
                                                         <li class="{{ $tab === Request::segment(3) ? 'active' : '' }} 
                                                                     @if($key != 0) 
@@ -159,6 +159,13 @@
                                                             role="tabpanel">
                                                             <div class="tab-ctn">
                                                                 @yield('tab-document')
+                                                            </div>
+                                                        </div>
+                                                        <div id="print-history"
+                                                            class="tab-pane fade in {{ 'print-history' === Request::segment(3) ? 'active' : '' }}"
+                                                            role="tabpanel">
+                                                            <div class="tab-ctn">
+                                                                @yield('tab-print-history')
                                                             </div>
                                                         </div>
                                                 </div>
