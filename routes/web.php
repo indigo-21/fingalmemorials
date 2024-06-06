@@ -52,6 +52,9 @@ Route::group(['middleware'=> 'auth'], function(){
 	Route::put('updateUser/{id}',[UserController::class, 'update'])->name('updateUser');
 	Route::delete('deleteUser',[UserController::class, 'destroy'])->name('deleteUser');
 	
+	Route::get('/edit-profile',[UserController::class, 'editProfile']);
+	Route::post('updateProfile/{id}',[UserController::class, 'updateProfile'])->name('updateProfile');
+	
 	Route::get('branches',[BranchController::class, 'index']);
 	Route::get('/branches/create',[BranchController::class, 'create']);
 	Route::get('/branches/edit/{id}',[BranchController::class, 'edit']);
