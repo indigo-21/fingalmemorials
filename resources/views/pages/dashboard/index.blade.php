@@ -37,8 +37,8 @@
                                 <thead>
                                     <tr>
                                         <th>Order No.</th>
-                                        <th>Date</th>
-                                        <th>Branch</th>
+                                        <th>Date Job Fixed</th>
+                                        <th>Cemetery</th>
                                         <th>Customer</th>
                                         <th>Value</th>
                                         <th>Balance</th>
@@ -51,11 +51,10 @@
                                                     href="{{ url('order/edit/general-details') }}/{{ $order->id }}">{{ $order->id }}</a>
                                             </td>
                                             <td>{{ date('m/d/Y', strtotime($order->created_at)) }}</td>
-                                            <td>{{ date('m/d/Y', strtotime($order->job_was_fixed_on)) }}</td>
-                                            <td>{{ $order->branch->name }}</td>
-                                            <td>{{ $order->orderType->name }}</td>
-                                            <td>{{ $order->customer->firstname }} {{ $order->customer->middlename }}
-                                                {{ $order->customer->surname }}</td>
+                                            <td>{{$order->cemetery->name }}</td>
+                                            <td>{{ $order->customer->firstname }} {{ $order->customer->surname }}</td>
+                                            <td></td>
+                                            <td></td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -78,7 +77,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($customers as $customer)
-                                        <tr>
+                           <tr>
                                             <td>{{ $customer->firstname }} {{ $customer->surname }}</td>
                                             <td class="text-right">{{ substr($customer->created_at,0,10) }}</td>
                                         </tr>
