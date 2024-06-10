@@ -218,20 +218,14 @@ ul.order-tabs li.active a, .order-tabs li:focus a, .order-tabs li:hover a{
 }
 
 /* JOB DETAILS */
-.job-details-field {
-    border: 1px solid #cdcdcd;
-    padding: 30px 20px 20px 20px;
-    border-radius: 5px;
+.vat-analysis {
+    margin-top:10px;
+    margin-left:5%;
 }
-
 /* END JOB DETAILS */
 
 /* DOCUMENT */
-.document-field {
-    border: 1px solid #cdcdcd;
-    padding: 30px 20px 20px 20px;
-    border-radius: 5px;
-}
+
 
 /* END DOCUMENT */
 
@@ -257,4 +251,34 @@ ul.order-tabs li.active a, .order-tabs li:focus a, .order-tabs li:hover a{
     min-height:100vh;
     text-align:center;
     background-color:#8981d8;
+}
+
+/* STATUS */
+.open-order {
+    background: #8965dc;
+    text-align: center;
+    color:#fff;
+    padding: 3px 0px;
+    border-radius: 5px;
+}
+.invoiced {
+    background: orange;
+    text-align: center;
+    color:#fff;
+    padding: 3px 0px;
+    border-radius: 5px;
+}
+.order-cancelled {
+    background: red;
+    text-align: center;
+    color:#fff;
+    padding: 3px 0px;
+    border-radius: 5px;
+}
+.complete-order {
+    background: green;
+    text-align: center;
+    color:#fff;
+    padding: 3px 0px;
+    border-radius: 5px;
 }

@@ -1932,7 +1932,7 @@ ul.wizard-nav-ac li .disabled{
 	border-radius:3px;
 	outline:none;
 	color:#fff;
-	margin-right:10px;
+	margin-right:5px;
 	box-shadow: 0 2px 10px rgba(0,0,0,.2);
 }
 .tooltips-static .btn-primary:hover, .tooltips-static .btn-primary:focus, .tooltips-static .btn-primary:active, .popover-cl-pro .btn-primary:hover, .popover-cl-pro .btn-primary:focus, .popover-cl-pro .btn-primary:active{
