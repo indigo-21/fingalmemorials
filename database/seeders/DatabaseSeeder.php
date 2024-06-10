@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(AccessLevelSeeder::class);
         $this->call(GraveSpaceSeeder::class);
         $this->call(DocumentTypeSeeder::class);
+        $this->call(UserSeeder::class);
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([

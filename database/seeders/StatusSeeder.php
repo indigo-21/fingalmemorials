@@ -15,10 +15,16 @@ class StatusSeeder extends Seeder
     {
         $data   = [
             [
+                "name"    => "Open Order",
+            ],
+            [
                 "name"    => "Invoiced - No Editing",
             ],
             [
                 "name"    => "Order Cancelled",
+            ],
+            [
+                "name"    => "Complete Order",
             ],
         ];
 
