@@ -61,19 +61,52 @@
                         @endforeach
                     </select>
                 </div>
+                <div class="nk-int-st" style="margin-bottom:20px;">
+                    <label>Special Instructions</label>
+                    <textarea class="form-control" placeholder="Special Instructions" style="height:90px;" name="special_instructions">{{isset($order) ? $order->special_instructions : ''}}</textarea>
+                </div>
             </div>
             
             <div class="col-12 col-md-6">
                 <h4 class="title-header title-header-md">Approvals</h4>
-                <div class="fm-checkbox">
-                    <label>
-                            <input type="checkbox" class="input-form i-checks" 
+                <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;">
+                    <label>Order Complete:</label>
+                    <select class="input-form selectpicker" name="source_id">
+                        <option value=""></option>
+                        <option value="">Yes</option>
+                        <option value="">No</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="fm-checkbox">
+                            <label>
+                                    <input type="checkbox" class="input-form i-checks" 
+                                        @if(isset($order))
+                                                {{$order->inscription_completed == "1" ? 'checked' : ''}}
+                                        @endif
+                                    name="inscription_completed"> 
+                                    <i></i> Inscription Completed
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="nk-datapk-ctm form-elet-mg" id="data_1" style="margin-bottom:20px;">
+                            <label>Inscription Completed Date</label>
+                            <div class="input-group date nk-int-st">
+                                <span class="input-group-addon"></span>
+                                <input type="text" class="input-form form-control"
+                                
                                 @if(isset($order))
-                                        {{$order->inscription_completed == "1" ? 'checked' : ''}}
+                                    value="{{date('m/d/Y', strtotime($order->job_was_fixed_on)) }}"
+                                @else
+                                    value="{{date('m/d/Y')}}"
                                 @endif
-                            name="inscription_completed"> 
-                            <i></i> Inscription Completed
-                    </label>
+        
+                                name="job_was_fixed_on" >
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="nk-datapk-ctm form-elet-mg" id="data_1" style="margin-bottom:20px;">
                     <label>Job was fixed on</label>
@@ -90,6 +123,8 @@
                         name="job_was_fixed_on" >
                     </div>
                 </div>
+                
+                
                 <h4 class="title-header title-header-md" style="margin-top:94px;">Analysis Codes</h4>
                 <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;">
                     <label>Source:</label>
