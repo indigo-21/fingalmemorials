@@ -11,13 +11,6 @@
                         <p class="breadcrumbs-link"><a href="">Dashboard</a> / <b>Customer </b></p>
                     </div>
                 </div>
-
-                <div class="header-btn-adminutil">
-                    <a href="{{ route('customer.create') }}"><button type="button"
-                            class="btn btn-primary btn-icon-notika waves-effect"><i class="fa fa-plus-circle"
-                                aria-hidden="true"></i>
-                            CREATE</button></a>
-                </div>
             </div>
         </div>
     </div>
@@ -33,8 +26,7 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Customer Name</th>
-                                        <th>Town</th>
-                                        <th>County</th>
+                                        <th>Address</th>
                                         <th>Postcode</th>
                                         <th>Email</th>
                                         <th>Phone</th>
@@ -44,26 +36,28 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($customers as $customer)
-                                    <tr>
-                                        <td>{{$loop->iteration}}</td>
-                                        <td>{{$customer->firstname}} {{$customer->surname}}</td>
-                                        <td>{{$customer->town}}</td>
-                                        <td>{{$customer->county}}</td>
-                                        <td>{{$customer->postcode}}</td>
-                                        <td>{{$customer->email}}</td>
-                                        <td>{{$customer->telno}}</td>
-                                        <td>{{$customer->mobile}}</td>
-                                        <td class="popover-cl-pro">
-                                            <a href="{{ route('customer.edit', [$customer]) }}"class="btn btn-primary" data-trigger="hover"
-                                                data-toggle="popover" data-placement="bottom" data-content="Edit"><i
-                                                    class="fa fa-pencil"></i></a>
-                                            <button class="btn btn-danger" data-trigger="hover" data-toggle="popover"
-                                                data-placement="bottom" data-content="Delete"><i
-                                                    class="fa fa-trash"></i></button>
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $customer->firstname }} {{ $customer->surname }}</td>
+                                            <td>{{ $customer->address1 }}</td>
+                                            <td>{{ $customer->postcode }}</td>
+                                            <td>{{ $customer->email }}</td>
+                                            <td>{{ $customer->telno }}</td>
+                                            <td>{{ $customer->mobile }}</td>
+                                            <td class="popover-cl-pro">
+                                                <a href=""class="btn btn-primary"
+                                                    data-trigger="hover" data-toggle="popover" data-placement="bottom"
+                                                    data-content="Add Order"><i class="fa fa-plus"></i></a>
+                                                <a href="{{ route('customer.edit', [$customer]) }}"class="btn btn-primary"
+                                                    data-trigger="hover" data-toggle="popover" data-placement="bottom"
+                                                    data-content="Edit"><i class="fa fa-pencil"></i></a>
+                                                <button class="btn btn-danger" data-trigger="hover" data-toggle="popover"
+                                                    data-placement="bottom" data-content="Delete"><i
+                                                        class="fa fa-trash"></i></button>
+                                            </td>
+                                        </tr>
                                     @endforeach
-                                   
+
                                 </tbody>
                             </table>
                         </div>

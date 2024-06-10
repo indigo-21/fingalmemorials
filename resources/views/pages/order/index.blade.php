@@ -149,11 +149,11 @@
                                     <tr>
                                         <th>Order No.</th>
                                         <th>Date</th>
-                                        <th>Fixing Date</th>
                                         <th>Branch</th>
                                         <th>Order Type</th>
                                         <th>Customer</th>
                                         <th>Created By</th>
+                                        <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -162,11 +162,24 @@
                                     <tr>
                                         <td><a href="{{url('order/edit/general-details')}}/{{$order->id}}">{{$order->id}}</a></td>
                                         <td>{{ date('m/d/Y', strtotime($order->created_at))}}</td>
-                                        <td>{{ date('m/d/Y', strtotime($order->job_was_fixed_on))}}</td>
                                         <td>{{$order->branch->name}}</td>
                                         <td>{{$order->orderType->name}}</td>
                                         <td>{{$order->customer->firstname}} {{$order->customer->middlename}} {{$order->customer->surname}}</td>
                                         <td>{{$order->user->firstname}} {{$order->user->surname}}</td>
+                                        <td>
+                                            <div class="open-order">
+                                                Open Order
+                                            </div>
+                                            <div class="invoiced">
+                                                Invoiced - No Editing
+                                            </div>
+                                            <div class="order-cancelled">
+                                                Order Cancelled
+                                            </div>
+                                            <div class="complete-order">
+                                                Invoiced - No Editing
+                                            </div>
+                                        </td>
                                         <td class="popover-cl-pro">
                                             <a href="{{url('order/edit/general-details')}}/{{$order->id}}" class="btn btn-primary" data-trigger="hover" data-toggle="popover" data-placement="bottom" data-content="Edit"><i class="fa fa-pencil"></i></a>
                                             <!-- <button class="btn btn-danger" data-trigger="hover" data-toggle="popover" data-placement="bottom" data-content="Delete"><i class="fa fa-trash"></i></button> -->
