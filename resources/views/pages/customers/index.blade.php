@@ -36,7 +36,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($customers as $customer)
-                                        <tr>
+                                        <tr id=tr"{{ $customer->id }}">
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $customer->firstname }} {{ $customer->surname }}</td>
                                             <td>{{ $customer->address1 }}</td>
@@ -51,9 +51,12 @@
                                                 <a href="{{ route('customer.edit', [$customer]) }}"class="btn btn-primary"
                                                     data-trigger="hover" data-toggle="popover" data-placement="bottom"
                                                     data-content="Edit"><i class="fa fa-pencil"></i></a>
-                                                <button class="btn btn-danger" data-trigger="hover" data-toggle="popover"
-                                                    data-placement="bottom" data-content="Delete"><i
-                                                        class="fa fa-trash"></i></button>
+                                                <button data-name="{{ $customer->firstname }} {{ $customer->surname }} "
+                                                    data-url="customer/destroy" 
+                                                    data-id="{{ $customer->id }}"
+                                                    class="btn btn-danger deleteCustomer" type="button"
+                                                    data-trigger="hover" data-toggle="popover" data-placement="bottom"
+                                                    data-content="Delete"><i class="fa fa-trash"></i></button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -66,4 +69,7 @@
             </div>
         </div>
     </div>
+@endsection
+@section('page-scripts')
+    <script src="{{ asset('js/delete-script.js') }}"></script>
 @endsection

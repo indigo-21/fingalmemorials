@@ -133,6 +133,8 @@ Route::group(['middleware'=> 'auth'], function(){
 
 	
 	// Customer
+
+	Route::get('customer/getCustomerOrders/{id}',[CustomerController::class,'getCustomerOrders']);
 	Route::resource('customer', CustomerController::class);
 
    // Logout

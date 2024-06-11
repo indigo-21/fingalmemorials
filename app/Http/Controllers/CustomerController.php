@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 use Response;
+use Auth;
+use App\Models\Order;
 
 class CustomerController extends Controller
 {
@@ -82,7 +84,7 @@ class CustomerController extends Controller
     {
         $customersTitle = Title::all();
         return view('pages.customers.form')
-                    ->withCustomersTitle($customersTitle);
+          ->withCustomersTitle($customersTitle);
      
     }
 
@@ -129,8 +131,26 @@ class CustomerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Customer $customers)
+    public function destroy(Request $request)
     {
-        //
+        $id                                 = $request->id;
+        $customer = $customerData     = Customer::findOrFail($id);        
+        $customer->deleted_by = Auth::id(); 
+        $customer->save();
+        $customer->delete();
+
+
+        return Response::json($customerData);
+
+        // dd('test');
     }
+
+    public function getCustomerOrders(Customer $customers , String $id){
+
+        $order = Order::where("customer_id" , "=" , $id)
+            ->get();
+         return Response::json($order);
+
+    }
+
 }
