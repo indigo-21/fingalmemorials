@@ -68,15 +68,6 @@
                                     <li><a href="/complete-unsettled">Complete/Invoiced Unsettled</a></li>
                                 </ul>
                             </li>
-                            <li><a data-toggle="collapse" data-target="#schedules-mob" href="#">Schedules</a>
-                                <ul id="schedules-mob" class="collapse dropdown-header-top">
-                                    <li><a href="/new-memorial">New Memorial</a></li>
-                                    <li><a href="/renovation">Renovation</a></li>
-                                    <li><a href="/sundries">Sundries</a> </li>
-                                    <li><a href="/cremation-product">Cremation Products</a></li>
-                                    <li><a href="/other">Other</a></li>
-                                </ul>
-                            </li>
                             <li><a data-toggle="collapse" data-target="#reports-mob" href="#">Reports</a>
                                 <ul id="reports-mob" class="collapse dropdown-header-top">
                                     <li><a href="/order-summary">Order Summary</a></li>
@@ -150,16 +141,6 @@
                             <li><a href="/order">Orders</a></li>
                             <li><a href="/customer">Customer</a></li>
                             <li><a href="/complete-unsettled">Complete/Invoiced Unsettled</a></li>
-                        </ul>
-                    </div>
-                    <div id="schedules"
-                        class="tab-pane notika-tab-menu-bg animated fadeInDown {{ Request::is('new-memorial', 'new-memorial/*', 'renovation', 'renovation/*', 'sundries', 'sundries/*', 'cremation-product', 'cremation-product/*', 'other', 'other/*') ? 'active' : '' }}">
-                        <ul class="notika-main-menu-dropdown">
-                            <li><a href="/new-memorial">New Memorial</a></li>
-                            <li><a href="/renovation">Renovation</a></li>
-                            <li><a href="/sundries">Sundries</a> </li>
-                            <li><a href="/cremation-product">Cremation Products</a></li>
-                            <li><a href="/other">Other</a></li>
                         </ul>
                     </div>
                     <div id="reports"
