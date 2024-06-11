@@ -13,7 +13,7 @@
                 </div>
                 <div class="chosen-select-act fm-cmp-mg mb-20">
                     <label>Cemetery</label>
-                    <select class="input-form chosen" data-placeholder="" id="input-cemetery" name="cemetery_id">
+                    <select class="input-form selectpicker" data-placeholder="" id="input-cemetery" name="cemetery_id">
                         <option disabled selected >Choose a Cemetery...</option>
                         @php
                             $fixing_area = "";
@@ -71,21 +71,23 @@
                 <h4 class="title-header title-header-md">Approvals</h4>
                 <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;">
                     <label>Order Complete:</label>
-                    <select class="input-form selectpicker" name="source_id">
+                    <select class="input-form selectpicker" name="order_complete" {{ isset($order) ? '' : 'disabled' }} >
                         <option value=""></option>
-                        <option value="">Yes</option>
-                        <option value="">No</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
                     </select>
                 </div>
                 <div class="row">
                     <div class="col-md-5">
                         <div class="fm-checkbox">
                             <label>
-                                    <input type="checkbox" class="input-form i-checks" 
+                                    <input type="checkbox" class="input-form i-checks" name="inscription_completed"
                                         @if(isset($order))
                                                 {{$order->inscription_completed == "1" ? 'checked' : ''}}
+                                        @else   
+                                            disabled
                                         @endif
-                                    name="inscription_completed"> 
+                                    > 
                                     <i></i> Inscription Completed
                             </label>
                         </div>
@@ -95,15 +97,14 @@
                             <label>Inscription Completed Date</label>
                             <div class="input-group date nk-int-st">
                                 <span class="input-group-addon"></span>
-                                <input type="text" class="input-form form-control"
-                                
-                                @if(isset($order))
-                                    value="{{date('m/d/Y', strtotime($order->job_was_fixed_on)) }}"
-                                @else
-                                    value="{{date('m/d/Y')}}"
-                                @endif
-        
-                                name="job_was_fixed_on" >
+                                <input type="text" class="input-form form-control" name="inscription_completed_date"
+                                    @if(isset($order))
+                                        value="{{$order->inscription_completed_date ? date('m/d/Y', strtotime($order->inscription_completed_date)) : '' }}"
+                                    @else
+                                        disabled
+                                        value=""
+                                    @endif
+                                >
                             </div>
                         </div>
                     </div>
@@ -115,9 +116,10 @@
                         <input type="text" class="input-form form-control"
                         
                         @if(isset($order))
-                            value="{{date('m/d/Y', strtotime($order->job_was_fixed_on)) }}"
+                            value="{{$order->job_was_fixed_on ? date('m/d/Y', strtotime($order->job_was_fixed_on)) : '' }}"
                         @else
-                            value="{{date('m/d/Y')}}"
+                            value=""
+                            disabled
                         @endif
 
                         name="job_was_fixed_on" >

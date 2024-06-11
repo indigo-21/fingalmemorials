@@ -39,6 +39,7 @@ $(document).ready(function(){
         let payment_type_id     = $(this).attr("paymenttypeid");
         let reason              = $(this).closest("tr").find(".reason").text();
         let payment             = $(this).attr("payment");
+
         $("[name=account_type_id]").val(account_type_id).trigger("change");   
         $(`#${div_id}`).find("[name=date_received]").val(date_received);   
         $(`#${div_id}`).find("[name=payment_type_id]").val(payment_type_id).trigger("change"); 
@@ -106,6 +107,7 @@ $(document).ready(function(){
             data,
             url: `${SYSTEM_URL}/order/create/modifyAccountPosting`,
             success:function(data){
+                let order_id = data.order_id;
                 Swal.fire({
                     icon: "success",
                     title: message,

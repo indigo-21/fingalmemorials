@@ -1,4 +1,23 @@
-const  SYSTEM_URL = $("body").attr("url");
+const  SYSTEM_URL   = $("body").attr("url");
+const  HAS_INVOICE  = $("#order_form").attr("hasinvoice") ? true : false;
+
+$(document).ready(function(){
+
+    if(HAS_INVOICE){
+        $("#general-details").find("input").attr("disabled", true);
+        $("#general-details").find("textarea").attr("disabled", true);
+        $("#general-details").find("select").attr("disabled", true);
+       
+        // EXEPTION
+        $("[name=order_complete]").attr("disabled", false);
+        $("[name=inscription_completed]").attr("disabled", false);
+        $("[name=inscription_completed_date]").attr("disabled", false);
+        $("[name=job_was_fixed_on]").attr("disabled", false);
+    }
+
+
+});
+
 
 $(document).on("change","#input-cemetery",function(){
     let area = $(this).find(":selected").attr("area");
@@ -10,21 +29,25 @@ $(document).on("change","#input-cemetery",function(){
 
 function getGeneralDetails(){
     let data = {
-        order_type_id:          $("[name=order_type_id]").val(),
-        order_branch:           $("[name=order_branch]").val(),
-        deceased_name:          $("[name=deceased_name]").val(),
-        date_of_death:          $("[name=date_of_death]").val(),
-        order_headline:         $("[name=order_headline]").val(),
-        cemetery_id:            $("[name=cemetery_id]").find(":selected").val(),
-        grave_space_id:         $("[name=grave_space_id]").find(":selected").val(),
-        plot_grave:             $("[name=plot_grave]").val(),
-        inscription_completed:  $("[name=inscription_completed]").val(),
-        job_was_fixed_on:       $("[name=job_was_fixed_on]").val(),
-        source_id:              $("[name=source_id]").find(":selected").val(),
-        category_id:            $("[name=category_id]").val(),
-        area:                   $("[name=area]").val(),
-        order_date:             $("[name=order_date]").val(),
-        special_instructions:   $("[name=special_instructions]").val(),
+        order_type_id:              $("[name=order_type_id]").val(),
+        order_branch:               $("[name=order_branch]").val(),
+        deceased_name:              $("[name=deceased_name]").val(),
+        date_of_death:              $("[name=date_of_death]").val(),
+        order_headline:             $("[name=order_headline]").val(),
+        cemetery_id:                $("[name=cemetery_id]").find(":selected").val(),
+        grave_space_id:             $("[name=grave_space_id]").find(":selected").val(),
+        plot_grave:                 $("[name=plot_grave]").val(),
+        // APPROVALS FIELDS
+        order_complete:             $("[name=order_complete]").val() == "1" ? true : false,
+        inscription_completed:      $("[name=inscription_completed]").is(":checked") ? "1" : "0",
+        inscription_completed_date: $("[name=inscription_completed_date]").val(),
+        job_was_fixed_on:           $("[name=job_was_fixed_on]").val(),
+        // END APPROVALS FIELDS
+        source_id:                  $("[name=source_id]").find(":selected").val(),
+        category_id:                $("[name=category_id]").val(),
+        area:                       $("[name=area]").val(),
+        order_date:                 $("[name=order_date]").val(),
+        special_instructions:       $("[name=special_instructions]").val(),
 
     };
     return data;

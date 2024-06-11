@@ -31,8 +31,21 @@ class OrderController extends Controller
 {
 
 
-    public function retriveData($tab = null, $order_id)
-    {
+    public function formRule($type = "" ){
+        switch ($type) {
+            case 'value':
+                # code...
+                break;
+            
+            default:
+                // $type="orders"
+                
+
+                break;
+        }
+    }
+
+    public function retriveData($tab = null, $order_id){
 
     }
 
@@ -73,14 +86,17 @@ class OrderController extends Controller
 
         $url = 'pages.order.tabs.' . $tab;
 
-        $orderTypes = OrderType::All();
-        $branches = Branch::All();
-        $cemeteries = Cemetery::All();
-        $sources = Source::All();
-        $categories = Category::All();
-        $graveSpaces = GraveSpace::All();
-        $titles = Title::All();
-
+        $orderTypes     = OrderType::All();
+        $branches       = Branch::All();
+        $cemeteries     = Cemetery::All();
+        $sources        = Source::All();
+        $categories     = Category::All();
+        $graveSpaces    = GraveSpace::All();
+        $titles         = Title::All();
+        $hasInvoice     = false;
+        $jobValue       = "0.00";
+        $orderBalance   = "0.00";
+    
 
         switch ($tab) {
             case 'general-details':
@@ -93,7 +109,10 @@ class OrderController extends Controller
                     ->withSources($sources)
                     ->withCategories($categories)
                     ->withGraveSpaces($graveSpaces)
-                    ->withTitles($titles);
+                    ->withTitles($titles)
+                    ->withJobValue($jobValue)
+                    ->withHasInvoice($hasInvoice)
+                    ->withOrderBalance($orderBalance);
                 break;
             case 'job-details':
                 return view($url)
@@ -180,7 +199,26 @@ class OrderController extends Controller
         $order          = Order::findOrFail($order_id);
         $customer       = Customer::findOrFail($order->customer_id);
 
-        // GENERAL DETAILS DATA
+        // GENERAL DETAILS - JOB DETAILS DATA
+        $jobDetails     = JobDetail::where("order_id",$order_id)->get();
+        $jobValue       = $jobDetails->sum("gross_amount");
+
+
+        // GENERAL DETAILS - ACCOUNT POSTING DETAILS DATA
+        $accountPostings          = AccountPosting::where("order_id",$order_id)->get();
+        $accountPostingInvoice    = AccountPosting::where("order_id",$order_id)
+                                                    ->where('account_type_id', 3)
+                                                    ->get();
+        $hasInvoice               = false;
+        $orderBalance             = floatval($jobValue) - floatval($accountPostings->sum("credit"));
+        
+        if($accountPostingInvoice->isNotEmpty()){
+            $hasInvoice = true;
+        }
+
+
+
+        // GENERAL DETAILS DATA ONLY
         $orderTypes     = OrderType::All();
         $branches       = Branch::All();
         $cemeteries     = Cemetery::All();
@@ -189,19 +227,18 @@ class OrderController extends Controller
         $graveSpaces    = GraveSpace::All();
         $titles         = Title::All();
 
-        // JOB DETAILS DATA
-        $jobDetails     = JobDetail::where("order_id",$order_id)->get();
+        // JOB DETAILS DATA ONLY
         $analyses       = Analysis::All();
         $vatCodes       = VatCode::All();
 
 
-        // ACCOUNT POSTING DATA
+        // ACCOUNT POSTING DATA ONLY
         $accountTypes       = AccountType::All();
         $paymentTypes       = PaymentType::All();
-        $accountPostings    = AccountPosting::where("order_id",$order_id)->get();
+        
 
 
-        // DOCUMENT DATA
+        // DOCUMENT DATA ONLY
         $documentTypes = DocumentType::All();
         $documents = Document::where("order_id", $order_id)->get();
 
@@ -223,7 +260,10 @@ class OrderController extends Controller
                     ->withGraveSpaces($graveSpaces)
                     ->withTitles($titles)
                     ->withOrder($order)
-                    ->withCustomer($customer);
+                    ->withCustomer($customer)
+                    ->withJobValue($jobValue)
+                    ->withHasInvoice($hasInvoice)
+                    ->withOrderBalance($orderBalance);
                 break;
             case 'job-details':
                 return view($url)
@@ -235,7 +275,10 @@ class OrderController extends Controller
                     ->withCustomer($customer)
                     ->withJobDetails($jobDetails)
                     ->withAnalyses($analyses)
-                    ->withVatCodes($vatCodes);
+                    ->withVatCodes($vatCodes)
+                    ->withJobValue($jobValue)
+                    ->withHasInvoice($hasInvoice)
+                    ->withOrderBalance($orderBalance);
                 break;
             case 'inscription-details':
                 return view($url)
@@ -245,7 +288,10 @@ class OrderController extends Controller
                     ->withBranches($branches)
                     ->withOrder($order)
                     ->withCustomer($customer)
-                    ->withOrder($order);
+                    ->withOrder($order)
+                    ->withJobValue($jobValue)
+                    ->withHasInvoice($hasInvoice)
+                    ->withOrderBalance($orderBalance);
                 break;
             case 'accounts-posting':
                 return view($url)
@@ -257,7 +303,10 @@ class OrderController extends Controller
                     ->withCustomer($customer)
                     ->withAccountTypes($accountTypes)
                     ->withPaymentTypes($paymentTypes)
-                    ->withAccountPostings($accountPostings);
+                    ->withAccountPostings($accountPostings)
+                    ->withJobValue($jobValue)
+                    ->withHasInvoice($hasInvoice)
+                    ->withOrderBalance($orderBalance);
                 break;
             case 'document':
                 return view($url)
@@ -268,7 +317,10 @@ class OrderController extends Controller
                     ->withOrder($order)
                     ->withCustomer($customer)
                     ->withDocumentTypes($documentTypes)
-                    ->withDocuments($documents);
+                    ->withDocuments($documents)
+                    ->withJobValue($jobValue)
+                    ->withHasInvoice($hasInvoice)
+                    ->withOrderBalance($orderBalance);
                 break;
             case 'print-history':
                 return view($url)
@@ -279,7 +331,10 @@ class OrderController extends Controller
                     ->withOrder($order)
                     ->withCustomer($customer)
                     ->withOrder($order)
-                    ->withPrintHistories($printHistories);
+                    ->withPrintHistories($printHistories)
+                    ->withJobValue($jobValue)
+                    ->withHasInvoice($hasInvoice)
+                    ->withOrderBalance($orderBalance);
                 break;
             default:
                 break;
@@ -336,8 +391,8 @@ class OrderController extends Controller
     }
 
     // INSERT OR UPDATE IN `order` TABLE
-    public function modifyOrder($data, $customer_id, $order_id = false)
-    {
+    public function modifyOrder($data, $customer_id, $order_id = false){
+
         // Indenty the function what will be the action taken
         $isInsert                           = !$order_id ? true : false;
         $orderData                          = $isInsert ? new Order : Order::findOrFail($order_id);
@@ -350,13 +405,22 @@ class OrderController extends Controller
         $orderData->cemetery_id             = $data["cemetery_id"];
         $orderData->plot_grave              = $data["plot_grave"];
         $orderData->inscription_completed   = $data["inscription_completed"] == "on" ? "1" : "0";
-        $orderData->job_was_fixed_on        = date('Y-m-d H:i:s', strtotime($data["job_was_fixed_on"]));
+        $orderData->job_was_fixed_on        = $data["job_was_fixed_on"] ? date('Y-m-d H:i:s', strtotime($data["job_was_fixed_on"])) : NULL;
         $orderData->source_id               = $data["source_id"];
         $orderData->category_id             = $data["category_id"];
         $orderData->customer_id             = $customer_id;
         $orderData->grave_space_id          = $data["grave_space_id"];
         $orderData->special_instructions    = $data["special_instructions"];
-        $orderData->created_at              = date('Y-m-d H:i:s', strtotime($data["order_date"]));
+        $orderData->order_date              = date('Y-m-d H:i:s', strtotime($data["order_date"]));
+
+        // STATUS VALUES
+        if($data["order_complete"] == "true"){
+            $orderData->status_id              = 4;
+        }else{
+            $orderData->status_id              = 1;
+        }
+
+
         
         if($isInsert){
             $orderData->created_by             = Auth::id();   
@@ -398,14 +462,18 @@ class OrderController extends Controller
         $balance                    = !$accountPostingData ? 0 : $accountPostingData->sum("payment");
 
         $jobDetailData->order_id                = $request->order_id;
-        $jobDetailData->details_of_work         = $request->details_of_work;
         $jobDetailData->analysis_id             = $request->analysis_id;
-        $jobDetailData->vat_code_id             = $request->vat_code_id;
-        $jobDetailData->vat	                    = $request->vat;
-        $jobDetailData->net                     = $request->net;
+        $jobDetailData->details_of_work         = $request->details_of_work;
+        $jobDetailData->job_cost                = $request->job_cost;
         $jobDetailData->discount                = $request->discount;
-        $jobDetailData->gross                   = $request->gross;
-        $jobDetailData->balance                 = $balance;
+        $jobDetailData->total                   = $request->total;
+        $jobDetailData->additional_fee          = $request->additional_fee;
+        $jobDetailData->net_amount              = $request->net_amount;
+        $jobDetailData->vat_code_id             = $request->vat_code_id;
+        $jobDetailData->vat_amount              = $request->vat_amount;
+        $jobDetailData->zero_rated_amount       = $request->zero_rated_amount;
+        $jobDetailData->adjusment_amount        = $request->adjusment_amount;
+        $jobDetailData->gross_amount            = $request->gross_amount;
 
         if($isInsert){
             $jobDetailData->created_by = Auth::id();
@@ -420,21 +488,25 @@ class OrderController extends Controller
 
         $data   = [
             "job_detail_id"         => $result->id,
-            "details_of_work"       => $result->details_of_work,
-            "net"                   => $result->net,
-            "vat_code_id"           => $result->vat_code_id,
             "analysis_id"           => $result->analysis_id,
+            "vat_code_id"           => $result->vat_code_id,
+            "details_of_work"       => $result->details_of_work,
             "vat_code_description"  => $result->vatCode->vat_description,
             "analysis_description"  => $result->analysis->description,
+            "job_cost"              => $result->job_cost,
             "discount"              => $result->discount,
-            "vat"                   => $result->vat,
-            "gross"                 => $result->gross,
+            "total"                 => $result->total,
+            "additional_fee"        => $result->additional_fee,
+            "net_amount"            => $result->net_amount,
+            "vat_amount"            => $result->vat_amount,
+            "zero_rated_amount"     => $result->zero_rated_amount,
+            "adjusment_amount"      => $result->adjusment_amount,
+            "gross_amount"          => $result->gross_amount,
         ];
 
         return response()->json($data);
 
     }
-
 
     // THIS METHOD IS FOR INSCRIPTION SECTION
     public function getInscriptionData(Request $request){
@@ -517,8 +589,6 @@ class OrderController extends Controller
         return response()->json($result);
         
     }
-
-
 
     // THIS METHOD IS FOR DOCUMENT SECTION
     public function modifyDocument(Request $request){

@@ -6,7 +6,7 @@
             <div class="col-12 col-md-4">
                 <div class="chosen-select-act fm-cmp-mg mb-40">
                     <label>Type</label>
-                    <select class="chosen" id="payment_type" name="account_type_id">
+                    <select class="selectpicker" id="payment_type" name="account_type_id">
                         @foreach($accountTypes as $accountType)
                             <option value="{{$accountType->id}}" code="{{strtolower($accountType->code)}}">{{$accountType->name}}</option>
                         @endforeach
@@ -23,7 +23,7 @@
                     </div>
                     <div class="chosen-select-act fm-cmp-mg mb-20">
                         <label>Payment Type</label>
-                        <select class="chosen payment-type" data-placeholder="Choose a Payment Type..." name="payment_type_id">
+                        <select class="selectpicker payment-type" data-placeholder="Choose a Payment Type..." name="payment_type_id">
                             <option disabled selected>- Select Payment Type</option>
                             @foreach($paymentTypes as $paymentType)
                                 <option value="{{$paymentType->id}}" reason="Deposit paid by {{$paymentType->name}}">{{$paymentType->name}}</option>
@@ -58,7 +58,7 @@
                     </div>
                     <div class="chosen-select-act fm-cmp-mg mb-20">
                         <label>Payment Type</label>
-                        <select class="chosen payment-type" data-placeholder="Choose a Country..." name="payment_type_id">
+                        <select class="selectpicker payment-type" data-placeholder="Choose a Country..." name="payment_type_id">
                             <option disabled selected>- Select Payment Type</option>
                             @foreach($paymentTypes as $paymentType)
                                 <option value="{{$paymentType->id}}" reason="Deposit paid by {{$paymentType->name}}">{{$paymentType->name}}</option>
@@ -136,6 +136,7 @@
                                         <td>{{$accountPosting->debit}}</td>
                                         <td>{{$accountPosting->credit}}</td>
                                         <td class="popover-cl-pro">
+                                            @if($accountPosting->account_type_id != "3")
                                             <button class="btn btn-primary edit-account-posting" data-trigger="hover" data-toggle="popover"
                                                     orderid="{{$accountPosting->order_id}}" 
                                                     accountpostingid="{{$accountPosting->account_type->id}}"
@@ -146,6 +147,8 @@
                                             
                                                 data-placement="bottom" data-content="Edit"><i
                                                     class="fa fa-pencil"></i></button>
+                                            @endif
+
                                             <button class="btn btn-primary" data-trigger="hover" data-toggle="popover"
                                                 data-placement="bottom" data-content="Print"><i
                                                     class="fa fa-print"></i></button>

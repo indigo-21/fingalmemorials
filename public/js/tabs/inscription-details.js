@@ -1,5 +1,15 @@
 $(document).ready(function(){
     const  SYSTEM_URL = $("body").attr("url");
+
+
+    const  HAS_INVOICE  = $("#order_form").attr("hasinvoice") ? true : false;
+
+    if(HAS_INVOICE){
+        $("#inscription-details").find("textarea").attr("disabled", true);
+       
+        $("#inscription-details").find(".form-btn").remove();
+    }
+
     getInscriptionData();
 
 

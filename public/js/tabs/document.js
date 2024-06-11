@@ -1,6 +1,14 @@
 $(document).ready(function(){
     const  SYSTEM_URL = $("body").attr("url");
+    const  HAS_INVOICE  = $("#order_form").attr("hasinvoice") ? true : false;
 
+    if(HAS_INVOICE){
+        $("#document").find("input").attr("disabled", true);
+        $("#document").find("textarea").attr("disabled", true);
+        $("#document").find("select").attr("disabled", true);
+       
+        $("#document").find(".form-btn").remove();
+    }
     
 
     $(document).on("click", ".add-document", function(){

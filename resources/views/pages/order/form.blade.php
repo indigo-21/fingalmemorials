@@ -1,14 +1,14 @@
 @extends ('main')
 @section('content')
 
-    <div class="form-container">
+    <div class="form-container" id="order_form" hasinvoice="{{isset($hasInvoice) ? $hasInvoice : 'true' }}">
         <div class="breadcrumbs">
             <div class="container">
                 <div class="breadcrumbs-content">
                     <div class="breadcrumbs-content">
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <h3>Create Orders</h3>
+                                <h3>{{isset($orders) ? "Update" : "Create" }} Orders</h3>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <p class="breadcrumbs-link"><a href="">Dashboard</a> / <b>Orders</b></p>
@@ -85,11 +85,11 @@
                                 <h4 class="title-header title-header-md">Order Totals</h4>
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Value</label>
-                                    <input type="text" class="input-form form-control" placeholder="" id="order-value" disabled>
+                                    <input type="text" class="input-form form-control" placeholder="" id="order-value" value="{{$jobValue}}" disabled>
                                 </div>
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Balance</label>
-                                    <input type="text" class="input-form form-control" placeholder="" id="order-balances" disabled>
+                                    <input type="text" class="input-form form-control" placeholder="" id="order-balances" value="{{$orderBalance}}" disabled>
                                 </div>
                             </div>
                         </div>
