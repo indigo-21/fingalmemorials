@@ -125,7 +125,7 @@
                 </div>
                 
                 
-                <h4 class="title-header title-header-md" style="margin-top:94px;">Analysis Codes</h4>
+                <h4 class="title-header title-header-md" style="margin-top:50px;">Analysis Codes</h4>
                 <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;">
                     <label>Source:</label>
                     <select class="input-form selectpicker" name="source_id">
@@ -152,11 +152,6 @@
                         @endforeach
                     </select>
                 </div>
-            </div>
-
-            <div class="nk-int-st" style="margin-bottom:20px;">
-                <label>Special Instructions</label>
-                <textarea class="form-control" placeholder="Special Instructions" style="height:90px;" name="special_instructions">{{isset($order) ? $order->special_instructions : ''}}</textarea>
             </div>
         </div>
         <div class="row mt-40">
