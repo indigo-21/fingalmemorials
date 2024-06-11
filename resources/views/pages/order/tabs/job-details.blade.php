@@ -28,13 +28,18 @@
                             <input type="text" class="form-control" placeholder="Job Cost" name="job-cost">
                         </div>
                         <div class="nk-int-st mb-20">
-                            <label>Additional Fee</label>
-                            <input type="text" class="form-control" placeholder="Additional Fee" name="additional-fee">
-                        </div>
-                        <div class="nk-int-st mb-20">
                             <label>Discount</label>
                             <input type="text" class="form-control" placeholder="Discount" name="discount">
                         </div>
+                        <div class="nk-int-st mb-20">
+                            <label>Total</label>
+                            <input type="text" class="form-control" placeholder="Total" name="total">
+                        </div>
+                        <div class="nk-int-st mb-20">
+                            <label>Additional Fee</label>
+                            <input type="text" class="form-control" placeholder="Additional Fee" name="additional-fee">
+                        </div>
+                        
                         <div class="vat-analysis">
                             <h4 class="title-header title-header-md">VAT Analysis</h4>
                             <div class="nk-int-st mb-20">
