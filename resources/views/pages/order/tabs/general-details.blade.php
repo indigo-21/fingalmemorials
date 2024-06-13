@@ -158,138 +158,138 @@
         </div>
         <div class="row mt-40">
             <h3 class="title text-center">Customer Details</h3>
-            <div class="col-12 col-md-6">
-                <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;">
-                    <label>Title:</label>
-                    <select class="input-form selectpicker" name="title_id">
-                        <option selected disabled>- Title</option>
-                        @foreach($titles as $title)
-                            <option value="{{$title->id}}"
-                                @if(isset($customer))
-                                        {{$customer->title_id == $title->id ? 'selected' : ''}}
-                                @endif
-                            >{{$title->name}}</option>
-                        @endforeach
-                    </select>
+
+
+            @if (!isset($order))
+                <div class="col-12 col-md-12 mb-10">
+                    <div class="fm-checkbox">
+                        <label>
+                            <input type="checkbox" class="input-form  checkBox-newCustomer  " id="checkBox-newCustomer"
+                                name="newCustomer">
+
+                            <i></i> New Customer
+                        </label>
+                    </div>
+                    <div class="chosen-select-act fm-cmp-mg mb-20 choose-customer-text">
+                        <label>Customers</label>
+                        <select class="input-form selectpicker chosen-customer" data-placeholder="" name="customer">
+                            <option disabled selected>Choose a Customer...</option>
+                            @php
+                                $fixing_area = '';
+                            @endphp
+
+                            @foreach ($customers as $findCustomer)
+                                <option value="{{ $findCustomer->id }}"> {{ $findCustomer->firstname }}
+                                    {{ $findCustomer->surname }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
-                <div class="nk-int-st mb-20">
-                    <label>First Name</label>
-                    <input type="text" class="input-form form-control" placeholder="Firstname" 
-                        @if(isset($customer))
-                                value="{{$customer->firstname}}"
-                        @endif
-                    name="firstname">
+            @endif
+
+
+            <div class="customer-form"  {{ !isset($order) ? "hidden" : "" }}>
+                <div class="col-12 col-md-6 ">
+                    <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;">
+                        <label>Title:</label>
+                        <select class="input-form selectpicker" name="title_id">
+                            <option selected disabled >- Title</option>
+                            @foreach ($titles as $title)
+                                <option value="{{ $title->id }}"
+                                    @if (isset($customer)) {{ $customer->title_id == $title->id ? 'selected' : '' }} @endif>
+                                    {{ $title->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="nk-int-st mb-20">
+                        <label>First Name</label>
+                        <input type="text" class="input-form form-control" placeholder="Firstname"
+                            @if (isset($customer)) value="{{ $customer->firstname }}" @endif name="firstname">
+                    </div>
+                    <div class="nk-int-st mb-20">
+                        <label>Middle Name</label>
+                        <input type="text" class="input-form form-control" placeholder="Middlename"
+                            @if (isset($customer)) value="{{ $customer->middlename }}" @endif
+                            name="middlename">
+                    </div>
+                    <div class="nk-int-st mb-20">
+                        <label>Last Name</label>
+                        <input type="text" class="input-form form-control" placeholder="Lastname"
+                            @if (isset($customer)) value="{{ $customer->surname }}" @endif name="surname">
+                    </div>
+                    <div class="nk-int-st mb-20">
+                        <label>Mobile</label>
+                        <input type="text" class="input-form form-control" placeholder="Mobile"
+                            @if (isset($customer)) value="{{ $customer->mobile }}" @endif name="mobile">
+                    </div>
+                    <div class="nk-int-st mb-20">
+                        <label>Tel No</label>
+                        <input type="text" class="input-form form-control" placeholder="Tel No"
+                            @if (isset($customer)) value="{{ $customer->telno }}" @endif name="telno">
+                    </div>
+                    <div class="nk-int-st mb-20">
+                        <label>Email</label>
+                        <input type="text" class="input-form form-control " placeholder="Enter Email"
+                            @if (isset($customer)) value="{{ $customer->email }}" @endif name="email">
+                    </div>
+
                 </div>
-                <div class="nk-int-st mb-20">
-                    <label>Middle Name</label>
-                    <input type="text" class="input-form form-control" placeholder="Middlename" 
-                        @if(isset($customer))
-                                value="{{$customer->middlename}}"
-                        @endif
-                    name="middlename">
-                </div>
-                <div class="nk-int-st mb-20">
-                    <label>Last Name</label>
-                    <input type="text" class="input-form form-control" placeholder="Lastname" 
-                        @if(isset($customer))
-                                value="{{$customer->surname}}"
-                        @endif
-                    name="surname">
-                </div>
-                <div class="nk-int-st mb-20">
-                    <label>Mobile</label>
-                    <input type="text" class="input-form form-control" placeholder="Mobile" 
-                        @if(isset($customer))
-                                value="{{$customer->mobile}}"
-                        @endif
-                    name="mobile" >
-                </div>
-                <div class="nk-int-st mb-20">
-                    <label>Tel No</label>
-                    <input type="text" class="input-form form-control" placeholder="Tel No" 
-                        @if(isset($customer))
-                                value="{{$customer->telno}}"
-                        @endif
-                    name="telno" >
-                </div>
-                <div class="nk-int-st mb-20">
-                    <label>Email</label>
-                    <input type="text" class="input-form form-control " placeholder="Enter Email" 
-                        @if(isset($customer))
-                                value="{{$customer->email}}"
-                        @endif
-                    name="email">
-                </div>
-                
-            </div>
-            <div class="col-12 col-md-6">
-                <div class="nk-int-st mb-20">
-                    <label>Address 1</label>
-                    <input type="text" class="input-form form-control" placeholder="Address 1" 
-                        @if(isset($customer))
-                                value="{{$customer->address1}}"
-                        @endif
-                    name="address1" >
-                </div>
-                <div class="nk-int-st mb-20">
-                    <label>Address 2</label>
-                    <input type="text" class="input-form form-control" placeholder="Address 2" 
-                        @if(isset($customer))
-                                value="{{$customer->address2}}"
-                        @endif
-                    name="address2" >
-                </div>
-                <div class="nk-int-st mb-20">
-                    <label>Address 3</label>
-                    <input type="text" class="input-form form-control" placeholder="Address 3" 
-                        @if(isset($customer))
-                                value="{{$customer->address3}}"
-                        @endif
-                    name="address3" >
-                </div>
-                <div class="nk-int-st mb-20">
-                    <label>Town</label>
-                    <input type="text" class="input-form form-control" placeholder="Town" 
-                        @if(isset($customer))
-                                value="{{$customer->town}}"
-                        @endif
-                    name="town">
-                </div>
-                <div class="nk-int-st mb-20">
-                    <label>County</label>
-                    <input type="text" class="input-form form-control" placeholder="County" 
-                        @if(isset($customer))
-                                value="{{$customer->county}}"
-                        @endif
-                    name="county" >
-                </div>
-                <div class="nk-int-st mb-20">
-                    <label>Postcode</label>
-                    <input type="text" class="input-form form-control" placeholder="Postcode" 
-                        @if(isset($customer))
-                                value="{{$customer->postcode}}"
-                        @endif
-                    name="postcode">
-                </div>
-                <div class="nk-int-st mb-20">
-                    <label>Account Number</label>
-                    <input type="text" class="input-form form-control" placeholder="MON01" name="account_number">
+                <div class="col-12 col-md-6">
+                    <div class="nk-int-st mb-20">
+                        <label>Address 1</label>
+                        <input type="text" class="input-form form-control" placeholder="Address 1"
+                            @if (isset($customer)) value="{{ $customer->address1 }}" @endif name="address1">
+                    </div>
+                    <div class="nk-int-st mb-20">
+                        <label>Address 2</label>
+                        <input type="text" class="input-form form-control" placeholder="Address 2"
+                            @if (isset($customer)) value="{{ $customer->address2 }}" @endif name="address2">
+                    </div>
+                    <div class="nk-int-st mb-20">
+                        <label>Address 3</label>
+                        <input type="text" class="input-form form-control" placeholder="Address 3"
+                            @if (isset($customer)) value="{{ $customer->address3 }}" @endif name="address3">
+                    </div>
+                    <div class="nk-int-st mb-20">
+                        <label>Town</label>
+                        <input type="text" class="input-form form-control" placeholder="Town"
+                            @if (isset($customer)) value="{{ $customer->town }}" @endif name="town">
+                    </div>
+                    <div class="nk-int-st mb-20">
+                        <label>County</label>
+                        <input type="text" class="input-form form-control" placeholder="County"
+                            @if (isset($customer)) value="{{ $customer->county }}" @endif name="county">
+                    </div>
+                    <div class="nk-int-st mb-20">
+                        <label>Postcode</label>
+                        <input type="text" class="input-form form-control" placeholder="Postcode"
+                            @if (isset($customer)) value="{{ $customer->postcode }}" @endif name="postcode">
+                    </div>
+                    <div class="nk-int-st mb-20">
+                        <label>Account Number</label>
+                        <input type="text" class="input-form form-control" placeholder="MON01" name="account_number">
+                    </div>
                 </div>
             </div>
+
         </div>
         <div class="row mt-20">
             <div class="col-md-12 text-center" id="general_details_buttons">
                 <div class="form-btn">
-                    @if(isset($order) && isset($customer))
-                        <a href="{{url('/order')}}" class="btn btn-light btn-icon-notika waves-effect">Back</a>
-                        <button class="btn btn-primary btn-icon-notika waves-effect edit-submit" orderid="{{$order->id}}" customerid="{{$customer->id}}">Update</button>
+                    @if (isset($order) && isset($customer))
+                        <a href="{{ url('/order') }}" class="btn btn-light btn-icon-notika waves-effect">Back</a>
+                        <button class="btn btn-primary btn-icon-notika waves-effect edit-submit"
+                            orderid="{{ $order->id }}" customerid="{{ $customer->id }}">Update</button>
                     @else
-                        <a href="{{url('/order')}}" class="btn btn-light btn-icon-notika waves-effect">Cancel</a>
+                        <a href="{{ url('/order') }}" class="btn btn-light btn-icon-notika waves-effect">Cancel</a>
                         <button class="btn btn-primary btn-icon-notika waves-effect create-submit">Create</button>
                     @endif
-                    
+
                 </div>
             </div>
         </div>
     </div>
+@endsection
+@section('page-scripts')
+    <script src="{{ asset('js/order.js') }}"></script>
 @endsection

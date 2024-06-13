@@ -217,7 +217,6 @@ class OrderController extends Controller
         }
 
 
-
         // GENERAL DETAILS DATA ONLY
         $orderTypes     = OrderType::All();
         $branches       = Branch::All();
@@ -616,9 +615,13 @@ class OrderController extends Controller
 
             return response()->json($documentData->id);
 
-
-
         }
+    }
+    public function findCustomer(string $id)
+    {
+
+        $customer = Customer::find($id);
+        return response()->json($customer);
 
 
     }

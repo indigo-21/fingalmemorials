@@ -44,6 +44,7 @@ Route::group(['middleware'=> 'auth'], function(){
 	Route::match(['post', 'put'], 'order/create/modifyDocument', [OrderController::class, 'modifyDocument']);
 	
 	Route::get('/order/edit/{tab?}/{order_id?}', [OrderController::class, 'edit']);
+	Route::get('order/create/findCustomer/{id}', [OrderController::class, 'findCustomer']);
 	// Route::get('/',[UserController::class, 'index']);
 	
 	Route::get('/users',[UserController::class, 'index']);

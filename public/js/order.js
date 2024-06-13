@@ -143,5 +143,39 @@ $(document).on("click",".edit-submit",function(){
 
 });
 
-// END Related on GENERAL DETAILS
+$(document).on("change", ".chosen-customer", function (e) {
+    // console.log(e.target.value);
+    let customerId = e.target.value;
 
+    $.ajax({
+        type: "GET",
+        async: false,
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        url: "findCustomer/" + customerId,
+        success: function (data) {
+            
+            $("[name=title_id]").val(data.title_id).trigger("change");
+
+            $("[name=firstname]").val(data.firstname);
+            $("[name=middlename]").val(data.middlename);
+            $("[name=surname]").val(data.surname);
+            $("[name=mobile]").val(data.mobile);
+            $("[name=telno]").val(data.telno);
+            $("[name=email]").val(data.email);
+            $("[name=account_number ]").val(data.account_number);
+            $("[name=address1]").val(data.address1);
+            $("[name=address2]").val(data.address2);
+            $("[name=address3]").val(data.address3);
+            $("[name=town]").val(data.town);
+            $("[name=county]").val(data.county);
+            $("[name=postcode]").val(data.postcode);
+        },
+
+        error: function (error) {},
+    });
+    $(".customer-form").attr("hidden", false);
+});
+
+// END Related on CUSTOMER DETAILS
