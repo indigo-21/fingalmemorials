@@ -135,12 +135,31 @@ $(document).on("click",".edit-submit",function(){
 
             });
         },
-        error:function(error){
-
-        }
+        error: function (error) {},
     });
+});
 
+// END Related on GENERAL DETAILS
 
+// Related on CUSTOMER DETAILS
+
+$(document).on("click", ".checkBox-newCustomer", function (e) {
+    // let check=e.target.checked;
+    if (e.target.checked === true) {
+
+        $(".choose-customer-text").attr("hidden", true);
+        $(".customer-form").attr("hidden", false);
+        $(".customer-form .input-form").val("");
+        $(".customer-form .input-form .selectpicker")
+            .find("option:selected")
+            .remove();
+        $(".chosen-customer option:first").prop('selected',true).trigger("change");
+        $("[name=title_id] option:first").prop('selected',true).trigger("change");
+        
+    } else {
+        $(".choose-customer-text").attr("hidden", false);
+        $(".customer-form").attr("hidden", false);
+    }
 });
 
 $(document).on("change", ".chosen-customer", function (e) {

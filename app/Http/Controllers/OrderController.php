@@ -55,9 +55,10 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders         = Order::All();
+        $customer = Customer::All();
+        $orders = Order::All();
         return view('pages.order.index')
-                    ->withOrders($orders);
+            ->withOrders($orders);
 
     }
 
@@ -92,6 +93,7 @@ class OrderController extends Controller
         $sources        = Source::All();
         $categories     = Category::All();
         $graveSpaces    = GraveSpace::All();
+        $customer       = Customer::All();
         $titles         = Title::All();
         $hasInvoice     = false;
         $jobValue       = "0.00";
@@ -112,7 +114,8 @@ class OrderController extends Controller
                     ->withTitles($titles)
                     ->withJobValue($jobValue)
                     ->withHasInvoice($hasInvoice)
-                    ->withOrderBalance($orderBalance);
+                    ->withOrderBalance($orderBalance)
+                    ->withCustomers($customer);
                 break;
             case 'job-details':
                 return view($url)
