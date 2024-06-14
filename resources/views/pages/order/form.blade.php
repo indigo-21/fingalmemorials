@@ -187,5 +187,5 @@
 
 
 @section('page-scripts')
-    <script src="{{ asset('js/order.js') }}"></script>
+    <script src="{{ asset('js/orders.js') }}"></script>
 @endsection

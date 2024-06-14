@@ -167,18 +167,25 @@
                                         <td>{{$order->customer->firstname}} {{$order->customer->middlename}} {{$order->customer->surname}}</td>
                                         <td>{{$order->user->firstname}} {{$order->user->surname}}</td>
                                         <td>
-                                            <div class="open-order">
-                                                Open Order
-                                            </div>
-                                            <div class="invoiced">
-                                                Invoiced - No Editing
-                                            </div>
-                                            <div class="order-cancelled">
-                                                Order Cancelled
-                                            </div>
-                                            <div class="complete-order">
-                                                Invoiced - No Editing
-                                            </div>
+                                            @if($order->status_id == "1")
+                                                              
+                                                <div class="open-order">
+                                                    Open Order
+                                                </div>                            
+                                            @elseif($order->status_id == "2")
+                                                <div class="invoiced">
+                                                    Invoiced - No Editing
+                                                </div>  
+                                            @elseif($order->status_id == "3")
+                                                <div class="order-cancelled">
+                                                    Order Cancelled
+                                                </div>
+                                            @else
+                                                <div class="complete-order">
+                                                   Order Complete
+                                                </div>
+                                            @endif
+
                                         </td>
                                         <td class="popover-cl-pro">
                                             <a href="{{url('order/edit/general-details')}}/{{$order->id}}" class="btn btn-primary" data-trigger="hover" data-toggle="popover" data-placement="bottom" data-content="Edit"><i class="fa fa-pencil"></i></a>

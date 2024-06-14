@@ -291,5 +291,5 @@
     </div>
 @endsection
 @section('page-scripts')
-    <script src="{{ asset('js/order.js') }}"></script>
+    <script src="{{ asset('js/tabs/general-details.js') }}"></script>
 @endsection
