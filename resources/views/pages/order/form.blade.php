@@ -8,7 +8,7 @@
                     <div class="breadcrumbs-content">
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <h3>{{isset($orders) ? "Update" : "Create" }} Orders</h3>
+                                <h3>{{isset($order) ? "Update" : "Create" }} Orders</h3>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <p class="breadcrumbs-link"><a href="">Dashboard</a> / <b>Orders</b></p>
@@ -127,6 +127,12 @@
                                                     @endforeach
                                                 </ul>
                                                 <div class="tab-content tab-custom-st">
+                                                        <!-- Error Display -->
+                                                            <div class="error-display" id="error_container">
+                          
+                                                            </div>
+                                                        <!-- Error Display -->
+
                                                         <div id="general-details"
                                                             class="tab-pane fade in {{ 'general-details' === Request::segment(3) ? 'active' : '' }}"
                                                             role="tabpanel">
@@ -187,5 +193,5 @@
 
 
 @section('page-scripts')
-    <script src="{{ asset('js/orders.js') }}"></script>
+   
 @endsection

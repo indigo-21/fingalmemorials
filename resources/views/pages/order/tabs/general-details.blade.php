@@ -14,7 +14,7 @@
                 <div class="chosen-select-act fm-cmp-mg mb-20">
                     <label>Cemetery</label>
                     <select class="input-form selectpicker" data-placeholder="" id="input-cemetery" name="cemetery_id">
-                        <option disabled selected >Choose a Cemetery...</option>
+                        <option disabled selected value="" >Choose a Cemetery...</option>
                         @php
                             $fixing_area = "";
                         @endphp
@@ -131,7 +131,7 @@
                 <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;">
                     <label>Source:</label>
                     <select class="input-form selectpicker" name="source_id">
-                        <option selected disabled>Source</option>
+                        <option selected disabled value="">Source</option>
                         @foreach($sources as $source)
                             <option value="{{$source->id}}"
                                 @if(isset($order))
@@ -144,7 +144,7 @@
                 <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;">
                     <label>Category:</label>
                     <select class="input-form selectpicker" name="category_id">
-                        <option selected disabled>Category</option>
+                        <option selected disabled value="">Category</option>
                         @foreach($categories as $category)
                             <option value="{{$category->id}}"
                                 @if(isset($order))

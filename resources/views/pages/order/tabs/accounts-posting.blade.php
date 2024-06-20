@@ -24,7 +24,7 @@
                     <div class="chosen-select-act fm-cmp-mg mb-20">
                         <label>Payment Type</label>
                         <select class="selectpicker payment-type" data-placeholder="Choose a Payment Type..." name="payment_type_id">
-                            <option disabled selected>- Select Payment Type</option>
+                            <option disabled selected value="">- Select Payment Type</option>
                             @foreach($paymentTypes as $paymentType)
                                 <option value="{{$paymentType->id}}" reason="Deposit paid by {{$paymentType->name}}">{{$paymentType->name}}</option>
                             @endforeach
@@ -36,7 +36,7 @@
                     </div>
                     <div class="nk-int-st" style="margin-bottom:20px;">
                         <label>Payment</label>
-                        <input type="text" class="form-control" placeholder="Payment" name="payment">
+                        <input type="number" class="form-control" placeholder="Payment" name="payment">
                     </div>
                     <div class="row mt-20">
                         <div class="col-md-12 text-center">
@@ -59,7 +59,7 @@
                     <div class="chosen-select-act fm-cmp-mg mb-20">
                         <label>Payment Type</label>
                         <select class="selectpicker payment-type" data-placeholder="Choose a Country..." name="payment_type_id">
-                            <option disabled selected>- Select Payment Type</option>
+                            <option disabled selected value="">- Select Payment Type</option>
                             @foreach($paymentTypes as $paymentType)
                                 <option value="{{$paymentType->id}}" reason="Deposit paid by {{$paymentType->name}}">{{$paymentType->name}}</option>
                             @endforeach
@@ -125,7 +125,7 @@
                                     <tr>
                                         <td>{{$loop->index + 1 }}</td>
                                         <td>{{$accountPosting->account_type->code}}</td>
-                                        <td>{{$accountPosting->invoice_number ? $accountPosting->invoice_number : "0"}}</td>
+                                        <td>{{$accountPosting->invoice_number ? $accountPosting->invoice_number : "-"}}</td>
                                         <td>
                                             @if(isset($accountPosting->payment_type->name))
                                                 <span class="reason">Deposit paid by {{$accountPosting->payment_type->name}}<span>

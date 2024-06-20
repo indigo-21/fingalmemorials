@@ -34,9 +34,27 @@ class CustomerController extends Controller
         ];
     }
 
+    public function changeAttributes(){
+        return  [
+            "title_id"      => "Title",
+            "firstname"     => "First Name",
+            "middlename"    => "Middle Name",
+            "surname"       => "Surname",
+            "mobile"        => "Mobile No.",
+            "telno"         => "Tel No.",
+            "email"         => "Email",
+            "address1"      => "Address 1",
+            "address2"      => "Address 2",
+            "address3"      => "Address 3",
+            "town"          => "Town",
+            "county"        => "County",
+            "postcode"      => "Postcode",
+        ];
+    }
+
     public function formAction($request, $id = false){
         // Validation Form
-        $request->validate(self::formRule($id));
+        $request->validate(self::formRule($id), [], self::changeAttributes());
 
         // When ID = false the form is for Create
         $data = !$id ? new Customer : Customer::findOrFail($id);

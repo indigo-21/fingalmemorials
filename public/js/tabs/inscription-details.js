@@ -107,6 +107,31 @@ $(document).ready(function(){
 
     });
 
+    function errorMessage(error){
+        let errorArray  = error.responseJSON.errors;
+        let errorList   = "";
+    
+        $.each(errorArray, function(key, value){
+            errorList += `<li> <strong>- </strong>${value[0]}</li>`;
+        });
+        
+        let html = `<div class="alert alert-danger alert-dismissible alert-mg-b-0" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true"><i class="notika-icon notika-close"></i></span>
+                        </button> 
+                        <ul>
+                            ${errorList}
+                        </ul>
+                    </div>  `;
+    
+        $("#error_container").html(html);
+    
+        // Scroll to the error messages container
+        document.getElementById('error_container').scrollIntoView({
+            behavior: 'smooth'
+        });
+    }
+
     
 
 });

@@ -11,7 +11,7 @@
                         <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;">
                             <label>Analysis:</label>
                             <select class="selectpicker" name="analysis_id">
-                                <option selected disabled>- Analysis</option>
+                                <option selected disabled value="">- Analysis</option>
                                 @foreach ($analyses as $analysis)
                                     <option class="option-analysis" value="{{ $analysis->id }}">{{ $analysis->code }}
                                     </option>
@@ -49,7 +49,7 @@
                             <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;">
                                 <label>VAT Rate:</label>
                                 <select class="selectpicker" name="vat_code_id">
-                                    <option disabled selected vatrate="0" >-- SELECT VAT RATE --</option>
+                                    <option disabled selected vatrate="" >-- SELECT VAT RATE --</option>
                                     @foreach ($vatCodes as $vatCode)
                                         <option value="{{ $vatCode->id }}" vatrate="{{ $vatCode->vat }}">{{ $vatCode->vat_description }}</option>
                                     @endforeach
@@ -120,14 +120,14 @@
                                             {{ $jobDetail->vatCode->vat_description }}</td>
                                         <td class="analysis_id" id="{{ $jobDetail->analysis_id }}">
                                             {{ $jobDetail->analysis->description }}</td>
-                                        <td class="discount">{{ $jobDetail->discount }}</td>
+                                        <td class="discount">{{ $jobDetail->discount == '' ? '0.00' : $jobDetail->discount }}</td>
                                         <td class="vat">{{ $jobDetail->vat_amount }}</td>
                                         <td class="gross">{{ $jobDetail->gross_amount }}</td>
                                         <td class="popover-cl-pro">
                                             <button class="btn btn-primary edit-job-detail" data-trigger="hover"
                                                 data-toggle="popover" data-placement="bottom" data-content="Edit"
                                                 jobcost="{{$jobDetail->job_cost}}"
-                                                discount="{{$jobDetail->discount}}"
+                                                discount="{{$jobDetail->discount == '' ? '0.00' : $jobDetail->discount }}"
                                                 subtotal="{{$jobDetail->total}}"
                                                 additionalfee="{{$jobDetail->additional_fee}}"
                                                 netamount="{{$jobDetail->net_amount}}"

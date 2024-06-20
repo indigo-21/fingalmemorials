@@ -76,14 +76,14 @@ $(document).ready(function() {
                                             <td class="net">${data.net_amount}</td>
                                             <td class="vat_code_id" id="${data.vat_code_id}">${data.vat_code_description}</td>
                                             <td class="analysis_id" id="${data.analysis_id}">${data.analysis_description}</td>
-                                            <td class="discount">${data.discount}</td>
+                                            <td class="discount">${data.discount == "null" ? "0.00" : data.discount}</td>
                                             <td class="vat">${data.vat_amount}</td>
                                             <td class="gross">${data.gross_amount}</td>
                                             <td class="popover-cl-pro">
                                                 <button class="btn btn-primary edit-job-detail" data-trigger="hover" 
                                                         data-toggle="popover" data-placement="bottom" data-content="Edit" 
                                                         jobcost="${data.job_cost}"
-                                                        discount="${data.discount}"
+                                                        discount="${data.discount == "null" ? "0.00" : data.discount}"
                                                         subtotal="${data.total}"
                                                         additionalfee="${data.additional_fee}"
                                                         netamount="${data.net_amount}"
@@ -103,7 +103,7 @@ $(document).ready(function() {
                 });
             },
             error:function(error){
-
+                errorMessage(error);
             }
         });
         
@@ -118,7 +118,7 @@ $(document).ready(function() {
         let data                = getJobDetails(order_id);
         data["job_detail_id"]   = job_detail_id;
         let element_data        = $(`.job-details-row-${job_detail_id}`);
-
+        console.log(element_data);
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -132,28 +132,29 @@ $(document).ready(function() {
                 });
             },
             success:function(data){
+                // element_data.find(".details_of_work").text(data.details_of_work);
+                // element_data.find(".analysis_id").attr("id", data.analysis_id);
+                // element_data.find(".analysis_id").text(data.analysis_description);
+                // element_data.find(".vat_code_id").attr("id", data.vat_code_id);
+                // element_data.find(".vat_code_id").text(data.vat_code_description);
+                // element_data.find(".vat").text(data.vat);
+                // element_data.find(".net").text(data.net);
+                // element_data.find(".discount").text(data.discount);
+                // element_data.find(".gross").text(data.gross);
                 Swal.fire({
                     icon: "success",
                     title: "Job Details Updated",
                     showConfirmButton: false,
                     timer: 1500
                 }).then(function(){
-                    element_data.find(".details_of_work").text(data.details_of_work);
-                    element_data.find(".analysis_id").attr("id", data.analysis_id);
-                    element_data.find(".analysis_id").text(data.analysis_description);
-                    element_data.find(".vat_code_id").attr("id", data.vat_code_id);
-                    element_data.find(".vat_code_id").text(data.vat_code_description);
-                    element_data.find(".vat").text(data.vat);
-                    element_data.find(".net").text(data.net);
-                    element_data.find(".discount").text(data.discount);
-                    element_data.find(".gross").text(data.gross);
                     
+                    window.location.href = `${SYSTEM_URL}/order/edit/job-details/${order_id}`;
                     alterForm();
                     alterButton();
                 });
             },
             error:function(error){
-
+                errorMessage(error);
             }
         });
     }); 
@@ -266,6 +267,31 @@ $(document).ready(function() {
 
     }
 
+
+    function errorMessage(error){
+        let errorArray  = error.responseJSON.errors;
+        let errorList   = "";
+    
+        $.each(errorArray, function(key, value){
+            errorList += `<li> <strong>- </strong>${value[0]}</li>`;
+        });
+        
+        let html = `<div class="alert alert-danger alert-dismissible alert-mg-b-0" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true"><i class="notika-icon notika-close"></i></span>
+                        </button> 
+                        <ul>
+                            ${errorList}
+                        </ul>
+                    </div>  `;
+    
+        $("#error_container").html(html);
+    
+        // Scroll to the error messages container
+        document.getElementById('error_container').scrollIntoView({
+            behavior: 'smooth'
+        });
+    }
 
 
 });

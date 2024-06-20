@@ -23,10 +23,17 @@ $(document).ready(function(){
         let payment         = thisForm.find("[name=payment]").val();   
         let invoice_to      = thisForm.find("[name=invoice_to]").val();
 
+        // IS INVOICE
+        if(account_type_id == "3"){
+            payment = $("#order-balances").val(); 
+        }
+
+
+
         let data = {
             order_id, account_type_id, date_received, payment_type_id,reason,payment,invoice_to
         };
-
+        
         modifyAccountPosting(data);
 
     });
@@ -118,21 +125,36 @@ $(document).ready(function(){
                 });
             },
             error:function(error){
-
+                errorMessage(error);
             }
         });
     }
 
 
 
-    // function getAccountPostingData(data){
+    function errorMessage(error){
+        let errorArray  = error.responseJSON.errors;
+        let errorList   = "";
+    
+        $.each(errorArray, function(key, value){
+            errorList += `<li> <strong>- </strong>${value[0]}</li>`;
+        });
         
-    //     payment_type_id 
-    //     payment
-    //     account_type_id
-    //     invoice_to
-
-
-    // }
+        let html = `<div class="alert alert-danger alert-dismissible alert-mg-b-0" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true"><i class="notika-icon notika-close"></i></span>
+                        </button> 
+                        <ul>
+                            ${errorList}
+                        </ul>
+                    </div>  `;
+    
+        $("#error_container").html(html);
+    
+        // Scroll to the error messages container
+        document.getElementById('error_container').scrollIntoView({
+            behavior: 'smooth'
+        });
+    }
 
 });

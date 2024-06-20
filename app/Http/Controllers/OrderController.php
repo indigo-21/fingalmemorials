@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use App\Models\Customer;
 use App\Models\OrderType;
 use App\Models\Branch;
@@ -30,19 +32,189 @@ use Auth;
 class OrderController extends Controller
 {
 
+    public function changeAttributes($type = "document"){
+       // $type = customer|order|job_details|inscription|account_posting|document
+       $data   = [];
+       switch ($type) {
+           case 'customer':
+               $data = ["customerData.title_id"      => "<strong>Title</strong>",
+                        "customerData.firstname"     => "<strong>First Name</strong>",
+                        "customerData.middlename"    => "<strong>Middle Name</strong>",
+                        "customerData.surname"       => "<strong>Surname</strong>",
+                        "customerData.mobile"        => "<strong>Mobile No.</strong>",
+                        "customerData.telno"         => "<strong>Tel No.</strong>",
+                        "customerData.email"         => "<strong>Email</strong>",
+                        "customerData.address1"      => "<strong>Address 1</strong>",
+                        "customerData.address2"      => "<strong>Address 2</strong>",
+                        "customerData.address3"      => "<strong>Address 3</strong>",
+                        "customerData.town"          => "<strong>Town</strong>",
+                        "customerData.county"        => "<strong>County</strong>",
+                        "customerData.postcode"      => "<strong>Postcode</strong>"];
+               
+           break;
 
-    public function formRule($type = "" ){
+           case 'order':
+                $data = ["orderData.order_type_id"             => "<strong>Order Type</strong>",
+                         "orderData.order_date"                => "<strong>Order Date</strong>",
+                         "orderData.order_branch"              => "<strong>Branch</strong>",
+                         "orderData.deceased_name"             => "<strong>Deceased Name</strong>",
+                         "orderData.date_of_death"             => "<strong>Date of Death</strong>",
+                         "orderData.order_headline"            => "<strong>Order Headline</strong>",
+                         "orderData.cemetery_id"               => "<strong>Cemetery</strong>",
+                         "orderData.plot_grave"                => "<strong>Plot/Grave</strong>",
+                         "orderData.grave_space_id"            => "<strong>Grave Space</strong>",
+                         "orderData.special_instructions"      => "<strong>Special Instruction</strong>",
+                         "orderData.source_id"                 => "<strong>Source</strong>",
+                         "orderData.category_id"               => "<strong>Category</strong>"];
+           break;
+           case 'job_details':
+                $data = [
+                    "analysis_id"           => "<strong>Analysis</strong>", 
+                    "details_of_work"       => "<strong>Details of Work</strong>", 
+                    "job_cost"              => "<strong>Job Cost</strong>", 
+                    "discount"              => "<strong>Discount</strong>",
+                    "total"                 => "<strong>Total</strong>",
+                    "additional_fee"        => "<strong>Additional Fee</strong>",
+                    "net_amount"            => "<strong>Net Amount</strong>",
+                    "vat_code_id"           => "<strong>VAT Rate</strong>", 
+                    "vat_amount"            => "<strong>VAT Amount</strong>", 
+                    "zero_rated_amount"     => "<strong>Zero Rated Fee</strong>", 
+                    "adjusment_amount"      => "<strong>Adjustment Amount</strong>", 
+                    "gross_amount"          => "<strong>Gross Amount</strong>", 
+                ];
+
+            break;
+            case 'account_posting_payment':
+                $data = [
+                    "account_type_id"     => "<strong>Account Type</strong>",
+                    "date_received"       => "<strong>Date Payment Received</strong>",
+                    "payment_type_id"     => "<strong>Payment Type</strong>",
+                    "reason"              => "<strong>Reason</strong>",
+                    "payment"             => "<strong>Payment</strong>",
+                ];
+            break;
+            case 'account_posting_refund':
+                $data = [
+                    "account_type_id"     => "<strong>Account Type</strong>",
+                    "date_received"       => "<strong>Date of Refund</strong>",
+                    "payment_type_id"     => "<strong>Payment Type</strong>",
+                    "reason"              => "<strong>Reason</strong>",
+                    "payment"             => "<strong>Payment</strong>",
+                ];
+            break;
+            case 'account_posting_invoice':
+                $data = [
+                    "date_received"       => "<strong>Date of the Invoice</strong>",
+                ];
+            break;
+           default:
+               // $type="document"
+               $data = [
+                "file"                  => "<strong>Document</strong>",
+                "description"           => "<strong>Description</strong>",
+                "document_type_id"      => "<strong>Document Type</strong>",
+            ];
+
+           break;
+       } 
+
+       return $data;
+    }
+
+    public function formRule($type = "document", $id = false){
+        // $type = customer|order|job_details|inscription|account_posting|document
+        $data   = [];
         switch ($type) {
-            case 'value':
-                # code...
-                break;
+            case 'customer':
+                $data = [
+                        "customerData.title_id"      => ['required'],
+                        "customerData.firstname"     => ['required','string','min:5','max:900'],
+                        "customerData.middlename"    => ['nullable','string','min:5','max:900'],
+                        "customerData.surname"       => ['required','string','min:5','max:900'],
+                        "customerData.mobile"        => ['nullable','string','min:5','max:900'],
+                        "customerData.telno"         => ['nullable','string','min:5','max:900'],
+                        "customerData.email"         => ['nullable','email','string','min:5','max:900', Rule::unique('customers', 'email')->ignore($id ? $id : "")],
+                        "customerData.address1"      => ['nullable','string','min:2','max:900'],
+                        "customerData.address2"      => ['nullable','string','min:2','max:900'],
+                        "customerData.address3"      => ['nullable','string','min:2','max:900'],
+                        "customerData.town"          => ['nullable','string','min:2','max:900'],
+                        "customerData.county"        => ['required','string','min:2','max:900'],
+                        "customerData.postcode"      => ['required','string','min:2','max:900'],
+                ];
+                
+            break;
+            case 'order':
+                $data = [
+                            "orderData.order_type_id"             => ['required'],
+                            "orderData.order_date"                => ['required'],
+                            "orderData.order_branch"              => ['required'],
+                            "orderData.deceased_name"             => ['required','min:5','max:50'],
+                            "orderData.date_of_death"             => ['required'],
+                            "orderData.order_headline"            => ['required','string','min:5','max:50'],
+                            "orderData.cemetery_id"               => ['required'],
+                            "orderData.plot_grave"                => ['required','string','min:5','max:20'],
+                            "orderData.grave_space_id"            => ['required'],
+                            "orderData.special_instructions"      => ['nullable','string','min:5','max:150'],
+                            "orderData.source_id"                 => ['required'],
+                            "orderData.category_id"               => ['required'],
+                        ];
+            break;
+            case 'job_details':
+                $data = [
+                    "analysis_id"           => ['required'],
+                    "details_of_work"       => ['required','string','min:5','max:50'], 
+                    "job_cost"              => ['required','min:1','max:5'], 
+                    "discount"              => ['nullable','min:1','max:5'], 
+                    "total"                 => ['required','min:1','max:5'], 
+                    "additional_fee"        => ['nullable','min:1','max:5'], 
+                    "net_amount"            => ['required','min:1','max:5'], 
+                    "vat_code_id"           => ['required'],
+                    "vat_amount"            => ['required','min:1','max:5'],
+                    "zero_rated_amount"     => ['nullable','min:1','max:5'],
+                    "adjusment_amount"      => ['nullable','min:1','max:5'],
+                    "gross_amount"          => ['required','min:1','max:5'],
+                ];
+
+            break;
+            case 'inscription':
+               
+            break;
+
+            case 'account_posting_payment':
+                $data = [
+                    "account_type_id"     => ['required'],
+                    "date_received"       => ['required'],
+                    "payment_type_id"     => ['required'],
+                    "reason"              => ['nullable','min:5','max:50'],
+                    "payment"             => ['required','numeric','min:1','max:10'],
+                ];
+            break;
+            case 'account_posting_refund':
+                $data = [
+                    "account_type_id"     => ['required'],
+                    "date_received"       => ['required'],
+                    "payment_type_id"     => ['required'],
+                    "reason"              => ['nullable','min:5','max:50'],
+                    "payment"             => ['required','numeric','min:1','max:10'],
+                ];
+            break;
+            case 'account_posting_invoice':
+                $data = [
+                    "date_received"       => ['required'],
+                ];
+            break;
             
             default:
-                // $type="orders"
-                
+                // $type="document"
+                $data = [
+                    "file"                  => ['required',"file"],
+                    "description"           => ['required',"string","min:5","max:250"],
+                    "document_type_id"      => ['required'],
+                ];
 
-                break;
+            break;
         }
+        return $data;
     }
 
     public function retriveData($tab = null, $order_id){
@@ -214,6 +386,7 @@ class OrderController extends Controller
                                                     ->get();
         $hasInvoice               = false;
         $orderBalance             = floatval($jobValue) - floatval($accountPostings->sum("credit"));
+
         
         if($accountPostingInvoice->isNotEmpty()){
             $hasInvoice = true;
@@ -278,8 +451,8 @@ class OrderController extends Controller
                     ->withJobDetails($jobDetails)
                     ->withAnalyses($analyses)
                     ->withVatCodes($vatCodes)
-                    ->withJobValue($jobValue)
                     ->withHasInvoice($hasInvoice)
+                    ->withJobValue($jobValue)
                     ->withOrderBalance($orderBalance);
                 break;
             case 'inscription-details':
@@ -291,8 +464,8 @@ class OrderController extends Controller
                     ->withOrder($order)
                     ->withCustomer($customer)
                     ->withOrder($order)
-                    ->withJobValue($jobValue)
                     ->withHasInvoice($hasInvoice)
+                    ->withJobValue($jobValue)
                     ->withOrderBalance($orderBalance);
                 break;
             case 'accounts-posting':
@@ -442,8 +615,11 @@ class OrderController extends Controller
         $customer_id    = isset($request->customer_id) ? $request->customer_id : false;
 
         // Insert/Update Customer Details
+        $request->validate(self::formRule("customer", $customer_id), [], self::changeAttributes("customer") );
         $customer_id    = self::modifyCustomer($request->customerData, $customer_id);
-       
+        
+
+        $request->validate(self::formRule("order", $order_id), [], self::changeAttributes("order") );
         // Insert/Update Order Details
         $orderID        = self::modifyOrder($request->orderData, $customer_id, $order_id);
 
@@ -456,7 +632,10 @@ class OrderController extends Controller
 
         $isInsert       = $request->job_detail_id ? false : true;
         $order_id       = $request->order_id;
-     
+        
+        // VALIDATION
+        $request->validate(self::formRule("job_details"), [], self::changeAttributes("job_details") );
+
         $jobDetailData  = $isInsert ? new JobDetail : JobDetail::findOrFail($request->job_detail_id);
         
         // FOR REFERENCE IN BALANCE(PAYMENT)
@@ -519,9 +698,9 @@ class OrderController extends Controller
     }
 
     public function modifyInscriptionDetails(Request $request){
-      
+    
         $isInsert           = $request->inscription_detail_id ? false : true;
-        
+    
         $inscriptionData    = $isInsert ? new Inscription : Inscription::find($request->inscription_detail_id);
         
         $inscriptionData->order_id              = $request->order_id;
@@ -550,6 +729,25 @@ class OrderController extends Controller
 
     // THIS METHOD IS FOR ACCOUNT POSTING SECTION
     public function modifyAccountPosting(Request $request){
+
+        switch ($request->account_type_id) {
+            case '1':
+                    $ruleType = "account_posting_payment";
+                break;
+
+            case '2':
+                $ruleType = "account_posting_refund";
+                break;
+            
+            default:
+                // 3 = INVOICE
+                $ruleType = "account_posting_invoice";
+                break;
+        }
+
+        // VALIDATION
+        $request->validate(self::formRule($ruleType), [], self::changeAttributes($ruleType) );
+
         $isInsert           = $request->account_posting_id ? false : true;
         
         $accountPostingData = $isInsert ? new AccountPosting : AccountPosting::find($request->account_posting_id);
@@ -560,11 +758,18 @@ class OrderController extends Controller
         
         if($request->account_type_id != "3"){
             // PAYMENT = CREDIT
-            $accountPostingData->credit          = $request->payment; 
+            $accountPostingData->credit        = $request->payment; 
         }else{
              // INVOICE = DEBIT
             $accountPostingData->debit         = $request->payment; 
+            
+            // MODIFY ORDER STATUS
+            $orderData                         = Order::findOrFail($request->order_id);
+            $orderData->status_id              = 2;
+            $orderData->updated_by             = Auth::id();  
+            $orderData->save();
         }
+
         $accountPostingData->account_type_id    = $request->account_type_id;
 
         if($request->invoice_to){
@@ -588,13 +793,19 @@ class OrderController extends Controller
         $inscription_id = $isInsert ? $accountPostingData->id : $request->account_posting_id;
         $result         = AccountPosting::find($inscription_id);
 
+
+
+
+
         return response()->json($result);
         
     }
 
     // THIS METHOD IS FOR DOCUMENT SECTION
     public function modifyDocument(Request $request){
-    
+
+        $request->validate(self::formRule(), [], self::changeAttributes() );
+
         if($request->file('file')->isValid()){
             $file           = $request->file("file");
             $originalName   = $file->getClientOriginalName();
@@ -620,6 +831,7 @@ class OrderController extends Controller
 
         }
     }
+
     public function findCustomer(string $id)
     {
 
