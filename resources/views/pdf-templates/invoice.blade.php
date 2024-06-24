@@ -8,6 +8,17 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Invoice</title>
     <style>
+        @page{
+            size:A4;
+            margin-left:2cm;
+            margin-right:2cm;
+            font-size:80%;
+        }
+        @media print{
+            header,footer{
+                display:none !important;
+            }
+        }
         body {
             border: 2px solid #000;
             margin: 0px;
@@ -88,19 +99,19 @@
         </tr>
         <tr>
             <td colspan="2">
-                <h3 class="title-receipt">INVOICE NO. 11276</h3>
+                <h3 class="title-receipt">INVOICE NO. {{$accountPostings->invoice_number}}</h3>
             </td>
         </tr>
         <tr>
             <td style="border: 1px solid #000; padding:10px 20px;">
-                <p><b>Name:</b> Fingal Memorials</p>
-                <p><b>Address:</b> </p>
+                <p><b>Name: </b>{{$customer->title->name}} {{$customer->firsname}} {{$customer->middlename}} {{$customer->surname}}</p>
+                <p><b>Address: </b>{{$customer->address1}} </p>
             </td>
             <td style="border: 1px solid #000; padding:10px 20px;">
-                <p><b>Invoice No.:</b></p>
-                <p><b>Invoice Date:</b></p>
-                <p><b>Order Value:</b></p>
-                <p><b>Balance now Due:</b></p>
+                <p><b>Invoice No.: </b>{{$accountPostings->invoice_number}}</p>
+                <p><b>Invoice Date: </b>{{date('m/d/Y', strtotime($accountPostings->created_at)) }}</p>
+                <p><b>Order Value: </b>{{number_format($jobValue, 2)}}</p>
+                <p><b>Balance now Due: </b>{{number_format($orderBalance, 2)}}</p>
             </td>
         </tr>
     </table>
@@ -112,7 +123,7 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <p>Permit Fee</p>
+                                    <p>Permit Fee: {{ number_format($totalAdditional, 2) }}</p>
                                 </td>
                                 <td>
                                     <p></p>
@@ -120,7 +131,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <p>Total</p>
+                                    <p>Total: {{ number_format($jobValue, 2) }}</p>
                                 </td>
                             </tr>
                             <tr>
@@ -153,15 +164,15 @@
                                 <p class="invoice-title"><b>Net Amount:</b></p>
                             </td>
                             <td>
-                                <p>€ 166.67</p>
+                                <p>€ {{ number_format($totalNet , 2)}}</p>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <p><b>VAT Amount at 13.50%:</b></p>
+                                <p><b>VAT Amount:</b></p>
                             </td>
                             <td>
-                                <p>€ 33.33</p>
+                                <p>€ {{ number_format($totalVat, 2 )}}</p>
                             </td>
                         </tr>
                         <tr>
@@ -169,7 +180,7 @@
                                 <p><b>Zero Rated Fees:</b></p>
                             </td>
                             <td>
-                                <p>€ 100.00</p>
+                                <p>€ {{number_format( $totalZeroRated, 2 )}}</p>
                             </td>
                         </tr>
                         <tr>
@@ -177,7 +188,7 @@
                                 <p><b>Gross Amount:</b></p>
                             </td>
                             <td>
-                                <p>€ 300.00</p>
+                                <p>€ {{number_format($jobValue, 2) }}</p>
                             </td>
                         </tr>
                     </table>
@@ -193,3 +204,11 @@
 </body>
 
 </html>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Print the page when the document is ready
+      window.print();
+    });
+</script>

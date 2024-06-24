@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('print_histories', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('order_id')->constrained();
             $table->string("type");
             $table->string("filename");
             $table->foreignId('printed_by')->nullable()->constrained('users');

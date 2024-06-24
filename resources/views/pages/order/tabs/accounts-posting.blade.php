@@ -149,9 +149,16 @@
                                                     class="fa fa-pencil"></i></button>
                                             @endif
 
-                                            <button class="btn btn-primary" data-trigger="hover" data-toggle="popover"
+                                            @if($accountPosting->invoice_number)
+                                                <a class="btn btn-primary" target="_blank" href="{{url('/order/invoice/')}}/{{$accountPosting->order_id}}/{{$accountPosting->invoice_number}}" data-trigger="hover" data-toggle="popover"
+                                                    data-placement="bottom" data-content="Print"><i
+                                                        class="fa fa-print"></i></a>
+                                            @else
+                                                <a class="btn btn-primary" target="_blank" href="{{url('/order/receipt/')}}/{{$accountPosting->order_id}}/{{$accountPosting->id}}" data-trigger="hover" data-toggle="popover"
                                                 data-placement="bottom" data-content="Print"><i
-                                                    class="fa fa-print"></i></button>
+                                                    class="fa fa-print"></i></a>
+                                            @endif
+                                            
                                         </td>
                                     </tr>
                                 @endforeach

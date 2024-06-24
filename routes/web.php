@@ -45,6 +45,10 @@ Route::group(['middleware'=> 'auth'], function(){
 	
 	Route::get('/order/edit/{tab?}/{order_id?}', [OrderController::class, 'edit']);
 	Route::get('order/create/findCustomer/{id}', [OrderController::class, 'findCustomer']);
+
+	Route::get('/order/invoice/{order_id?}/{invoice_number?}/{is_view?}', [OrderController::class, 'printInvoice']);
+	Route::get('/order/receipt/{order_id?}/{job_posting_id?}/{is_view?}', [OrderController::class, 'printReceipt']);
+
 	// Route::get('/',[UserController::class, 'index']);
 	
 	Route::get('/users',[UserController::class, 'index']);
@@ -129,14 +133,9 @@ Route::group(['middleware'=> 'auth'], function(){
 	Route::put('updateVatCodes/{id}',[VatCodeController::class,'update'])->name('updateVatCodes');
 	Route::delete('deleteVatCodes',[VatCodeController::class,'destroy'])->name('deleteVatCodes');
 
-		// Dashboard
+	// Dashboard
 	Route::resource('dashboard',DashboardController::class);
-	Route::get("/receipt", function(){
-		return view("pdf-templates/receipt");
-	 });
-	 Route::get("/invoice", function(){
-		return view("pdf-templates/invoice");
-	 });
+	
 	// Customer
 
 	Route::get('customer/getCustomerOrders/{id}',[CustomerController::class,'getCustomerOrders']);

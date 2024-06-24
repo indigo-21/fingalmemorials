@@ -418,8 +418,9 @@ class OrderController extends Controller
         $documents = Document::where("order_id", $order_id)->get();
 
         // PRINT HISTORY 
-        $printHistories = PrintHistory::All();
+        $printHistories = PrintHistory::where("order_id",$order_id)->get();
 
+        // dd($printHistories->first()->user->firstname);
 
         
         switch ($tab) {
@@ -801,6 +802,74 @@ class OrderController extends Controller
         
     }
 
+    public function printInvoice( $order_id, $invoice_number, $is_view = false ){
+      
+        $order          = Order::findOrFail($order_id);
+        $customer       = Customer::findOrFail($order->customer_id);
+
+        // GENERAL DETAILS - JOB DETAILS DATA
+        $jobDetails         = JobDetail::where("order_id",$order_id)->get();
+        $jobValue           = $jobDetails->sum("gross_amount");
+        $totalAdditional    = $jobDetails->sum("additional_fee");
+        $totalNet           = $jobDetails->sum("net_amount");
+        $totalVat           = $jobDetails->sum("vat_amount");
+        $totalZeroRated     = $jobDetails->sum("zero_rated_amount");
+    
+
+
+        // GENERAL DETAILS - ACCOUNT POSTING DETAILS DATA
+        $accountPostings          = AccountPosting::where("order_id",$order_id)
+                                                ->where("invoice_number",$invoice_number)
+                                                ->get();
+        $accountPostingInvoice    = AccountPosting::where("order_id",$order_id)
+                                                    ->where('account_type_id', 3)
+                                                    ->get();
+
+        $orderBalance             = floatval($jobValue) - floatval($accountPostings->sum("credit"));
+        // dd($jobValue." + ".$accountPostings->sum("credit")." = " .$orderBalance);
+        
+       if($is_view == false){
+           self::createPrintHistory($order_id, "Invoice", url('/order/invoice/')."/".$order_id."/".$invoice_number);
+       }
+        
+        return view('pdf-templates.invoice')
+                ->withOrder($order)
+                ->withCustomer($customer)
+                ->withJobDetails($jobDetails)
+                ->withAccountPostings($accountPostings->first())
+                ->withOrderBalance($orderBalance == $jobValue ? 0 : $orderBalance)
+                ->withTotalAdditional($totalAdditional)
+                ->withTotalNet($totalNet)
+                ->withTotalVat($totalVat)
+                ->withTotalZeroRated($totalZeroRated)
+                ->withJobValue($jobValue);
+    }
+
+    public function printReceipt($order_id, $account_posting_id, $is_view = false ){
+
+        $order          = Order::findOrFail($order_id);
+        $customer       = Customer::findOrFail($order->customer_id);
+        $accountPosting = AccountPosting::findOrFail($account_posting_id);
+
+        $jobDetails     = JobDetail::where("order_id",$order_id)->get();
+        $jobValue       = $jobDetails->sum("gross_amount");
+
+        $orderBalance   = floatval($jobValue) - floatval($accountPosting->sum("credit"));
+
+        if($is_view == false){
+            self::createPrintHistory($order_id,"Receipt", url('/order/receipt/')."/".$order_id."/".$account_posting_id );
+        }
+
+        return view('pdf-templates.receipt')
+                ->withOrder($order)
+                ->withCustomer($customer)
+                ->withJobValue($jobValue)
+                ->withOrderBalance($orderBalance)
+                ->withAccountPosting($accountPosting);
+
+
+    }
+
     // THIS METHOD IS FOR DOCUMENT SECTION
     public function modifyDocument(Request $request){
 
@@ -840,6 +909,18 @@ class OrderController extends Controller
 
 
     }
+
+    public function createPrintHistory($order_id, $type = "File", $filaname = "default"){
+
+        $printHistoryData               = new PrintHistory;
+        $printHistoryData->order_id     = $order_id;
+        $printHistoryData->type         = $type;
+        $printHistoryData->filename     = $filaname;
+        $printHistoryData->printed_by   = Auth::id();
+
+        $printHistoryData->save();
+    }
+
 
 
 }

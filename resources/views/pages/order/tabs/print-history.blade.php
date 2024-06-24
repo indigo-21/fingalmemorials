@@ -21,8 +21,8 @@
                                     <tr>
                                         <td id="tr {{ $printHistory->id }}">{{ $loop->iteration }}</td>
                                         <td>{{ $printHistory->type }}</td>
-                                        <td>{{ $printHistory->filename }}</td>
-                                        <td>{{ $printHistory->printed_by }}</td>
+                                        <td><a href="{{ $printHistory->filename }}/true" target="_blank" rel="noopener noreferrer">{{ $printHistory->type }}</a></td>
+                                        <td>{{ $printHistory->user->firstname }} {{ $printHistory->user->lastname }}</td>
                                     </tr>
                                 @endforeach
 

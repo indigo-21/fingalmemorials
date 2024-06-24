@@ -8,6 +8,17 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Receipt</title>
     <style>
+         @page{
+            size:auto;
+            margin-left:1cm;
+            margin-right:1cm;
+            font-size:80%;
+        }
+        @media print{
+            header,footer{
+                display:none !important;
+            }
+        }
         body {
             border: 2px solid #000;
         }
@@ -94,14 +105,14 @@
         </tr>
         <tr>
             <td style="border: 1px solid #000; padding:10px 20px;">
-                <p><b>Name:</b> Fingal Memorials</p>
-                <p><b>Address:</b> </p>
+                <p><b>Name: </b>{{$customer->title->name}} {{$customer->firsname}} {{$customer->middlename}} {{$customer->surname}}</p>
+                <p><b>Address: </b>{{$customer->address1}} </p>
             </td>
             <td style="border: 1px solid #000; padding:10px 20px;">
-                <p><b>Re Order No.:</b></p>
-                <p><b>Receipt Date:</b></p>
-                <p><b>Order Value:</b></p>
-                <p><b>Balance now Due:</b></p>
+                <p><b>Order No.: </b> {{$order->id}}</p>
+                <p><b>Receipt Date: </b>{{date('m/d/Y', strtotime($order->created_at)) }}</p>
+                <p><b>Order Value: </b>{{number_format($jobValue, 2)}}</p>
+                <p><b>Balance now Due: </b>{{number_format($orderBalance, 2)}}</p>
             </td>
         </tr>
     </table>
@@ -134,13 +145,13 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <p>2024-03-14</p>
+                                    <p>{{date('m/d/Y', strtotime($order->created_at)) }}</p>
                                 </td>
                                 <td>
-                                    <p>Cash</p>
+                                    <p>{{$accountPosting->payment_type->name}}</p>
                                 </td>
                                 <td>
-                                    <p>200.00</p>
+                                    <p>{{number_format($accountPosting->credit, 2)}}</p>
                                 </td>
                                 <td>
                                     <p></p>
@@ -168,3 +179,10 @@
 </body>
 
 </html>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Print the page when the document is ready
+      window.print();
+    });
+</script>
