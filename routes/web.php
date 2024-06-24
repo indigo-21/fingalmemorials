@@ -131,8 +131,12 @@ Route::group(['middleware'=> 'auth'], function(){
 
 		// Dashboard
 	Route::resource('dashboard',DashboardController::class);
-
-	
+	Route::get("/receipt", function(){
+		return view("pdf-templates/receipt");
+	 });
+	 Route::get("/invoice", function(){
+		return view("pdf-templates/invoice");
+	 });
 	// Customer
 
 	Route::get('customer/getCustomerOrders/{id}',[CustomerController::class,'getCustomerOrders']);
