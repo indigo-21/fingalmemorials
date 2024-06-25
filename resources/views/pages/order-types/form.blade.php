@@ -43,14 +43,13 @@
                                 <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;">
                                     <label>Access Level</label>
                                     <select class="selectpicker" name="active">
+                                        <option value="">-- SELECT ACCESS LEVEL --</option>
                                         <option value="1"
                                             {{ isset($orderType) && $orderType->active == '1' ? 'selected' : '' }}>Active
                                         </option>
                                         <option value="2"
-                                            {{ isset($orderType) && $orderType->active == '2' ? 'selected' : '' }}>Inactive
+                                            {{ isset($orderType) && $orderType->active == '0' ? 'selected' : '' }}>Inactive
                                         </option>
-
-
                                     </select>
                                 </div>
 

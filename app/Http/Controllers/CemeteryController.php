@@ -43,7 +43,7 @@ class CemeteryController extends Controller
     public function store(Request $request)
     {
 
-        $request->validate(self::formRule());
+        $request->validate(self::formRule(), [], self::changeAttribute());
         $request->merge([
             'created_by' => Auth::id()
         ]);
@@ -80,7 +80,7 @@ class CemeteryController extends Controller
      */
     public function update(Request $request, String $id)
     {
-        $request->validate(self::formRule($id));
+        $request->validate(self::formRule($id), [], self::changeAttribute());
         $request->merge([
             'updated_by' => Auth::id()
         ]);
@@ -105,11 +105,35 @@ class CemeteryController extends Controller
     public function formRule($id = false)
     {
         return [
-            "code" => ['required', 'string'],
-            "name" => ['required', 'string'],
+            "code" => ['required','regex:/^[A-Za-z ]+$/', 'min:2', 'max:10', 'string', Rule::unique('cemeteries')->ignore($id ? $id : "")],
+            "name" => ['required','min:3', 'max:100','string'],
+            "email" => ['required','email' ,'string'],
+            "phone" => ['required', 'string'],       
             "address1" => ['required', 'string'],
+            "address2" => ['required', 'string'],
+            "address3" => ['required', 'string'],
+            "town" => ['required', 'string'],
+            "county" => ['required', 'string'],
+            "postcode" => ['required', 'string'],
             "cemetery_group_id" => ['required', 'Integer'],
             "cemetery_area_id" => ['required', 'Integer'],
+        ];
+    }
+
+    public function changeAttribute($id = false){
+        return [
+            "code" => "Code",
+            "name" => "Name",
+            "email" => "Email",
+            "phone" => "Phone",       
+            "address1" => "Address 1",
+            "address2" => "Address 2",
+            "address3" => "Address 3",
+            "town" => "Town",
+            "county" => "County",
+            "postcode" => "Postcode",
+            "cemetery_group_id" => "Group",
+            "cemetery_area_id" => "Area",
         ];
     }
 }

@@ -34,7 +34,7 @@ class AccountTypeController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(self::formRule());
+        $request->validate(self::formRule(),[],self::changeAttribute());
         $request->merge([
             'created_by' => Auth::id()
         ]);
@@ -67,7 +67,7 @@ class AccountTypeController extends Controller
      */
     public function update(Request $request, AccountType $accountType ,String $id)
     {
-        $request->validate(self::formRule($id));
+        $request->validate(self::formRule($id),[],self::changeAttribute());
         $accountType = AccountType::find($id);
         $request->merge([
             'updated_by' => Auth::id()
@@ -92,8 +92,14 @@ class AccountTypeController extends Controller
 
     public function formRule($id = false){
         return [
-            "code"    => ['required','string', Rule::unique('account_types')->ignore($id ? $id : "")],
-            "name"   => ['required','string']
+            "code"    => ['required','regex:/^[A-Za-z ]+$/','min:2','max:','string', Rule::unique('account_types')->ignore($id ? $id : "")],
+            "name"   => ['required','string','min:3','max:100']
+        ];
+    }
+    public function changeAttribute($id = false){
+        return [
+            "code" => "Code",
+            "name" => "Name",            
         ];
     }
 }

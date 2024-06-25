@@ -8,14 +8,10 @@
                     <div class="breadcomb-list">
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <div class="breadcomb-wp">
-                                    {{-- <div class="breadcomb-icon">
-                                        <i class="fa fa-home"></i>
-                                    </div> --}}
-                                    <div class="breadcomb-ctn">
-                                        <h3>Dashboard</h3>
-                                    </div>
-                                </div>
+                                <h3>Dashboard</h3>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <p class="breadcrumbs-link"><a href="">Dashboard</a></p>
                             </div>
                         </div>
                     </div>
@@ -29,8 +25,19 @@
             <div class="row">
                 <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
                     <div class="search-engine-int">
-                        <div class="contact-hd search-hd-eg">
-                            <h2>Latest Orders</h2>
+                        <div class="contact-hd search-hd-eg">                           
+                            <div class="row">
+                                <div class="col-lg-6">
+                                         <h2>Latest Orders</h2>
+                                </div>
+                                <div class="col-lg-6 text-right">
+                                    <a href="/order/create/general-details">
+                                        <button type="button"
+                                            class="btn btn-primary btn-icon-notika waves-effect"><i
+                                                class="fa fa-plus-circle" aria-hidden="true"></i> CREATE ORDER</button>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                         <div class="search-eg-table">
                             <table id="data-table-basic" class="table table-striped">
@@ -51,7 +58,7 @@
                                                     href="{{ url('order/edit/general-details') }}/{{ $order->id }}">{{ $order->id }}</a>
                                             </td>
                                             <td>{{ date('m/d/Y', strtotime($order->created_at)) }}</td>
-                                            <td>{{$order->cemetery->name }}</td>
+                                            <td>{{ $order->cemetery->name }}</td>
                                             <td>{{ $order->customer->firstname }} {{ $order->customer->surname }}</td>
                                             <td></td>
                                             <td></td>
@@ -77,9 +84,9 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($customers as $customer)
-                           <tr>
+                                        <tr>
                                             <td>{{ $customer->firstname }} {{ $customer->surname }}</td>
-                                            <td class="text-right">{{ substr($customer->created_at,0,10) }}</td>
+                                            <td class="text-right">{{ substr($customer->created_at, 0, 10) }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

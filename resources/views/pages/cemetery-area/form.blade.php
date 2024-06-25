@@ -37,12 +37,12 @@
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Code</label>
                                     <input type="text" name="code" class="form-control"
-                                        value="{{ isset($cemeteryArea) ? $cemeteryArea->code : '' }}" placeholder="Code">
+                                        value="{{ isset($cemeteryArea) ? $cemeteryArea->code : old('code') }}" placeholder="Code">
                                 </div>
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Name</label>
                                     <input type="text" name="name" class="form-control"
-                                        value="{{ isset($cemeteryArea) ? $cemeteryArea->name : '' }}" placeholder="Name">
+                                        value="{{ isset($cemeteryArea) ? $cemeteryArea->name : old('name') }}" placeholder="Name">
                                 </div>
                             </div>
                         </div>

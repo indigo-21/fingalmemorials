@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\CemeteryGroup;
 use Auth;
 use Response;
+use Illuminate\Validation\Rule;
 class CemeteryGroupController extends Controller
 {
     /**
@@ -31,7 +32,7 @@ class CemeteryGroupController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(self::formRule());
+        $request->validate(self::formRule(), [], self::changeAttribute());
         $request->merge([
             'created_by' => Auth::id()
         ]);
@@ -63,7 +64,7 @@ class CemeteryGroupController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $request->validate(self::formRule($id));
+        $request->validate(self::formRule($id), [], self::changeAttribute());
         $request->merge([
             'updated_by' => Auth::id()
         ]);
@@ -87,8 +88,15 @@ class CemeteryGroupController extends Controller
 
     public function formRule($id = false){
         return [
-            "code"      => ['required','string'],
-            "name"      => ['required','string']
+            "code"      => ['required','regex:/^[A-Za-z ]+$/', 'min:2', 'max:10', 'string', Rule::unique('cemetery_groups')->ignore($id ? $id : "")],
+            "name"      => ['required','min:3', 'max:100','string']
+        ];
+    }
+
+    public function changeAttribute($id = false){
+        return [
+            "code" => "Code",
+            "name" => "Name",
         ];
     }
 }

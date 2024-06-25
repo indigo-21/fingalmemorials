@@ -11,7 +11,7 @@
                 <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;">
                     <label>Document Type:</label>
                     <select class="selectpicker" name="document_type_id">
-                        <option selected disabled value="">- Document Type</option>
+                        <option selected disabled>- Document Type</option>
                         @foreach ($documentTypes as $documentType)
                             <option value="{{ $documentType->id }}">{{ $documentType->name }}</option>
                         @endforeach

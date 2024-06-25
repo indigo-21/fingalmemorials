@@ -34,7 +34,7 @@ class VatCodeController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(self::formRule());
+        $request->validate(self::formRule(),[],self::changeAttribute());
         $request->merge([
             'created_by' => Auth::id()
         ]);
@@ -67,7 +67,7 @@ class VatCodeController extends Controller
      */
     public function update(Request $request, VatCode $vatCode, String $id)
     {
-        $request->validate(self::formRule($id));
+        $request->validate(self::formRule($id),[],self::changeAttribute());
         $vatCode = VatCode::find($id);
         $request->merge([
             'updated_by' => Auth::id()
@@ -91,9 +91,17 @@ class VatCodeController extends Controller
     }
     public function formRule($id = false){
         return [
-            "vat_description"    => ['required','string'],
-            "vat"   => ['required','decimal:0,2'],
-            "code"   => ['required','string', Rule::unique('vat_codes')->ignore($id ? $id : "")],
+            "vat_description"    => ['required','min:3','max:100','string'],
+            "vat"   => ['required','regex:/^[0-9.]+$/','decimal:0,2'],
+            "code"   => ['required','regex:/^[A-Za-z0-9.]+$/','string','max:20', Rule::unique('vat_codes')->ignore($id ? $id : "")],
+        ];
+    }
+    public function changeAttribute($id = false){
+        return [
+            "vat_description"    => "Vat Description",
+            "vat"   => "Vat",
+            "code"   => "Code"
+            
         ];
     }
 }

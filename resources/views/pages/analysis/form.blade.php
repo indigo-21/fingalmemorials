@@ -38,6 +38,7 @@
                                 <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;">
                                     <label>Branch</label>
                                     <select class="selectpicker" name="branch_id">
+                                        <option value="">-- SELECT BRANCH --</option>
                                         @foreach ($branches as $branch)
                                             <option value="{{ $branch->id }}"
                                                 {{ isset($id) && $branch->id == $analysis->branch_id ? 'selected' : '' }}

@@ -36,7 +36,7 @@ class PaymentTypeController extends Controller
     public function store(Request $request)
     {
         
-        $request->validate(self::formRule());
+        $request->validate(self::formRule(), [], self::changeAttribute());
         $request->merge([
             'created_by' => Auth::id()
         ]);
@@ -68,10 +68,10 @@ class PaymentTypeController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, PaymentType $paymentType,String $id)
-    {
+    {   
        
-       
-        $request->validate(self::formRule($id));       
+        // dd($id)
+        $request->validate(self::formRule($id), [], self::changeAttribute());   
         $paymentType = PaymentType::find($id);
         $request->merge([
             'updated_by' => Auth::id()
@@ -96,7 +96,13 @@ class PaymentTypeController extends Controller
 
     public function formRule($id = false){
         return [
-            "name"    => ['required','string','min:5','max:900', Rule::unique('payment_types')->ignore($id ? $id : "")],
+            "name"    => ['required','string','min:3','max:100', Rule::unique('payment_types')->ignore($id ? $id : "")],
+        ];
+    }
+
+    public function changeAttribute($id = false){
+        return [
+            "name" => "Name",
         ];
     }
 }

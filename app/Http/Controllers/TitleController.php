@@ -6,7 +6,7 @@ use App\Models\Title;
 use Illuminate\Http\Request;
 use Auth;
 use Response;
-
+use Illuminate\Validation\Rule;
 class TitleController extends Controller
 {
     /**
@@ -32,7 +32,7 @@ class TitleController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(self::formRule());
+        $request->validate(self::formRule(),[],self::changeAttribute());
         $request->merge([
             'created_by' => Auth::id()
         ]);
@@ -64,7 +64,7 @@ class TitleController extends Controller
      */
     public function update(Request $request, String $id)
     {
-        $request->validate(self::formRule($id));
+        $request->validate(self::formRule($id),[],self::changeAttribute());
         $request->merge([
             'updated_by' => Auth::id()
         ]);
@@ -88,7 +88,15 @@ class TitleController extends Controller
 
     public function formRule($id = false){
         return [
-            "name"      => ['required','string']
+            "name"    => ['required','string','min:2','max:100', Rule::unique('titles')->ignore($id ? $id : "")],
+        ];
+    }
+
+    public function changeAttribute($id = false){
+        return [
+            "code" => "Code",
+            "name" => "Name",
+            
         ];
     }
 }

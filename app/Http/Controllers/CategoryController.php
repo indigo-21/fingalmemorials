@@ -34,7 +34,7 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(self::formRule());
+        $request->validate(self::formRule(), [], self::changeAttribute());
         $request->merge([
             'created_by' => Auth::id()
         ]);
@@ -67,7 +67,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category,String $id)
     {
-        $request->validate(self::formRule($id));
+     $request->validate(self::formRule($id), [], self::changeAttribute());
             $category = Category::find($id);
             $request->merge([
                 'updated_by' => Auth::id()
@@ -90,8 +90,14 @@ class CategoryController extends Controller
     }
     public function formRule($id = false){
         return [
-            "code"    => ['required','string', Rule::unique('categories')->ignore($id ? $id : "")],
-            "name"   => ['required','string']
+            "code"    => ['required', 'regex:/^[A-Za-z ]+$/', 'min:2', 'max:10', 'string', Rule::unique('categories')->ignore($id ? $id : "")],
+            "name"   => ['required','min:3', 'max:100','string']
+        ];
+    }
+    public function changeAttribute($id = false){
+        return [
+            "code"    => "Code",
+            "name"   => "Name",
         ];
     }
 }

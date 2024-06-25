@@ -34,7 +34,7 @@ class DocumentTypeController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(self::formRule());
+        $request->validate(self::formRule(), [], self::changeAttribute());
         $request->merge([
             'created_by' => Auth::id()
         ]);
@@ -67,7 +67,7 @@ class DocumentTypeController extends Controller
      */
     public function update(Request $request, DocumentType $documentType, string $id)
     {
-        $request->validate(self::formRule($id));
+        $request->validate(self::formRule($id), [], self::changeAttribute());
         $documentType = DocumentType::find($id);
         $request->merge([
             'updated_by' => Auth::id()
@@ -92,8 +92,14 @@ class DocumentTypeController extends Controller
     public function formRule($id = false)
     {
         return [
-            "name" => ['required', 'string', Rule::unique('document_types')->ignore($id ? $id : "")]
+            "name" => ['required', 'min:3', 'max:100','string', Rule::unique('document_types')->ignore($id ? $id : "")]
 
+        ];
+    }
+
+    public function changeAttribute($id = false){
+        return [
+            "name" => "Name",
         ];
     }
 }

@@ -33,7 +33,7 @@ class OrderTypeController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(self::formRule());
+        $request->validate(self::formRule(), [], self::changeAttribute());
         $request->merge([
             'created_by' => Auth::id()
         ]);
@@ -66,7 +66,7 @@ class OrderTypeController extends Controller
      */
     public function update(Request $request, OrderType $orderType,String $id)
     {
-        $request->validate(self::formRule($id));
+        $request->validate(self::formRule($id), [], self::changeAttribute());
         $request->merge([
             'updated_by' => Auth::id()
         ]);
@@ -90,8 +90,15 @@ class OrderTypeController extends Controller
 
     public function formRule($id = false){
         return [
-            "name"    => ['required','string', Rule::unique('order_types')->ignore($id ? $id : "")],
+            "name"    => ['required','string','min:3','max:100', Rule::unique('order_types')->ignore($id ? $id : "")],
             "active"   => ['required','Integer']
+        ];
+    }
+
+    public function changeAttribute($id = false){
+        return [
+            "name" => "Name",
+            "active" => "Access Level",
         ];
     }
 
