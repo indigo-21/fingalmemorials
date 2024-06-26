@@ -32,7 +32,6 @@
                                                 @endif
                                             >{{$orderType->name}}</option>
                                         @endforeach
-
                                     </select>
                                 </div>
                             </div>

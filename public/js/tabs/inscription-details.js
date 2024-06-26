@@ -89,6 +89,7 @@ $(document).ready(function(){
             beforeSend:function(){
                 
             },
+            
             success:function(data){
                 Swal.fire({
                     icon: "success",

@@ -19,13 +19,15 @@
                                 <h2>Order Type:</h2>
                             </div>
                             <div class="bootstrap-select fm-cmp-mg">
-                                <select class="selectpicker">
-                                    <option>Drama</option>
-                                    <option>Cariska</option>
-                                    <option>Cheriska</option>
-                                    <option>Malias</option>
-                                    <option>Kamines</option>
-                                    <option>Austranas</option>
+                                <select class="selectpicker" name="order_type_id">
+                                        <option value="0">All</option>
+                                        @foreach ($orderTypes as $orderType)
+                                            <option value="{{$orderType->id}}" 
+                                                @if(isset($order))
+                                                    {{$order->order_type_id == $orderType->id ? 'selected' : ''}}
+                                                @endif
+                                            >{{$orderType->name}}</option>
+                                        @endforeach
                                 </select>
                             </div>
                         </div>
@@ -36,23 +38,21 @@
                             <div class="bootstrap-select fm-cmp-mg">
                                 <div class="row">
                                     <div class="col-lg-6">
-                                        <select class="selectpicker">
-                                            <option>Month</option>
-                                            <option>Cariska</option>
-                                            <option>Cheriska</option>
-                                            <option>Malias</option>
-                                            <option>Kamines</option>
-                                            <option>Austranas</option>
+                                        <select class="selectpicker" name="order_month">
+                                            @foreach ($orderDates as $orderDate)
+                                                <option 
+                                                    {{$orderDate->month == date("m") ? "selected":""}}
+                                                    value="{{$orderDate->month}}" >{{$orderDate->month_name}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div class="col-lg-6">
-                                        <select class="selectpicker">
-                                            <option>Year</option>
-                                            <option>Cariska</option>
-                                            <option>Cheriska</option>
-                                            <option>Malias</option>
-                                            <option>Kamines</option>
-                                            <option>Austranas</option>
+                                        <select class="selectpicker" name="order_year">
+                                            @foreach ($orderDates as $orderDate)
+                                                <option 
+                                                    {{$orderDate->year == date("Y") ? "selected":""}}
+                                                    value="{{$orderDate->year}}" >{{$orderDate->year}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -63,13 +63,12 @@
                                 <h2>Branch:</h2>
                             </div>
                             <div class="bootstrap-select fm-cmp-mg">
-                                <select class="selectpicker">
-                                    <option>Drama</option>
-                                    <option>Cariska</option>
-                                    <option>Cheriska</option>
-                                    <option>Malias</option>
-                                    <option>Kamines</option>
-                                    <option>Austranas</option>
+                                <select class="selectpicker" name="branch">
+                                    <option value="0">All</option>
+                                    @foreach ($branches as $branch)
+                                            <option value="{{$branch->id}}"
+                                            >{{$branch->name}}</option>
+                                        @endforeach
                                 </select>
                             </div>
                         </div>
@@ -80,13 +79,12 @@
                                 <h2>Invoice Status:</h2>
                             </div>
                             <div class="bootstrap-select fm-cmp-mg">
-                                <select class="selectpicker">
-                                    <option>Drama</option>
-                                    <option>Cariska</option>
-                                    <option>Cheriska</option>
-                                    <option>Malias</option>
-                                    <option>Kamines</option>
-                                    <option>Austranas</option>
+                                <select class="selectpicker" name="invoice_status">
+                                    <option value="0">All</option>
+                                    <option value="1">Open Order</option>
+                                    <option value="2">Invoiced - No Editing</option>
+                                    <option value="3">Order Cancelled</option>
+                                    <option value="4">Order Complete</option>
                                 </select>
                             </div>
                         </div>
@@ -97,18 +95,19 @@
                             <div class="bootstrap-select fm-cmp-mg">
                                 <div class="row">
                                     <div class="col-lg-6">
-                                        <select class="selectpicker">
-                                            <option>Search Field</option>
-                                            <option>Cariska</option>
-                                            <option>Cheriska</option>
-                                            <option>Malias</option>
-                                            <option>Kamines</option>
-                                            <option>Austranas</option>
+                                        <select class="selectpicker" name="search_field">
+                                            <option value="">Search Field</option>
+                                            <option value="order_no">Order No.</option>
+                                            <option value="customer_lastname">Customer Lastname</option>
+                                            <option value="invoice_no">Invoice No.</option>
+                                            <option value="deceased">Deceased</option>
+                                            <option value="grave_no">Grave No.</option>
+                                            <option value="phone_no">Phone No.</option>
                                         </select>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="nk-int-st">
-                                            <input type="text" class="form-control" placeholder="Search">
+                                            <input type="text" class="form-control" placeholder="Search" name="search_input" disabled>
                                         </div>
                                     </div>
                                 </div>
@@ -119,7 +118,7 @@
                                 <div>
                                     <div class="col-lg-6">
                                         <div class="header-btn">
-                                            <button type="submit" class="btn btn-primary btn-icon-notika waves-effect"><i class="fa fa-search" aria-hidden="true"></i> SEARCH</button>
+                                            <button type="button" class="btn btn-primary btn-icon-notika waves-effect search-order" id="search-order"><i class="fa fa-search" aria-hidden="true"></i> SEARCH</button>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
@@ -157,7 +156,7 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="order_table_row">
                                     @foreach($orders as $order)
                                     <tr>
                                         <td><a href="{{url('order/edit/general-details')}}/{{$order->id}}">{{$order->id}}</a></td>
@@ -165,10 +164,9 @@
                                         <td>{{$order->branch->name}}</td>
                                         <td>{{$order->orderType->name}}</td>
                                         <td>{{$order->customer->firstname}} {{$order->customer->middlename}} {{$order->customer->surname}}</td>
-                                        <td>{{$order->user->firstname}} {{$order->user->surname}}</td>
+                                        <td>{{$order->user->firstname}} {{$order->user->lastname}}</td>
                                         <td>
                                             @if($order->status_id == "1")
-                                                              
                                                 <div class="open-order">
                                                     Open Order
                                                 </div>                            
@@ -185,7 +183,6 @@
                                                    Order Complete
                                                 </div>
                                             @endif
-
                                         </td>
                                         <td class="popover-cl-pro">
                                             <a href="{{url('order/edit/general-details')}}/{{$order->id}}" class="btn btn-primary" data-trigger="hover" data-toggle="popover" data-placement="bottom" data-content="Edit"><i class="fa fa-pencil"></i></a>
@@ -201,4 +198,9 @@
             </div>
         </div>
     </div>
+@endsection
+
+
+@section('page-scripts')
+    <script src="{{ asset('js/order.js') }}"></script>
 @endsection

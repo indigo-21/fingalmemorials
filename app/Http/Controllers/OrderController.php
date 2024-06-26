@@ -24,6 +24,7 @@ use App\Models\PaymentType;
 use App\Models\DocumentType;
 use App\Models\Document;
 use App\Models\PrintHistory;
+use DB;
 
 
 use Auth;
@@ -222,15 +223,93 @@ class OrderController extends Controller
     }
 
 
+
+    public function searchOrder(Request $request){
+        
+        $month          = $request->order_month;
+        $year           = $request->order_year;
+        $order_type     = $request->order_type;
+        $branch         = $request->branch;
+        $invoice_status = $request->invoice_status;
+
+        $search_field   = $request->search_field;
+        $search_input   = $request->search_input;
+        $search_column  = match($search_field) {
+                                    'customer_lastname'     => 'customers.surname',
+                                    'invoice_no'            => 'account_postings.invoice_number',
+                                    'deceased'              => 'deceased_name',
+                                    'grave_no'              => 'plot_grave',
+                                    'phone_no'              => 'customer.mobile',
+                                    default                 => 'orders.id',
+                                };
+
+        $query = Order::leftJoin("customers",       "orders.customer_id",   "=",    "customers.id")
+                        ->leftJoin("order_types",   "orders.order_type_id" ,"=",    "order_types.id")
+                        ->leftJoin("branches",      "orders.branch_id",     "=",    "branches.id")
+                        ->leftJoin("users",         "orders.created_by",    "=",    "users.id");
+        
+        if($search_field && $search_input){
+            $query->leftJoin('account_postings', 'orders.id', '=', 'account_postings.order_id');
+        }
+
+        $query->select([
+            DB::raw("CONCAT(customers.firstname, ' ', customers.middlename, ' ', customers.surname) AS fullname"),
+            DB::raw("DATE_FORMAT(orders.order_date, '%m/%d/%Y') AS order_date_format"),
+            "order_types.name AS order_type",
+            "branches.name AS branch_name",
+            DB::raw("CONCAT(users.firstname,' ', users.lastname) AS author_name"),
+            "orders.*", 
+        ]);
+
+        if ($search_field == 'invoice_no') {
+            $query->addSelect('account_postings.invoice_number AS invoice_number');
+        }
+
+        $query->whereMonth('orders.created_at', $month)
+            ->whereYear('orders.created_at', $year);
+
+        if ($order_type != 0) {
+            $query->where('order_type_id', $order_type);
+        }
+
+        if ($branch != 0) {
+            $query->where('branch_id', $branch);
+        }
+
+        if ($invoice_status != 0) {
+            $query->where('status_id', $invoice_status);
+        }
+
+        if ($search_field && $search_input ) {
+            $query->where($search_column, $search_input);
+        }
+
+        $result = $query->get();
+
+
+        return response()->json($result);
+
+    }
+
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $customer = Customer::All();
-        $orders = Order::All();
+        $customer       = Customer::All();
+        $orders         = Order::All();
+        $orderTypes     = OrderType::All();
+        $orderDates     = Order::selectRaw('DATE_FORMAT(created_at, "%m") as month, DATE_FORMAT(created_at, "%M") as month_name, YEAR(created_at) as year')
+                            ->groupBy('month','month_name', 'year')
+                            ->get();
+        $branches       = Branch::All();
+
         return view('pages.order.index')
-            ->withOrders($orders);
+            ->withOrders($orders)
+            ->withOrderTypes($orderTypes)
+            ->withOrderDates($orderDates)
+            ->withBranches($branches);
 
     }
 
