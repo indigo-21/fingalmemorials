@@ -1,6 +1,6 @@
 @extends('main')
 @section('content')
-    <div class="breadcrumbs">
+    <div class="breadcrumbs-no-mb">
         <div class="container">
             <div class="breadcrumbs-content">
                 <div class="row">
