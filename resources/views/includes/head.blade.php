@@ -51,7 +51,8 @@
     <link rel="stylesheet" href="{{ asset('assets/css/responsive.css') }}">
     <!-- Data Table JS
   ============================================ -->
-    <link rel="stylesheet" href="{{ asset('assets/css/jquery.dataTables.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('assets/css/jquery.dataTables.min.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('datatables/datatables.min.css') }}">
     <!-- bootstrap select CSS
   ============================================ -->
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-select/bootstrap-select.css') }}">
