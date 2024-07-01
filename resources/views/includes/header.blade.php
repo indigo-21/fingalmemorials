@@ -70,9 +70,8 @@
                             </li>
                             <li><a data-toggle="collapse" data-target="#reports-mob" href="#">Reports</a>
                                 <ul id="reports-mob" class="collapse dropdown-header-top">
-                                    <li><a href="/order-summary">Order Summary</a></li>
-                                    <li><a href="/order-details">Order Details</a></li>
                                     <li><a href="/order-report">Order Report</a></li>
+                                    <li><a href="/sage-report">Sage Report</a></li>
                                 </ul>
                             </li>
                             <li><a data-toggle="collapse" data-target="#admin-mob" href="#">Admin Utilities</a>
@@ -146,9 +145,8 @@
                     <div id="reports"
                         class="tab-pane notika-tab-menu-bg animated fadeInDown {{ Request::is('order-summary', 'order-summary/*', 'order-details', 'order-details/*', 'order-report', 'order-report/*') ? 'active' : '' }}">
                         <ul class="notika-main-menu-dropdown">
-                            <li><a href="/order-summary">Order Summary</a></li>
-                            <li><a href="/order-details">Order Details</a></li>
                             <li><a href="/order-report">Order Report</a></li>
+                            <li><a href="/sage-report">Sage Report</a></li>
                         </ul>
                     </div>
                     <div id="admin"

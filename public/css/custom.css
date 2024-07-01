@@ -37,6 +37,9 @@ h1.text-logo {
 .breadcrumbs-no-mb {
     margin-bottom: 0px;
 }
+.breadcrumbs-no-mb .breadcrumbs-content {
+    padding-bottom: 0px;
+}
 .breadcrumbs-content {
     padding: 20px 20px;
     background: #fff;
@@ -291,3 +294,21 @@ ul.order-tabs li.active a, .order-tabs li:focus a, .order-tabs li:hover a{
     padding: 3px 15px;
     color: #fff;
 }
+
+.loader {
+    width: 40px;
+    padding: 8px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #8965DC;
+    --_m: 
+      conic-gradient(#0000 10%,#8965DC),
+      linear-gradient(#8965DC 0 0) content-box;
+    -webkit-mask: var(--_m);
+            mask: var(--_m);
+    -webkit-mask-composite: source-out;
+            mask-composite: subtract;
+    animation: l3 1s infinite linear;
+    margin: auto;
+  }
+  @keyframes l3 {to{transform: rotate(1turn)}}

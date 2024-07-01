@@ -4627,3 +4627,111 @@ body.box-layout {
 /*----------------------------------------*/
 .mCS-light-1.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar{ background-color: #8981d8; }
 .mCS-light-1.mCSB_scrollTools .mCSB_draggerRail{ background-color: #ccc; }
+
+/* DATATABLE */
+.table.table-striped.dataTable.dtr-inline {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+table#data-table-order-report {
+    margin-top: 70px;
+}
+div.dt-info {
+    display: inline;
+}
+/* Search */
+.dt-search {
+    float: right;
+    clear: both;
+    margin-top:20px;
+}
+.dt-search label {
+    margin-right:10px;
+    margin-left:10px;
+}
+/* Buttons */
+.dt-buttons {
+    clear: both;
+    float: right;
+}
+.dt-buttons button.dt-button {
+    background: #8965DC !important;
+    color: #fff !important;
+    border: 0px !important;
+    padding: 10px 15px;
+    /* font-family: 'Roboto', sans-serif; */
+    font-size: 14px; 
+    border-radius: 5px;
+}
+.dt-buttons button.dt-button span {
+    font-family: 'Roboto', sans-serif;
+    padding-left:5px;
+}
+.dt-buttons button.dt-button:hover {
+    background: #8981d8 !important;
+}
+
+/* Length */
+.dt-length {
+    display: inline;
+}
+.dt-length::before {
+    content: "Show ";
+    margin: 0px 10px;
+}
+.dt-length label {
+    margin-right:10px;
+    margin-left:10px;
+
+}
+/* Input */
+/* .dt-input {
+    border: 1px solid #eee;
+    height: 35px;
+    padding: 5px 10px;
+    font-size: 13px;
+    border-radius: 2px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    line-height: 100%;
+    background-color: #fff;
+    outline: none;
+} */
+/* Pagination */
+ .dt-paging.paging_full_numbers {
+    float: right;
+    margin-bottom: 20px;
+    vertical-align: top;
+}
+
+button.dt-paging-button.disabled.first, button.dt-paging-button.disabled.previous, .dt-paging-button.disabled.next, .dt-paging-button.disabled.last {
+    vertical-align: top;
+    background: transparent !important;
+}
+button.dt-paging-button.first, button.dt-paging-button.previous, .dt-paging-button.next, .dt-paging-button.last {
+    font-size: 18px !important;
+}
+button.dt-paging-button {
+    background: #f1f1f1 !important;
+    color: #7e7e7e !important;
+    border: 0px !important;
+    width: 45px;
+    height: 45px;
+    border-radius: 50% !important;
+    margin: 0 5px;
+    vertical-align: top;
+    padding: .5em;
+   
+}
+button.dt-paging-button.current {
+    background: #8965DC !important;
+    color: #fff !important;
+}
+div.dt-container .dt-paging .dt-paging-button.current {
+    color: #fff !important;
+}
+div.dt-container .dt-paging .dt-paging-button.current:hover, div.dt-container .dt-paging .dt-paging-button:hover {
+    background: #8965DC !important;
+    color: #fff !important;
+    border: 0px !important;
+}

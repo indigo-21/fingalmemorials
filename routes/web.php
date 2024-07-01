@@ -20,6 +20,7 @@ use App\Http\Controllers\CemeteryAreaController;
 use App\Http\Controllers\SourceController;
 use App\Http\Controllers\TitleController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OrderReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -133,6 +134,14 @@ Route::group(['middleware'=> 'auth'], function(){
 	Route::post('createVatCodes',[VatCodeController::class, 'store'])->name('createVatCodes');
 	Route::put('updateVatCodes/{id}',[VatCodeController::class,'update'])->name('updateVatCodes');
 	Route::delete('deleteVatCodes',[VatCodeController::class,'destroy'])->name('deleteVatCodes');
+
+	// Reports
+	Route::resource('order-report', OrderReportController::class);
+	Route::post('order-report/search',[OrderReportController::class, 'search'])->name('searchOrderReports');
+	// Route::resource('sage-report', TitleController::class);
+	// Route::get("/order-report", function(){
+	// 	return view("pages/reports/order-report/index");
+	//  });
 
 	// Dashboard
 	Route::resource('dashboard',DashboardController::class);
