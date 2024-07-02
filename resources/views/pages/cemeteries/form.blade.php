@@ -44,17 +44,17 @@
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Name</label>
                                     <input type="text" name="name" class="form-control"
-                                        value="{{ isset($cemetery) ? $cemetery->name : '' }}" placeholder="Name">
+                                        value="{{ isset($cemetery) ? $cemetery->name : old('name') }}" placeholder="Name">
                                 </div>
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Email</label>
                                     <input type="text" name="email" class="form-control"
-                                        value="{{ isset($cemetery) ? $cemetery->email : '' }}" placeholder="Email">
+                                        value="{{ isset($cemetery) ? $cemetery->email : old('email') }}" placeholder="Email">
                                 </div>
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Phone</label>
                                     <input type="text" name="phone" class="form-control"
-                                        value="{{ isset($cemetery) ? $cemetery->phone : '' }}" placeholder="Phone">
+                                        value="{{ isset($cemetery) ? $cemetery->phone : old('phone') }}" placeholder="Phone">
                                 </div>
                                 <div class="chosen-select-act fm-cmp-mg mb-20">
                                     <label>Group</label>
@@ -79,32 +79,32 @@
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Address 1</label>
                                     <input type="text" name="address1" class="form-control"
-                                        value="{{ isset($cemetery) ? $cemetery->address1 : '' }}" placeholder="Address 1">
+                                        value="{{ isset($cemetery) ? $cemetery->address1 : old('address1') }}" placeholder="Address 1">
                                 </div>
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Address 2</label>
                                     <input type="text" name="address2" class="form-control"
-                                        value="{{ isset($cemetery) ? $cemetery->address2 : '' }}" placeholder="Address 2">
+                                        value="{{ isset($cemetery) ? $cemetery->address2 : old('address2') }}" placeholder="Address 2">
                                 </div>
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Address 3</label>
                                     <input type="text" name="address3" class="form-control"
-                                        value="{{ isset($cemetery) ? $cemetery->address3 : '' }}" placeholder="Address 3">
+                                        value="{{ isset($cemetery) ? $cemetery->address3 : old('address3') }}" placeholder="Address 3">
                                 </div>
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Town</label>
                                     <input type="text" name="town" class="form-control"
-                                        value="{{ isset($cemetery) ? $cemetery->town : '' }}" placeholder="Town">
+                                        value="{{ isset($cemetery) ? $cemetery->town : old('town') }}" placeholder="Town">
                                 </div>
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>County</label>
                                     <input type="text" name="county" class="form-control"
-                                        value="{{ isset($cemetery) ? $cemetery->county : '' }}" placeholder="County">
+                                        value="{{ isset($cemetery) ? $cemetery->county : old('county') }}" placeholder="County">
                                 </div>
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Postcode</label>
                                     <input type="text" name="postcode" class="form-control"
-                                        value="{{ isset($cemetery) ? $cemetery->postcode : '' }}" placeholder="Postcode">
+                                        value="{{ isset($cemetery) ? $cemetery->postcode : old('postcode') }}" placeholder="Postcode">
                                 </div>
 
 

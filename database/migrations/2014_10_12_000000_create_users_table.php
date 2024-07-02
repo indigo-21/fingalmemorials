@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('lastname');
             $table->string('username');
             $table->foreignId('access_level_id')->constrained('access_levels');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->foreignId('created_by')->nullable()->constrained('users');

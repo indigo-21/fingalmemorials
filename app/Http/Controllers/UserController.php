@@ -77,13 +77,12 @@ class UserController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {       
-
+    {        
         
         $user = User::find($id);        
 
-        if($request->password){ 
-            $password = Hash::make($request->passwordd);           
+        if($request->password){
+            $password = Hash::make($request->password);           
            
         }else{
             $password= $user->password;
@@ -117,9 +116,9 @@ class UserController extends Controller
         return [
             "firstname"    => ['required','string'],
             "lastname"   => ['required','string'],
-            "username"   => ['required','string',Rule::unique('users')->ignore($id ? $id : "")],
+            "username"   => ['required','string',Rule::unique('users')->ignore($id ? $id : "")->whereNull('deleted_at')],
             "access_level_id"   => ['required','integer'],
-            "email"   => ['required','string',Rule::unique('users')->ignore($id ? $id : "")],
+            "email"   => ['required','string',Rule::unique('users')->ignore($id ? $id : "")->whereNull('deleted_at')],
             "password"   => ['required','string'],
         ];
     }
