@@ -36,7 +36,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($customers as $customer)
-                                        <tr id=tr"{{ $customer->id }}">
+                                        <tr id="tr{{ $customer->id }}">
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $customer->firstname }} {{ $customer->surname }}</td>
                                             <td>{{ $customer->address1 }}</td>
@@ -45,7 +45,7 @@
                                             <td>{{ $customer->telno }}</td>
                                             <td>{{ $customer->mobile }}</td>
                                             <td class="popover-cl-pro">
-                                                <a href=""class="btn btn-primary"
+                                                <a href="{{url('order/create-customer/general-details')}}/{{$customer->id}}"class="btn btn-primary"
                                                     data-trigger="hover" data-toggle="popover" data-placement="bottom"
                                                     data-content="Add Order"><i class="fa fa-plus"></i></a>
                                                 <a href="{{ route('customer.edit', [$customer]) }}"class="btn btn-primary"
