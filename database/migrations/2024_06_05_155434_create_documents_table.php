@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained();
-            $table->foreignId('document_type_id')->constrained();
+            $table->foreignId('document_type_id')->nullable()->constrained();
             $table->string('description')->nullable();
             $table->string('filename');
             $table->foreignId('created_by')->nullable()->constrained('users');

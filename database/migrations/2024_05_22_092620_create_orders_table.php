@@ -19,19 +19,20 @@ return new class extends Migration
             $table->foreignId('branch_id')->constrained();
             $table->date('date_of_death');
 
-            $table->string('order_headline');
-            $table->foreignId('cemetery_id')->constrained();
-            $table->string('plot_grave');
-            $table->foreignId('grave_space_id')->constrained();
+            $table->string('order_headline')->nullable();
+            $table->foreignId('cemetery_id')->nullable()->constrained();
+            $table->string('plot_grave')->nullable();
+            $table->foreignId('grave_space_id')->nullable()->constrained();
 
             $table->foreignId('status_id')->constrained();
             $table->boolean('inscription_completed')->nullable();
             $table->date('inscription_completed_date')->nullable();
             $table->date('job_was_fixed_on')->nullable();
 
-            $table->foreignId('source_id')->constrained();
-            $table->foreignId('category_id')->constrained();
+            $table->foreignId('source_id')->nullable()->constrained();
+            $table->foreignId('category_id')->nullable()->constrained();
             $table->longText('special_instructions')->nullable();
+            $table->string('account_number')->nullable();
 
             $table->foreignId('customer_id')->constrained();
             $table->float('balance', 10, 2)->nullable();

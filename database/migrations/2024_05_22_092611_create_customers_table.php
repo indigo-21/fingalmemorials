@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('title_id')->constrained();
+            $table->foreignId('title_id')->nullable()->constrained();
             $table->string('firstname');
             $table->string('middlename')->nullable();
             $table->string('surname');
@@ -24,8 +24,8 @@ return new class extends Migration
             $table->string('address2')->nullable();
             $table->string('address3')->nullable();
             $table->string('town')->nullable();
-            $table->string('county');
-            $table->string('postcode');
+            $table->string('county')->nullable();
+            $table->string('postcode')->nullable();
             $table->string('account_number')->default('MON01');
             $table->foreignId('created_by')->nullable()->constrained('users');
             $table->foreignId('updated_by')->nullable()->constrained('users');

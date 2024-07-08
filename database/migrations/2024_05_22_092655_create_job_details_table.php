@@ -14,13 +14,16 @@ return new class extends Migration
         Schema::create('job_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained();
-            $table->string('details_of_work')->nullable();
+            $table->longText('details_of_work')->nullable();
+            $table->string('headstone_shape')->nullable();
+            $table->string('chipping_color')->nullable();
             $table->foreignId('vat_code_id')->constrained();
             $table->foreignId('analysis_id')->constrained();
             $table->float('job_cost', 10, 2);
             $table->float('discount', 10, 2)->nullable();
             $table->float('total', 10, 2);
             $table->float('additional_fee', 10, 2)->nullable();
+            $table->float('cemetery_fee', 10, 2)->nullable();
             $table->float('net_amount', 10, 2);
             $table->float('vat_amount', 10, 2);
             $table->float('zero_rated_amount', 10, 2)->nullable();
