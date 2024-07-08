@@ -20,17 +20,19 @@
                         </div>
                         <div class="nk-int-st mb-20">
                             <label>Details of work</label>
-                            <input type="text" class="form-control" placeholder="Details of work" name="details_of_work"
-                                value="">
+                            <!-- <input type="text" class="form-control" placeholder="Details of work" name="details_of_work"
+                                value=""> -->
+
+                                <textarea class="form-control" name="details_of_work" id="" rows="5"></textarea>
                         </div>
                         <div class="nk-int-st mb-20">
                             <label>Job Cost</label>
                             <input type="number" class="form-control" placeholder="0.00" name="job_cost"  min="1">
                         </div>
-                        <div class="nk-int-st mb-20">
+                        <!-- <div class="nk-int-st mb-20">
                             <label>Discount</label>
                             <input type="number" class="form-control" placeholder="0.00" name="discount" min="0">
-                        </div>
+                        </div> -->
                         <div class="nk-int-st mb-20">
                             <label>Total</label>
                             <input type="number" class="form-control" placeholder="0.00" name="total" disabled>
@@ -103,7 +105,7 @@
                                 <th>Net Amount</th>
                                 <th>VAT Rate</th>
                                 <th>Analysis</th>
-                                <th>Discount</th>
+                                <!-- <th>Discount</th> -->
                                 <th>VAT Amount</th>
                                 <th>Gross</th>
                                 <th>Action</th>
@@ -120,7 +122,7 @@
                                             {{ $jobDetail->vatCode->vat_description }}</td>
                                         <td class="analysis_id" id="{{ $jobDetail->analysis_id }}">
                                             {{ $jobDetail->analysis->description }}</td>
-                                        <td class="discount">{{ $jobDetail->discount == '' ? '0.00' : $jobDetail->discount }}</td>
+                                        <!-- <td class="discount">{{ $jobDetail->discount == '' ? '0.00' : $jobDetail->discount }}</td> -->
                                         <td class="vat">{{ $jobDetail->vat_amount }}</td>
                                         <td class="gross">{{ $jobDetail->gross_amount }}</td>
                                         <td class="popover-cl-pro">

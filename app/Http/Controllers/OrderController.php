@@ -24,6 +24,7 @@ use App\Models\PaymentType;
 use App\Models\DocumentType;
 use App\Models\Document;
 use App\Models\PrintHistory;
+use Carbon\Carbon;
 use DB;
 
 
@@ -129,18 +130,18 @@ class OrderController extends Controller
             case 'customer':
                 $data = [
                         "customerData.title_id"      => ['required'],
-                        "customerData.firstname"     => ['required','string','min:5','max:900'],
-                        "customerData.middlename"    => ['nullable','string','min:5','max:900'],
-                        "customerData.surname"       => ['required','string','min:5','max:900'],
+                        "customerData.firstname"     => ['required','string'],
+                        "customerData.middlename"    => ['nullable','string'],
+                        "customerData.surname"       => ['required','string'],
                         "customerData.mobile"        => ['nullable','string','min:5','max:900'],
                         "customerData.telno"         => ['nullable','string','min:5','max:900'],
-                        "customerData.email"         => ['nullable','email','string','min:5','max:900', Rule::unique('customers', 'email')->ignore($id ? $id : "")],
+                        "customerData.email"         => ['required','email','string','min:5','max:900', Rule::unique('customers', 'email')->ignore($id ? $id : "")],
                         "customerData.address1"      => ['nullable','string','min:2','max:900'],
                         "customerData.address2"      => ['nullable','string','min:2','max:900'],
                         "customerData.address3"      => ['nullable','string','min:2','max:900'],
                         "customerData.town"          => ['nullable','string','min:2','max:900'],
-                        "customerData.county"        => ['required','string','min:2','max:900'],
-                        "customerData.postcode"      => ['required','string','min:2','max:900'],
+                        "customerData.county"        => ['nullable','string','min:2','max:900'],
+                        "customerData.postcode"      => ['nullable','string','min:2','max:900'],
                 ];
                 
             break;
@@ -149,31 +150,31 @@ class OrderController extends Controller
                             "orderData.order_type_id"             => ['required'],
                             "orderData.order_date"                => ['required'],
                             "orderData.order_branch"              => ['required'],
-                            "orderData.deceased_name"             => ['required','min:5','max:50'],
+                            "orderData.deceased_name"             => ['required','min:2','max:150'],
                             "orderData.date_of_death"             => ['required'],
-                            "orderData.order_headline"            => ['required','string','min:5','max:50'],
-                            "orderData.cemetery_id"               => ['required'],
-                            "orderData.plot_grave"                => ['required','string','min:5','max:20'],
-                            "orderData.grave_space_id"            => ['required'],
+                            "orderData.order_headline"            => ['nullable','string','min:5','max:50'],
+                            "orderData.cemetery_id"               => ['nullable'],
+                            "orderData.plot_grave"                => ['nullable','string','min:5','max:20'],
+                            "orderData.grave_space_id"            => ['nullable'],
                             "orderData.special_instructions"      => ['nullable','string','min:5','max:150'],
-                            "orderData.source_id"                 => ['required'],
-                            "orderData.category_id"               => ['required'],
+                            "orderData.source_id"                 => ['nullable'],
+                            "orderData.category_id"               => ['nullable'],
                         ];
             break;
             case 'job_details':
                 $data = [
                     "analysis_id"           => ['required'],
-                    "details_of_work"       => ['required','string','min:5','max:50'], 
-                    "job_cost"              => ['required','min:1','max:5'], 
-                    "discount"              => ['nullable','min:1','max:5'], 
-                    "total"                 => ['required','min:1','max:5'], 
-                    "additional_fee"        => ['nullable','min:1','max:5'], 
-                    "net_amount"            => ['required','min:1','max:5'], 
+                    "details_of_work"       => ['required','string','min:2','max:300'], 
+                    "job_cost"              => ['required','min:1'], 
+                    "discount"              => ['nullable','min:1'], 
+                    "total"                 => ['required','min:1'], 
+                    "additional_fee"        => ['nullable','min:1'], 
+                    "net_amount"            => ['required','min:1'], 
                     "vat_code_id"           => ['required'],
-                    "vat_amount"            => ['required','min:1','max:5'],
-                    "zero_rated_amount"     => ['nullable','min:1','max:5'],
-                    "adjusment_amount"      => ['nullable','min:1','max:5'],
-                    "gross_amount"          => ['required','min:1','max:5'],
+                    "vat_amount"            => ['required','min:1'],
+                    "zero_rated_amount"     => ['nullable','min:1'],
+                    "adjusment_amount"      => ['nullable','min:1'],
+                    "gross_amount"          => ['required','min:1'],
                 ];
 
             break;
@@ -187,7 +188,7 @@ class OrderController extends Controller
                     "date_received"       => ['required'],
                     "payment_type_id"     => ['required'],
                     "reason"              => ['nullable','min:5','max:50'],
-                    "payment"             => ['required','numeric','min:1','max:10'],
+                    "payment"             => ['required','numeric','min:1'],
                 ];
             break;
             case 'account_posting_refund':
@@ -196,7 +197,7 @@ class OrderController extends Controller
                     "date_received"       => ['required'],
                     "payment_type_id"     => ['required'],
                     "reason"              => ['nullable','min:5','max:50'],
-                    "payment"             => ['required','numeric','min:1','max:10'],
+                    "payment"             => ['required','numeric','min:1'],
                 ];
             break;
             case 'account_posting_invoice':
@@ -210,7 +211,7 @@ class OrderController extends Controller
                 $data = [
                     "file"                  => ['required',"file"],
                     "description"           => ['required',"string","min:5","max:250"],
-                    "document_type_id"      => ['required'],
+                    // "document_type_id"      => ['required'],
                 ];
 
             break;
@@ -218,36 +219,49 @@ class OrderController extends Controller
         return $data;
     }
 
-    public function retriveData($tab = null, $order_id){
-
-    }
-
-
-
     public function searchOrder(Request $request){
         
-        $month          = $request->order_month;
-        $year           = $request->order_year;
-        $order_type     = $request->order_type;
-        $branch         = $request->branch;
-        $invoice_status = $request->invoice_status;
+        $data = [
+            "month"          => $request->order_month,
+            "year"           => $request->order_year,
+            "order_type"     => $request->order_type,
+            "branch"         => $request->branch,
+            "invoice_status" => $request->invoice_status,
+            "search_field"   => $request->search_field,
+            "search_input"   => $request->search_input,
+        ];
+        
+        return self::retriveData($data);
+    }
 
-        $search_field   = $request->search_field;
-        $search_input   = $request->search_input;
+    public function retriveData($data = null){
+        
+        $date           = Carbon::now();
+
+        $month          = !$data ? $date->format("m") : $data["month"];
+        $year           = !$data ? $date->format("Y") : $data["year"];
+        $order_type     = !$data ? false : $data["order_type"];
+        $branch         = !$data ? false : $data["branch"];
+        $invoice_status = !$data ? false : $data["invoice_status"];
+        $search_field   = !$data ? false : $data["search_field"];
+        $search_input   = !$data ? false : $data["search_input"];
+
+
+
         $search_column  = match($search_field) {
-                                    'customer_lastname'     => 'customers.surname',
-                                    'invoice_no'            => 'account_postings.invoice_number',
-                                    'deceased'              => 'deceased_name',
-                                    'grave_no'              => 'plot_grave',
-                                    'phone_no'              => 'customer.mobile',
-                                    default                 => 'orders.id',
-                                };
+                                'customer_lastname'     => 'customers.surname',
+                                'invoice_no'            => 'account_postings.invoice_number',
+                                'deceased'              => 'deceased_name',
+                                'grave_no'              => 'plot_grave',
+                                'phone_no'              => 'customer.mobile',
+                                default                 => 'orders.id',
+                            };
 
         $query = Order::leftJoin("customers",       "orders.customer_id",   "=",    "customers.id")
                         ->leftJoin("order_types",   "orders.order_type_id" ,"=",    "order_types.id")
                         ->leftJoin("branches",      "orders.branch_id",     "=",    "branches.id")
                         ->leftJoin("users",         "orders.created_by",    "=",    "users.id");
-        
+
         if($search_field && $search_input){
             $query->leftJoin('account_postings', 'orders.id', '=', 'account_postings.order_id');
         }
@@ -265,8 +279,8 @@ class OrderController extends Controller
             $query->addSelect('account_postings.invoice_number AS invoice_number');
         }
 
-        $query->whereMonth('orders.created_at', $month)
-            ->whereYear('orders.created_at', $year);
+            $query->whereMonth('orders.order_date', $month)
+            ->whereYear('orders.order_date', $year);
 
         if ($order_type != 0) {
             $query->where('order_type_id', $order_type);
@@ -284,13 +298,10 @@ class OrderController extends Controller
             $query->where($search_column, $search_input);
         }
 
-        $result = $query->get();
-
-
-        return response()->json($result);
-
+        $result = !$data ? $query->get() : response()->json($query->get());
+       
+        return $result;
     }
-
 
     /**
      * Display a listing of the resource.
@@ -298,9 +309,11 @@ class OrderController extends Controller
     public function index()
     {
         $customer       = Customer::All();
-        $orders         = Order::All();
+        // $orders         = Order::All();
+        $orders         = self::retriveData();
+        // $orders         = Order::where("deleted_at", "=", "NULL");
         $orderTypes     = OrderType::All();
-        $orderDates     = Order::selectRaw('DATE_FORMAT(created_at, "%m") as month, DATE_FORMAT(created_at, "%M") as month_name, YEAR(created_at) as year')
+        $orderDates     = Order::selectRaw('DATE_FORMAT(order_date, "%m") as month, DATE_FORMAT(order_date, "%M") as month_name, YEAR(order_date) as year')
                             ->groupBy('month','month_name', 'year')
                             ->get();
         $branches       = Branch::All();
@@ -338,7 +351,7 @@ class OrderController extends Controller
 
         $url = 'pages.order.tabs.' . $tab;
 
-        $orderTypes     = OrderType::All();
+        $orderTypes     = OrderType::where("active", 1)->get();
         $branches       = Branch::All();
         $cemeteries     = Cemetery::All();
         $sources        = Source::All();
@@ -404,6 +417,99 @@ class OrderController extends Controller
                 break;
         }
     }
+
+    public function createWithCustomer($tab = null, $customerID)
+    {
+
+        $tabs = [
+            'general-details',
+            'job-details',
+            'inscription-details',
+            'accounts-posting',
+            'document',
+            'print-history',
+        ];
+
+        $icons = [
+            'fa-file-text-o',
+            'fa-folder-open-o',
+            'fa-text-height',
+            'fa-calculator',
+            'fa-file-o',
+            'fa-print',
+        ];
+
+        $url = 'pages.order.tabs.' . $tab;
+
+        $orderTypes     = OrderType::where("active", 1)->get();
+        $branches       = Branch::All();
+        $cemeteries     = Cemetery::All();
+        $sources        = Source::All();
+        $categories     = Category::All();
+        $graveSpaces    = GraveSpace::All();
+        $customer       = Customer::All();
+        $titles         = Title::All();
+        $hasInvoice     = false;
+        $jobValue       = "0.00";
+        $orderBalance   = "0.00";
+    
+
+        switch ($tab) {
+            case 'general-details':
+                return view($url)
+                    ->withTabs($tabs)
+                    ->withIcons($icons)
+                    ->withOrderTypes($orderTypes)
+                    ->withBranches($branches)
+                    ->withCemeteries($cemeteries)
+                    ->withSources($sources)
+                    ->withCategories($categories)
+                    ->withGraveSpaces($graveSpaces)
+                    ->withTitles($titles)
+                    ->withJobValue($jobValue)
+                    ->withHasInvoice($hasInvoice)
+                    ->withOrderBalance($orderBalance)
+                    ->withCustomers($customer)
+                    ->withCustomerId($customerID);
+                break;
+            case 'job-details':
+                return view($url)
+                    ->withTabs($tabs)
+                    ->withIcons($icons)
+                    ->withOrderTypes($orderTypes)
+                    ->withBranches($branches);
+                break;
+            case 'inscription-details':
+                return view($url)
+                    ->withTabs($tabs)
+                    ->withIcons($icons)
+                    ->withOrderTypes($orderTypes)
+                    ->withBranches($branches);
+                break;
+            case 'accounts-posting':
+                return view($url)
+                    ->withTabs($tabs)
+                    ->withIcons($icons)
+                    ->withOrderTypes($orderTypes)
+                    ->withBranches($branches);
+                break;
+            case 'document':
+                return view($url)
+                    ->withTabs($tabs)
+                    ->withIcons($icons)
+                    ->withOrderTypes($orderTypes)
+                    ->withBranches($branches);
+                break;
+            case 'print-history':
+                return view($url)
+                    ->withTabs($tabs);
+                break;
+            default:
+                break;
+        }
+    }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -473,8 +579,8 @@ class OrderController extends Controller
 
 
         // GENERAL DETAILS DATA ONLY
-        $orderTypes     = OrderType::All();
-        $branches       = Branch::All();
+        $orderTypes     = OrderType::where("active", 1)->get();
+        $branches       = Branch::where("id",$order->branch_id)->get();
         $cemeteries     = Cemetery::All();
         $sources        = Source::All();
         $categories     = Category::All();
@@ -639,10 +745,10 @@ class OrderController extends Controller
             $customerData->updated_by = Auth::id();
         }
         
-        $result = $customerData->save() ? $customerData->id : dd("Error found: Back End Issue (Customer Data)");
-        $data   = $isInsert ? $result : $customer_id;
-        
-        return $data;
+        $result     = $customerData->save() ? $customerData->id : dd("Error found: Back End Issue (Customer Data)");
+        $result     = $isInsert ? $result : $customer_id;
+
+        return $result;
     }
 
     // INSERT OR UPDATE IN `order` TABLE
@@ -668,6 +774,11 @@ class OrderController extends Controller
         $orderData->special_instructions    = $data["special_instructions"];
         $orderData->order_date              = date('Y-m-d H:i:s', strtotime($data["order_date"]));
 
+        if($isInsert){
+            $orderData->balance             = number_format(0, 2);
+            $orderData->value               = number_format(0, 2);
+        }
+
         // STATUS VALUES
         if($data["order_complete"] == "true"){
             $orderData->status_id              = 4;
@@ -685,6 +796,7 @@ class OrderController extends Controller
 
         $result = $orderData->save() ? $orderData->id : dd("Error Found: Back End Issue (Order Data)");
         $data   = $isInsert ? $orderData->id : $order_id;
+        // $result = $orderData;
         return $result;
 
     }
@@ -694,12 +806,16 @@ class OrderController extends Controller
         $order_id       = isset($request->order_id) ? $request->order_id : false;
         $customer_id    = isset($request->customer_id) ? $request->customer_id : false;
 
+
+        // VALIDATION
+            $request->validate(self::formRule("order", $order_id), [], self::changeAttributes("order") );
+            $request->validate(self::formRule("customer", $customer_id), [], self::changeAttributes("customer") );
+
+
         // Insert/Update Customer Details
-        $request->validate(self::formRule("customer", $customer_id), [], self::changeAttributes("customer") );
         $customer_id    = self::modifyCustomer($request->customerData, $customer_id);
         
 
-        $request->validate(self::formRule("order", $order_id), [], self::changeAttributes("order") );
         // Insert/Update Order Details
         $orderID        = self::modifyOrder($request->orderData, $customer_id, $order_id);
 
@@ -747,23 +863,8 @@ class OrderController extends Controller
         $job_id     = $isInsert ? $jobDetailData->id : $request->job_detail_id;
         $result     = JobDetail::find($job_id);
 
-        $data   = [
-            "job_detail_id"         => $result->id,
-            "analysis_id"           => $result->analysis_id,
-            "vat_code_id"           => $result->vat_code_id,
-            "details_of_work"       => $result->details_of_work,
-            "vat_code_description"  => $result->vatCode->vat_description,
-            "analysis_description"  => $result->analysis->description,
-            "job_cost"              => $result->job_cost,
-            "discount"              => $result->discount,
-            "total"                 => $result->total,
-            "additional_fee"        => $result->additional_fee,
-            "net_amount"            => $result->net_amount,
-            "vat_amount"            => $result->vat_amount,
-            "zero_rated_amount"     => $result->zero_rated_amount,
-            "adjusment_amount"      => $result->adjusment_amount,
-            "gross_amount"          => $result->gross_amount,
-        ];
+        //   UPDATE ORDERS VALUE AND BALANCE
+        $data   = self::updateOrderValueBalance($order_id, "job-detail", $result);
 
         return response()->json($data);
 
@@ -829,7 +930,8 @@ class OrderController extends Controller
         $request->validate(self::formRule($ruleType), [], self::changeAttributes($ruleType) );
 
         $isInsert           = $request->account_posting_id ? false : true;
-        
+        $order_id           = $request->order_id;
+
         $accountPostingData = $isInsert ? new AccountPosting : AccountPosting::find($request->account_posting_id);
         
         $accountPostingData->order_id           = $request->order_id;
@@ -870,16 +972,44 @@ class OrderController extends Controller
 
         $accountPostingData->save();
 
-        $inscription_id = $isInsert ? $accountPostingData->id : $request->account_posting_id;
-        $result         = AccountPosting::find($inscription_id);
+        $account_posting_id     = $isInsert ? $accountPostingData->id : $request->account_posting_id;
+        $result                 = AccountPosting::find($account_posting_id);
 
 
-
+        //   UPDATE ORDERS VALUE AND BALANCE
+        $data   = self::updateOrderValueBalance($order_id, "account-posting", $result);
 
 
         return response()->json($result);
         
     }
+
+
+
+    public function updateOrderValueBalance($order_id, $from = "job-detail", $data = []){
+
+        $order_data             = Order::findOrFail($order_id);
+        $jobDetails             = JobDetail::where("order_id",$order_id)->get();
+        $accountPostings        = AccountPosting::where("order_id",$order_id)->get();
+        $order_value            = $jobDetails->sum("gross_amount");
+        $order_balance          = floatval($order_value) - floatval($accountPostings->sum("credit"));
+
+        if($from === "job-detail"){
+            
+            $order_data->value  = floatval($order_value);
+            $order_data->save() || dd("Error: Updating Order Value"); 
+
+        }else{
+            #ACCOUNT POSTING
+            $order_data->balance  = floatval($order_balance);
+            $order_data->save() || dd("Error: Updating Order Value"); 
+        }
+
+
+
+    }
+
+
 
     public function printInvoice( $order_id, $invoice_number, $is_view = false ){
       
@@ -903,9 +1033,9 @@ class OrderController extends Controller
         $accountPostingInvoice    = AccountPosting::where("order_id",$order_id)
                                                     ->where('account_type_id', 3)
                                                     ->get();
-
-        $orderBalance             = floatval($jobValue) - floatval($accountPostings->sum("credit"));
-        // dd($jobValue." + ".$accountPostings->sum("credit")." = " .$orderBalance);
+        $payments                 = AccountPosting::where("order_id", $order_id)->get()->sum("credit");
+        $orderBalance             = floatval($jobValue) - floatval($payments);
+        // dd($jobValue." - ".$payments." = " .$orderBalance);
         
        if($is_view == false){
            self::createPrintHistory($order_id, "Invoice", url('/order/invoice/')."/".$order_id."/".$invoice_number);
@@ -929,11 +1059,12 @@ class OrderController extends Controller
         $order          = Order::findOrFail($order_id);
         $customer       = Customer::findOrFail($order->customer_id);
         $accountPosting = AccountPosting::findOrFail($account_posting_id);
-
         $jobDetails     = JobDetail::where("order_id",$order_id)->get();
-        $jobValue       = $jobDetails->sum("gross_amount");
 
-        $orderBalance   = floatval($jobValue) - floatval($accountPosting->sum("credit"));
+
+        $jobValue       = $jobDetails->sum("gross_amount");
+        $payments       = AccountPosting::where("order_id",$order_id)->get()->sum("credit");
+        $orderBalance   = floatval($jobValue) - floatval($payments);
 
         if($is_view == false){
             self::createPrintHistory($order_id,"Receipt", url('/order/receipt/')."/".$order_id."/".$account_posting_id );
@@ -945,8 +1076,6 @@ class OrderController extends Controller
                 ->withJobValue($jobValue)
                 ->withOrderBalance($orderBalance)
                 ->withAccountPosting($accountPosting);
-
-
     }
 
     // THIS METHOD IS FOR DOCUMENT SECTION

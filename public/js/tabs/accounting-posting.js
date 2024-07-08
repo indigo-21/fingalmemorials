@@ -5,7 +5,8 @@ $(document).ready(function(){
     $(document).on("change", "#payment_type", function(){
         let div_id  =   `tab-form-content-${$(this).val()}`;
         formContentAnimation(div_id);
-        changeButtons(div_id,"insert");
+        changeButtons(div_id);
+        // changeButtons(div_id,"insert");
     });
 
     $(document).on("change",".payment-type", function(){
@@ -14,46 +15,47 @@ $(document).ready(function(){
     });
 
     $(document).on("click", ".add-account-posting", function(){
-        let thisForm        = $(this).closest(".tab-form-content");
-        let order_id        = $(this).attr("orderid");
-        let account_type_id = $("[name=account_type_id]").find(":selected").val();   
-        let date_received   = thisForm.find("[name=date_received]").val();   
-        let payment_type_id = thisForm.find("[name=payment_type_id]").find(":selected").val();   
-        let reason          = thisForm.find("[name=reason]").val();   
-        let payment         = thisForm.find("[name=payment]").val();   
-        let invoice_to      = thisForm.find("[name=invoice_to]").val();
-
+        let thisForm            = $(this).closest(".tab-form-content");
+        let account_posting_id  = $(this).attr("accountpostingid");
+        let order_id            = $(this).attr("orderid");
+        let account_type_id     = $("[name=account_type_id]").find(":selected").val();   
+        let date_received       = thisForm.find("[name=date_received]").val();   
+        let payment_type_id     = thisForm.find("[name=payment_type_id]").find(":selected").val();   
+        let reason              = thisForm.find("[name=reason]").val();   
+        let payment             = thisForm.find("[name=payment]").val();   
+        let invoice_to          = thisForm.find("[name=invoice_to]").val();
+        let isInsert            = !account_posting_id ? true : false;
         // IS INVOICE
         if(account_type_id == "3"){
-            payment = $("#order-balances").val(); 
+            payment = $("#order-value").val(); 
         }
 
 
 
         let data = {
-            order_id, account_type_id, date_received, payment_type_id,reason,payment,invoice_to
+            order_id,account_posting_id, account_type_id, date_received, payment_type_id,reason,payment,invoice_to
         };
         
-        modifyAccountPosting(data);
+        modifyAccountPosting(data, isInsert);
 
     });
 
     $(document).on("click",".edit-account-posting",function(){
         let account_posting_id  = $(this).attr("accountpostingid");
-        let div_id              = `tab-form-content-${account_posting_id}`;
         let account_type_id     = $(this).attr("accounttypeid");
+        let div_id              = `tab-form-content-${account_type_id}`;
         let date_received       = $(this).attr("datereceived");
         let payment_type_id     = $(this).attr("paymenttypeid");
         let reason              = $(this).closest("tr").find(".reason").text();
         let payment             = $(this).attr("payment");
 
-        $("[name=account_type_id]").val(account_type_id).trigger("change");   
-        $(`#${div_id}`).find("[name=date_received]").val(date_received);   
-        $(`#${div_id}`).find("[name=payment_type_id]").val(payment_type_id).trigger("change"); 
-        $(`#${div_id}`).find("[name=reason]").val(reason);   
-        $(`#${div_id}`).find("[name=payment]").val(payment);   
+            $("[name=account_type_id]").val(account_type_id).trigger("change");   
+            $(`#${div_id}`).find("[name=date_received]").val(date_received);   
+            $(`#${div_id}`).find("[name=reason]").val(reason);   
+            $(`#${div_id}`).find("[name=payment]").val(payment);   
+            $(`#${div_id}`).find("[name=payment_type_id]").val(payment_type_id).trigger("change"); 
 
-        changeButtons(div_id,"update")
+            changeButtons(div_id, account_posting_id);
         
         // formContentAnimation(div_id);
         
@@ -64,27 +66,31 @@ $(document).ready(function(){
     });
 
     $(document).on("click",".cancel-account-posting", function(){
-        // let type    = $(this).attr("isupdate") == "true" ? "insert" : "update";
-        let type    = "insert";
         let div_id  = $(this).closest(".tab-form-content").attr("id");
-        changeButtons(div_id, type);
+        $(`#${div_id}`).find("[name=date_received]").val("");   
+        $(`#${div_id}`).find("[name=reason]").val("");   
+        $(`#${div_id}`).find("[name=payment]").val("");   
+        $(`#${div_id}`).find("[name=payment_type_id]").val("").trigger("change"); 
+
+        changeButtons(div_id);
     });
 
 
 
     
 
-    function changeButtons(div_id, type = "insert"){
-        let order_id    = $("#account-posting-container").attr("orderid");
-        let html        = ` 
-                            <button class="btn btn-light btn-icon-notika waves-effect cancel-account-posting" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-icon-notika waves-effect add-account-posting" orderid="${order_id}" type="button">Add</button>
-                          `;
-        if(type != "insert"){
-             html        =  ` 
-                                <button class="btn btn-light btn-icon-notika waves-effect cancel-account-posting" isupdate="true" type="button">Cancel</button>
-                                <button class="btn btn-primary btn-icon-notika waves-effect add-account-posting" orderid="${order_id}" type="button">Update</button>
+    function changeButtons(div_id, account_posting_id = false){
+        let isInsert        = !account_posting_id; 
+        let order_id        = $("#account-posting-container").attr("orderid");
+        let html            = ` 
+                                <button class="btn btn-light btn-icon-notika waves-effect cancel-account-posting" type="button">Cancel</button>
+                                <button class="btn btn-primary btn-icon-notika waves-effect add-account-posting" orderid="${order_id}" type="button">Add</button>
                             `;
+        if(!isInsert){
+             html                   =  ` 
+                                        <button class="btn btn-light btn-icon-notika waves-effect cancel-account-posting" isupdate="true" type="button">Cancel</button>
+                                        <button class="btn btn-primary btn-icon-notika waves-effect add-account-posting" orderid="${order_id}" accountpostingid="${account_posting_id}" type="button">Update</button>
+                                    `;
         }
         
         

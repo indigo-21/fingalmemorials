@@ -133,13 +133,13 @@
                                                 
                                             @endif
                                         </td>
-                                        <td>{{$accountPosting->debit}}</td>
-                                        <td>{{$accountPosting->credit}}</td>
+                                        <td>{{number_format($accountPosting->debit, 2)}}</td>
+                                        <td>{{number_format($accountPosting->credit,2)}}</td>
                                         <td class="popover-cl-pro">
                                             @if($accountPosting->account_type_id != "3")
                                             <button class="btn btn-primary edit-account-posting" data-trigger="hover" data-toggle="popover"
                                                     orderid="{{$accountPosting->order_id}}" 
-                                                    accountpostingid="{{$accountPosting->account_type->id}}"
+                                                    accountpostingid="{{$accountPosting->id}}"
                                                     accounttypeid="{{$accountPosting->account_type_id}}"
                                                     datereceived="{{ date('m/d/Y', strtotime($accountPosting->created_at)) }}"
                                                     paymenttypeid="{{$accountPosting->payment_type_id}}"

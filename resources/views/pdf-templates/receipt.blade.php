@@ -106,7 +106,7 @@
         <tr>
             <td style="border: 1px solid #000; padding:10px 20px;">
                 <p><b>Name: </b>{{$customer->title->name}} {{$customer->firsname}} {{$customer->middlename}} {{$customer->surname}}</p>
-                <p><b>Address: </b>{{$customer->address1}} </p>
+                <p><b>Address: </b>{{$customer->address1}}, {{$customer->town}}, {{$customer->county}}, {{$customer->postcode}}  </p>
             </td>
             <td style="border: 1px solid #000; padding:10px 20px;">
                 <p><b>Order No.: </b> {{$order->id}}</p>
@@ -154,7 +154,7 @@
                                     <p>{{number_format($accountPosting->credit, 2)}}</p>
                                 </td>
                                 <td>
-                                    <p></p>
+                                    <p>Deposit paid by {{$accountPosting->payment_type->name}}</p>
                                 </td>
                             </tr>
                         </tbody>

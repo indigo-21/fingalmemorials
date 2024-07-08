@@ -16,14 +16,18 @@
                     <select class="input-form selectpicker" data-placeholder="" id="input-cemetery" name="cemetery_id">
                         <option disabled selected value="" >Choose a Cemetery...</option>
                         @php
-                            $fixing_area = "";
+                            $group_area     = "";
+                            $fixing_area    = "";
                         @endphp
 
                         @foreach($cemeteries as $cemetery)
-                            <option area="{{$cemetery->cemeteryArea->name}}" 
+                            <option 
+                                group="{{$cemetery->cemeteryGroup->name}}"
+                                area="{{$cemetery->cemeteryArea->name}}" 
                                 @if(isset($order))
                                         @php 
-                                            $fixing_area = $order->cemetery_id == $cemetery->id ? $cemetery->cemeteryArea->name : ''
+                                            $group_area     = $order->cemetery_id == $cemetery->id ? $cemetery->cemeteryGroup->name : '';
+                                            $fixing_area    = $order->cemetery_id == $cemetery->id ? $cemetery->cemeteryArea->name : '';
                                         @endphp
 
                                         {{$order->cemetery_id == $cemetery->id ? 'selected' : ''}}
@@ -31,6 +35,14 @@
                                 value="{{$cemetery->id}}">{{$cemetery->name}}</option>
                         @endforeach
                     </select>
+                </div>
+                <div class="nk-int-st" style="margin-bottom:20px;">
+                    <label>Cemetery Group</label>
+                    <input type="text" disabled  class="input-form form-control" placeholder="Fixing Area" 
+                        @if(isset($order))
+                            value="{{$group_area}}"
+                        @endif
+                        name="cemetery_group" id="cemetery_group">
                 </div>
                 <div class="nk-int-st" style="margin-bottom:20px;">
                     <label>Fixing Area</label>
@@ -179,8 +191,11 @@
                             @endphp
 
                             @foreach ($customers as $findCustomer)
-                                <option value="{{ $findCustomer->id }}"> {{ $findCustomer->firstname }}
-                                    {{ $findCustomer->surname }}</option>
+                                <option value="{{ $findCustomer->id }}"
+                                    @if(isset($customerId) && $findCustomer->id == $customerId )
+                                        selected
+                                    @endif
+                                > {{ $findCustomer->firstname }} {{ $findCustomer->surname }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -267,7 +282,7 @@
                     </div>
                     <div class="nk-int-st mb-20">
                         <label>Account Number</label>
-                        <input type="text" class="input-form form-control" placeholder="MON01" name="account_number">
+                        <input type="text" disabled class="input-form form-control" placeholder="MON01" value="MON01"  name="account_number">
                     </div>
                 </div>
             </div>

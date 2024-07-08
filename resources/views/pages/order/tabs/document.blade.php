@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-lg-4 col-md-4">
             <form action="" enctype="multipart/form-data">
-                <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;">
+                <!-- <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;">
                     <label>Document Type:</label>
                     <select class="selectpicker" name="document_type_id">
                         <option selected disabled value="">- Document Type</option>
@@ -16,7 +16,7 @@
                             <option value="{{ $documentType->id }}">{{ $documentType->name }}</option>
                         @endforeach
                     </select>
-                </div>
+                </div> -->
                 <div class="nk-int-st mb-20">
                     <label>Description</label>
                     <input type="text" class="form-control" placeholder="Headline" name="document_description">

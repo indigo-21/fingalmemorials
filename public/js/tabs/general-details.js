@@ -15,13 +15,23 @@ $(document).ready(function(){
         $("[name=job_was_fixed_on]").attr("disabled", false);
     }
 
+    if($("[name=customer]").find(":selected").val()){
+        $("[name=customer]").trigger("change");
+    }
 
 });
 
 
+$(document).on("change", ".fm-checkbox", function(){
+    alert("test");
+});
+
+
 $(document).on("change","#input-cemetery",function(){
-    let area = $(this).find(":selected").attr("area");
+    let area    = $(this).find(":selected").attr("area");
+    let group   = $(this).find(":selected").attr("group");
     $("#cemetery_area").val(area);
+    $("#cemetery_group").val(group);
 });
 
 
@@ -146,9 +156,11 @@ $(document).on("change","#input-cemetery",function(){
 
 
 // Related on CUSTOMER DETAILS
-
     $(document).on("click", ".checkBox-newCustomer", function (e) {
         // let check=e.target.checked;
+        let isChecked = $(this).closest(".new-customer");
+        console.log(isChecked);
+
         if (e.target.checked === true) {
 
             $(".choose-customer-text").attr("hidden", true);
@@ -167,7 +179,6 @@ $(document).on("change","#input-cemetery",function(){
     });
 
     $(document).on("change", ".chosen-customer", function (e) {
-        // console.log(e.target.value);
         let customerId = e.target.value;
 
         $.ajax({
@@ -176,7 +187,7 @@ $(document).on("change","#input-cemetery",function(){
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
-            url: "findCustomer/" + customerId,
+            url: `${SYSTEM_URL}/order/create/findCustomer/${customerId}`,
             success: function (data) {
                 
                 $("[name=title_id]").val(data.title_id).trigger("change");

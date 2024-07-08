@@ -84,11 +84,11 @@
                                 <h4 class="title-header title-header-md">Order Totals</h4>
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Value</label>
-                                    <input type="text" class="input-form form-control" placeholder="" id="order-value" value="{{$jobValue}}" disabled>
+                                    <input type="text" class="input-form form-control" placeholder="" id="order-value" value="{{number_format($jobValue, 2)}}" disabled>
                                 </div>
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Balance</label>
-                                    <input type="text" class="input-form form-control" placeholder="" id="order-balances" value="{{$orderBalance}}" disabled>
+                                    <input type="text" class="input-form form-control" placeholder="" id="order-balances" value="{{number_format($orderBalance, 2)}}" disabled>
                                 </div>
                             </div>
                         </div>
