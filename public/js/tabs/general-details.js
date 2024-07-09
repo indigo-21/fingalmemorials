@@ -23,7 +23,7 @@ $(document).ready(function(){
 
 
 $(document).on("change", ".fm-checkbox", function(){
-    alert("test");
+   
 });
 
 
@@ -157,24 +157,28 @@ $(document).on("change","#input-cemetery",function(){
 
 // Related on CUSTOMER DETAILS
     $(document).on("click", ".checkBox-newCustomer", function (e) {
-        // let check=e.target.checked;
         let isChecked = $(this).closest(".new-customer");
-        console.log(isChecked);
-
+        
         if (e.target.checked === true) {
-
+            
             $(".choose-customer-text").attr("hidden", true);
-            $(".customer-form").attr("hidden", false);
+            // $(".customer-form").attr("hidden", false);
             $(".customer-form .input-form").val("");
             $(".customer-form .input-form .selectpicker")
                 .find("option:selected")
                 .remove();
             $(".chosen-customer option:first").prop('selected',true).trigger("change");
             $("[name=title_id] option:first").prop('selected',true).trigger("change");
+            let hideCustomerForm = false;
+            customerForm(false,hideCustomerForm);
             
         } else {
             $(".choose-customer-text").attr("hidden", false);
             $(".customer-form").attr("hidden", false);
+            
+            let hideCustomerForm = true;
+            customerForm(false, hideCustomerForm);
+            
         }
     });
 
@@ -188,6 +192,9 @@ $(document).on("change","#input-cemetery",function(){
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
             url: `${SYSTEM_URL}/order/create/findCustomer/${customerId}`,
+            beforeSend:function(){
+                customerForm(true);
+            },
             success: function (data) {
                 
                 $("[name=title_id]").val(data.title_id).trigger("change");
@@ -205,14 +212,34 @@ $(document).on("change","#input-cemetery",function(){
                 $("[name=county]").val(data.county);
                 $("[name=postcode]").val(data.postcode);
                 $(".create-submit").attr("customerid", data.id);
+
             },
 
             error: function (error) {},
         });
-        $(".customer-form").attr("hidden", false);
+        
     });
 
+
 // END Related on CUSTOMER DETAILS
+
+function customerForm(disabled = true, hideCustomerForm = false){
+    $(".customer-form").show();
+    $(".customer-form").find("input").attr("disabled", disabled);
+    $("#customer_form").find("select").attr("disabled", disabled);
+    $(".customer-form").find("select").attr("disabled", disabled);
+
+    $("#customer_form").find("select").selectpicker("destroy");
+    $("#customer_form").find("select").selectpicker();
+
+    $(".customer-form").find("select").selectpicker("destroy");
+    $(".customer-form").find("select").selectpicker();
+
+
+    if(hideCustomerForm){
+        $(".customer-form").hide();
+    }
+}
 
 
 function errorMessage(error){

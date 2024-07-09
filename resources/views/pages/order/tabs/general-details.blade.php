@@ -168,7 +168,7 @@
                 </div>
             </div>
         </div>
-        <div class="row mt-40">
+        <div class="row mt-40" id="customer_form">
             <h3 class="title text-center">Customer Details</h3>
 
 
@@ -185,7 +185,7 @@
                     <div class="chosen-select-act fm-cmp-mg mb-20 choose-customer-text">
                         <label>Customers</label>
                         <select class="input-form selectpicker chosen-customer" data-placeholder="" name="customer">
-                            <option disabled selected>Choose a Customer...</option>
+                            <option disabled selected value="">Choose a Customer...</option>
                             @php
                                 $fixing_area = '';
                             @endphp
