@@ -60,8 +60,8 @@
                                             <td>{{ date('m/d/Y', strtotime($order->created_at)) }}</td>
                                             <td>{{ $order->cemetery->name }}</td>
                                             <td>{{ $order->customer->firstname }} {{ $order->customer->surname }}</td>
-                                            <td></td>
-                                            <td></td>
+                                            <td>{{ number_format($order->value,2) }}</td>
+                                            <td>{{ number_format($order->balance,2) }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
