@@ -19,7 +19,7 @@
                                 <h2>Order Type:</h2>
                             </div>
                             <div class="bootstrap-select fm-cmp-mg">
-                                <select class="selectpicker" name="order_type_id">
+                                <select class="selectpicker" name="order_type_id" data-live-search="true">
                                         <option value="0">All</option>
                                         @foreach ($orderTypes as $orderType)
                                             <option value="{{$orderType->id}}" 

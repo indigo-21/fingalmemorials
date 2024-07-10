@@ -8,7 +8,7 @@
                         <h3>Order Types</h3>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <p class="breadcrumbs-link"><a href="">Dashboard</a> / <b>Order Types </b></p>
+                        <p class="breadcrumbs-link"><a href="/">Dashboard</a> <i class="fa fa-angle-right" aria-hidden="true"></i> <b>Order Types </b></p>
                     </div>
                 </div>
 
@@ -89,6 +89,7 @@
 @endsection
 
 @section('page-scripts')
+    <script src="{{ asset('js/datatables/admin-utilities.js')}} "></script>
     <script src="{{ asset('js/delete-script.js') }}"></script>
 @endsection
 

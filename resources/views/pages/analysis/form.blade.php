@@ -6,11 +6,14 @@
                 <div class="breadcrumbs-content">
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <h3>{{ isset($id) ? 'Update' : 'Create' }} Analysis</h3>
+                            <h3>{{ isset($analysis) ? 'Update' : 'Create' }} Analysis</h3>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <p class="breadcrumbs-link"><a href="">Dashboard</a> / <b>
-                                    {{ isset($id) ? 'Update' : 'Create' }} Analysis </b></p>
+                            <p class="breadcrumbs-link"><a href="/">Dashboard</a> <i class="fa fa-angle-right"
+                                    aria-hidden="true"></i>
+                                <a href="/analysis">Analysis</a> <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                <b>{{ isset($analysis) ? 'Update' : 'Create' }} Analysis</b>
+                            </p>
                         </div>
                     </div>
 

@@ -9,8 +9,9 @@
                             <h3>{{ isset($cemetery) ? 'Update' : 'Create' }} Cemetery</h3>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <p class="breadcrumbs-link"><a href="">Dashboard</a> / <b>
-                                    {{ isset($cemetery) ? 'Update' : 'Create' }} Cemetery </b></p>
+                            <p class="breadcrumbs-link"><a href="/">Dashboard</a> <i class="fa fa-angle-right" aria-hidden="true"></i>  
+                                <a href="/cemetery">Cemetery</a> <i class="fa fa-angle-right" aria-hidden="true"></i> 
+                                <b>{{ isset($cemetery) ? 'Update' : 'Create' }} Cemetery </b></p>
                         </div>
                     </div>
 
