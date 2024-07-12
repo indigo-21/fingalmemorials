@@ -320,3 +320,41 @@ ul.order-tabs li.active a, .order-tabs li:focus a, .order-tabs li:hover a{
     margin: auto;
   }
   @keyframes l3 {to{transform: rotate(1turn)}}
+
+  #job_details_buttons .form-btn, .account_posting_buttons .form-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #job_details_buttons .form-btn button, .account_posting_buttons .form-btn button{
+    margin:0 5px;
+    padding: 10px 25px !important;
+  }
+
+  /* input[type="checkbox"] {
+    height: 34px;
+  } */
+  .form-check-input {
+    border: 1px solid rgba(0, 0, 0, .25);
+    background-color: #fff;
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: top;
+    margin-top: .8em !important;
+  }
+
+  label.form-check-label {
+    margin-top: 0.9em;
+    margin-left: 5px;
+    font-weight: normal;
+}
+.form-check-input:checked {
+    background-color: #8981d8 !important;
+    border-color: #8981d8 !important;
+}
+.customer-exists {
+    background: #f6f8fa;
+    padding: 30px 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
