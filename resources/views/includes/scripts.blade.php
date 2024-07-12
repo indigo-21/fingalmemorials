@@ -61,7 +61,7 @@
   ============================================ -->
   <script src="{{ asset('datatables/datatables.min.js') }}"></script>
  {{-- <script src="{{ asset('assets/js/data-table/jquery.dataTables.min.js') }}"></script>  --}}
- <script src="{{ asset('assets/js/data-table/data-table-act.js') }}"></script>  
+ {{-- <script src="{{ asset('assets/js/data-table/data-table-act.js') }}"></script>   --}}
 {{-- <script src="{{ asset('assets/datatables/datatables.min.js') }}"></script> --}}
 {{-- <script src="{{ asset('assets/js/datatables.js') }}"></script>  --}}
 

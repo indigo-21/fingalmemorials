@@ -56,44 +56,32 @@
                 <div class="mobile-menu">
                     <nav id="dropdown">
                         <ul class="mobile-menu-nav">
-                            <li><a data-toggle="collapse" data-target="#dashboard-mob" href="#">Dashboard</a>
-                                <ul class="collapse dropdown-header-top">
-                                    <li><a href="/dashboard">Dashboard</a></li>
-                                </ul>
-                            </li>
+                            <li><a  href="/dashboard" class="{{ Request::is('dashboard', 'dashboard/*') ? 'active' : '' }}">Dashboard</a></li>
                             <li><a data-toggle="collapse" data-target="#orders-mob" href="#">Orders</a>
                                 <ul class="collapse dropdown-header-top">
-                                    <li><a href="/order">Orders</a></li>
-                                    <li><a href="/customer">Customer</a></li>
-                                    <li><a href="/complete-unsettled">Complete/Invoiced Unsettled</a></li>
+                                    <li><a href="/order" class="{{ Request::is('order', 'order/*') ? 'active' : '' }}">Orders</a></li>
+                                    <li><a href="/customer" class="{{ Request::is('customer', 'customer/*') ? 'active' : '' }}">Customer</a></li>
                                 </ul>
                             </li>
                             <li><a data-toggle="collapse" data-target="#reports-mob" href="#">Reports</a>
                                 <ul id="reports-mob" class="collapse dropdown-header-top">
-                                    <li><a href="/order-report">Order Report</a></li>
-                                    <li><a href="/sage-report">Sage Report</a></li>
+                                    <li><a href="/order-report" class="{{ Request::is('order-report', 'order-report/*') ? 'active' : '' }}">Order Report</a></li>
+                                    <li><a href="/sage-report" class="{{ Request::is('sage-report', 'sage-report/*') ? 'active' : '' }}">Sage Report</a></li>
                                 </ul>
                             </li>
                             <li><a data-toggle="collapse" data-target="#admin-mob" href="#">Admin Utilities</a>
                                 <ul id="admin-mob" class="collapse dropdown-header-top">
-                                    <li><a href="/account-types">Account Types</a></li>
-                                    <li><a href="/branches">Branches</a></li>
-                                    <li><a href="/categories">Categories</a></li>
-                                    <li><a href="/cemetery">Cemetery</a></li>
-                                    <li><a href="/cemetery-area">Cemetery Area</a></li>
-                                    <li><a href="/cemetery-group">Cemetery Group</a></li>
-                                    <li><a href="/document-types">Document Types</a></li>
-                                    <li><a href="/order-types">Order Types</a></li>
-                                    <li><a href="/payment-types">Payment Types</a></li>
-                                    <li><a href="/source">Source</a></li>
-                                    <li><a href="/title">Title</a></li>
+                                    <li><a href="/branches" class="{{ Request::is('branches', 'branches/*') ? 'active' : '' }}">Branches</a></li>
+                                    <li><a href="/categories" class="{{ Request::is('categories', 'categories/*') ? 'active' : '' }}">Categories</a></li>
+                                    <li><a href="/cemetery" class="{{ Request::is('cemetery', 'cemetery/*') ? 'active' : '' }}">Cemetery</a></li>
+                                    <li><a href="/cemetery-area" class="{{ Request::is('cemetery-area', 'cemetery-area/*') ? 'active' : '' }}">Cemetery Area</a></li>
+                                    <li><a href="/cemetery-group" class="{{ Request::is('cemetery-group', 'cemetery-group/*') ? 'active' : '' }}">Cemetery Group</a></li>
+                                    <li><a href="/order-types" class="{{ Request::is('order-types', 'order-types/*') ? 'active' : '' }}">Order Types</a></li>
+                                    <li><a href="/source" class="{{ Request::is('source', 'source/*') ? 'active' : '' }}">Source</a></li>
+                                    <li><a href="/vat-codes" class="{{ Request::is('vat-codes', 'vat-codes/*') ? 'active' : '' }}">Vat Codes</a></li>
                                 </ul>
                             </li>
-                            <li><a data-toggle="collapse" data-target="#admin-mob" href="#">User</a>
-                                <ul id="admin-mob" class="collapse dropdown-header-top">
-                                    <li><a href="/users">Users</a></li>
-                                </ul>
-                            </li>
+                            <li><a href="/users" class="{{ Request::is('users', 'users/*') ? 'active' : '' }}">User</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -129,48 +117,43 @@
                 </ul>
                 <div class="tab-content custom-menu-content">
                     <div id="dashboard"
-                        class="tab-pane notika-tab-menu-bg animated fadeInDown {{ Request::is('dashboard', 'dashboard/*',) ? 'active' : '' }}">
+                        class="tab-pane notika-tab-menu-bg animated fadeIn {{ Request::is('dashboard', 'dashboard/*',) ? 'active' : '' }}">
                         <ul class="notika-main-menu-dropdown">
-                            <li><a href="/dashboard">Dashboard</a></li>
+                            <li><a href="/dashboard" class="{{ Request::is('dashboard', 'dashboard/*') ? 'active' : '' }}">Dashboard</a></li>
                         </ul>
                     </div>
                     <div id="orders"
-                        class="tab-pane notika-tab-menu-bg animated fadeInDown {{ Request::is('order', 'order/*', 'customer', 'customer/*', 'complete-unsettled', 'complete-unsettled/*') ? 'active' : '' }}">
+                        class="tab-pane notika-tab-menu-bg animated fadeIn {{ Request::is('order', 'order/*', 'customer', 'customer/*', 'complete-unsettled', 'complete-unsettled/*') ? 'active' : '' }}">
                         <ul class="notika-main-menu-dropdown">
-                            <li><a href="/order">Orders</a></li>
-                            <li><a href="/customer">Customer</a></li>
-                            <li><a href="/complete-unsettled">Complete/Invoiced Unsettled</a></li>
+                            <li><a href="/order" class="{{ Request::is('order', 'order/*') ? 'active' : '' }}">Orders</a></li>
+                            <li><a href="/customer" class="{{ Request::is('customer', 'customer/*') ? 'active' : '' }}">Customer</a></li>
                         </ul>
                     </div>
                     <div id="reports"
-                        class="tab-pane notika-tab-menu-bg animated fadeInDown {{ Request::is('order-summary', 'order-summary/*', 'order-details', 'order-details/*', 'order-report', 'order-report/*') ? 'active' : '' }}">
+                        class="tab-pane notika-tab-menu-bg animated fadeIn {{ Request::is('order-summary', 'order-summary/*', 'order-details', 'order-details/*', 'order-report', 'order-report/*') ? 'active' : '' }}">
                         <ul class="notika-main-menu-dropdown">
-                            <li><a href="/order-report">Order Report</a></li>
-                            <li><a href="/sage-report">Sage Report</a></li>
+                            <li><a href="/order-report" class="{{ Request::is('order-report', 'order-report/*') ? 'active' : '' }}">Order Report</a></li>
+                            <li><a href="/sage-report" class="{{ Request::is('sage-report', 'sage-report/*') ? 'active' : '' }}">Sage Report</a></li>
                         </ul>
                     </div>
                     <div id="admin"
-                        class="tab-pane notika-tab-menu-bg animated fadeInDown {{ Request::is('branches', 'branches/*', 'document-types', 'document-types/*', 'branches', 'branches/*', 'account-types', 'account-types/*', 'categories', 'categories/*', 'order-types', 'order-types/*', 'payment-types', 'payment-types/*', 'cemetery', 'cemetery/*', 'cemetery-group', 'cemetery-group/*', 'cemetery-area', 'cemetery-area/*', 'title', 'title/*', 'source', 'source/*', 'analysis', 'analysis/*', 'vat-codes', 'vat-codes/*') ? 'active' : '' }}">
+                        class="tab-pane notika-tab-menu-bg animated fadeIn {{ Request::is('branches', 'branches/*', 'document-types', 'document-types/*', 'branches', 'branches/*', 'account-types', 'account-types/*', 'categories', 'categories/*', 'order-types', 'order-types/*', 'payment-types', 'payment-types/*', 'cemetery', 'cemetery/*', 'cemetery-group', 'cemetery-group/*', 'cemetery-area', 'cemetery-area/*', 'title', 'title/*', 'source', 'source/*', 'analysis', 'analysis/*', 'vat-codes', 'vat-codes/*') ? 'active' : '' }}">
                         <ul class="notika-main-menu-dropdown">
-                            <li><a href="/account-types">Account Types</a></li>
-                            <li><a href="/analysis">Analysis</a></li>
-                            <li><a href="/branches">Branches</a></li>
-                            <li><a href="/categories">Categories</a></li>
-                            <li><a href="/cemetery">Cemetery</a></li>
-                            <li><a href="/cemetery-area">Cemetery Area</a></li>
-                            <li><a href="/cemetery-group">Cemetery Group</a></li>
-                            <li><a href="/document-types">Document Types</a></li>
-                            <li><a href="/order-types">Order Types</a></li>
-                            <li><a href="/payment-types">Payment Types</a></li>                           
-                            <li><a href="/source">Sources</a></li>
-                            <li><a href="/title">Titles</a></li>
-                            <li><a href="/vat-codes">Vat Codes</a></li>
+                            <li><a href="/analysis" class="{{ Request::is('analysis', 'analysis/*') ? 'active' : '' }}">Analysis</a></li>
+                            <li><a href="/branches" class="{{ Request::is('branches', 'branches/*') ? 'active' : '' }}">Branches</a></li>
+                            <li><a href="/categories" class="{{ Request::is('categories', 'categories/*') ? 'active' : '' }}">Categories</a></li>
+                            <li><a href="/cemetery" class="{{ Request::is('cemetery', 'cemetery/*') ? 'active' : '' }}">Cemetery</a></li>
+                            <li><a href="/cemetery-area" class="{{ Request::is('cemetery-area', 'cemetery-area/*') ? 'active' : '' }}">Cemetery Area</a></li>
+                            <li><a href="/cemetery-group" class="{{ Request::is('cemetery-group', 'cemetery-group/*') ? 'active' : '' }}">Cemetery Group</a></li>
+                            <li><a href="/order-types" class="{{ Request::is('order-types', 'order-types/*') ? 'active' : '' }}">Order Types</a></li>
+                            <li><a href="/source" class="{{ Request::is('source', 'source/*') ? 'active' : '' }}">Sources</a></li>
+                            <li><a href="/vat-codes" class="{{ Request::is('vat-codes', 'vat-codes/*') ? 'active' : '' }}">Vat Codes</a></li>
                         </ul>
                     </div>
                     <div id="user"
-                        class="tab-pane notika-tab-menu-bg animated fadeInDown {{ Request::is('users', 'users/*') ? 'active' : '' }}">
+                        class="tab-pane notika-tab-menu-bg animated fadeIn {{ Request::is('users', 'users/*') ? 'active' : '' }}">
                         <ul class="notika-main-menu-dropdown">
-                            <li><a href="/users">Users</a></li>
+                            <li><a href="/users"  class="{{ Request::is('users', 'users/*') ? 'active' : '' }}">Users</a></li>
                         </ul>
                     </div>
                 </div>
