@@ -9,6 +9,20 @@
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <h3>{{isset($order) ? "Update" : "Create" }} Orders</h3>
+                                @if(isset($order))
+                                    <div class="order-status open-order">
+                                        <span><b>Status:</b> Open Order</span>
+                                    </div>
+                                    <div class="order-status invoiced">
+                                        <span><b>Status:</b> Invoiced</span>
+                                    </div>
+                                    <div class="order-status order-cancelled">
+                                        <span><b>Status:</b> Order Cancelled</span>
+                                    </div>
+                                    <div class="order-status complete-order">
+                                        <span><b>Status:</b> Complete Order</span>
+                                    </div>
+                                @endif
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <p class="breadcrumbs-link"><a href="">Dashboard</a> / <b>Orders</b></p>
@@ -165,6 +179,13 @@
                                                             role="tabpanel">
                                                             <div class="tab-ctn">
                                                                 @yield('tab-document')
+                                                            </div>
+                                                        </div>
+                                                        <div id="document"
+                                                            class="tab-pane fade in {{ 'email' === Request::segment(3) ? 'active' : '' }}"
+                                                            role="tabpanel">
+                                                            <div class="tab-ctn">
+                                                                @yield('tab-email')
                                                             </div>
                                                         </div>
                                                         <div id="print-history"

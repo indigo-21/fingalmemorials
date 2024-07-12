@@ -76,7 +76,7 @@
                     <div class="row" style="margin-top:20px;">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="nk-int-mk sl-dp-mn">
-                                <h2>Invoice Status:</h2>
+                                <h2>Order Status:</h2>
                             </div>
                             <div class="bootstrap-select fm-cmp-mg">
                                 <select class="selectpicker" name="invoice_status">
