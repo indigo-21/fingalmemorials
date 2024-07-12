@@ -13,8 +13,9 @@
                 </div>
                 <div class="chosen-select-act fm-cmp-mg mb-20">
                     <label>Cemetery</label>
-                    <select class="input-form selectpicker" data-placeholder="" id="input-cemetery" name="cemetery_id">
-                        <option disabled selected value="" >Choose a Cemetery...</option>
+                    <select class="input-form selectpicker" data-placeholder="" id="input-cemetery" name="cemetery_id"
+                        data-live-search="true">
+                        <option disabled selected value="">Choose a Cemetery...</option>
                         @php
                             $group_area     = "";
                             $fixing_area    = "";
@@ -62,8 +63,8 @@
 
                 <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;">
                     <label>Grave Space:</label>
-                    <select class="selectpicker" name="grave_space_id">
-                        <option value="" selected disableds >-- SELECT GRAVE SPACE --</option>
+                    <select class="selectpicker" name="grave_space_id" data-live-search="true">
+                        <option value="" selected disableds>-- SELECT GRAVE SPACE --</option>
                         @foreach ($graveSpaces as $graveSpace)
                             <option value="{{ $graveSpace->id }}"
                                 @if(isset($order))
@@ -91,7 +92,14 @@
                 </div>
                 <div class="row">
                     <div class="col-md-5">
-                        <div class="fm-checkbox">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="inscription_completed"
+                                @if (isset($order)) {{ $order->inscription_completed == '1' ? 'checked' : '' }}
+                            @else   
+                                disabled @endif>
+                            <label class="form-check-label">Inscription Completed</label>
+                        </div>
+                        {{-- <div class="fm-checkbox">
                             <label>
                                     <input type="checkbox" class="input-form i-checks" name="inscription_completed"
                                         @if(isset($order))
@@ -102,7 +110,7 @@
                                     > 
                                     <i></i> Inscription Completed
                             </label>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="col-md-7">
                         <div class="nk-datapk-ctm form-elet-mg" id="data_1" style="margin-bottom:20px;">
@@ -142,7 +150,7 @@
                 <h4 class="title-header title-header-md" style="margin-top:50px;">Analysis Codes</h4>
                 <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;">
                     <label>Source:</label>
-                    <select class="input-form selectpicker" name="source_id">
+                    <select class="input-form selectpicker" name="source_id" data-live-search="true">
                         <option selected disabled value="">Source</option>
                         @foreach($sources as $source)
                             <option value="{{$source->id}}"
@@ -155,7 +163,7 @@
                 </div>
                 <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;">
                     <label>Category:</label>
-                    <select class="input-form selectpicker" name="category_id">
+                    <select class="input-form selectpicker" name="category_id" data-live-search="true">
                         <option selected disabled value="">Category</option>
                         @foreach($categories as $category)
                             <option value="{{$category->id}}"
@@ -174,18 +182,43 @@
 
             @if (!isset($order))
                 <div class="col-12 col-md-12 mb-10">
-                    <div class="fm-checkbox">
+                    {{-- <div class="fm-checkbox">
                         <label>
                             <input type="checkbox" class="input-form  checkBox-newCustomer  " id="checkBox-newCustomer"
                                 name="newCustomer">
 
                             <i></i> New Customer
                         </label>
+                    </div> --}}
+                    {{-- <div class="form-check">
+                        <input type="checkbox" class="form-check-input checkBox-newCustomer  " id="checkBox-newCustomer"
+                            name="newCustomer">
+                        <label class="form-check-label">New Customer</label>
+                    </div> --}}
+                    <div class="customer-exists text-center">
+                        <h4>Does this customer already exists?</h4>
+                        <div class="form-check">
+                            <span style="margin-right:10px;">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                    id="flexRadioDefault1">
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                    Yes
+                                </label>
+                            </span>
+                            <span>
+                                <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                    id="flexRadioDefault2" >
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                    No
+                                </label>
+                            </span>
+                        </div>
                     </div>
                     <div class="chosen-select-act fm-cmp-mg mb-20 choose-customer-text">
                         <label>Customers</label>
-                        <select class="input-form selectpicker chosen-customer" data-placeholder="" name="customer">
-                            <option disabled selected value="">Choose a Customer...</option>
+                        <select class="input-form selectpicker chosen-customer" data-placeholder="" name="customer"
+                            data-live-search="true">
+                            <option disabled selected>Choose a Customer...</option>
                             @php
                                 $fixing_area = '';
                             @endphp

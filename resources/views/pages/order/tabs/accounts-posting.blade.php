@@ -40,9 +40,11 @@
                     </div>
                     <div class="row mt-20">
                         <div class="col-md-12 text-center">
-                            <div class="form-btn">
-                                <button class="btn btn-light btn-icon-notika waves-effect cancel-account-posting" type="button">Cancel</button>
-                                <button class="btn btn-primary btn-icon-notika waves-effect add-account-posting" orderid="{{$order->id}}" type="button">Add</button>
+                            <div class="account_posting_buttons">
+                                <div class="form-btn">
+                                    <button class="btn btn-light btn-icon-notika waves-effect cancel-account-posting" type="button">Cancel</button>
+                                    <button class="btn btn-primary btn-icon-notika waves-effect add-account-posting" orderid="{{$order->id}}" type="button">Add</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -75,9 +77,11 @@
                     </div>
                     <div class="row mt-20">
                         <div class="col-md-12 text-center">
-                            <div class="form-btn">
-                                <button class="btn btn-light btn-icon-notika waves-effect cancel-account-posting" type="button">Cancel</button>
-                                <button class="btn btn-primary btn-icon-notika waves-effect add-account-posting" orderid="{{$order->id}}" type="button">Add</button>
+                            <div class="account_posting_buttons">
+                                <div class="form-btn">
+                                    <button class="btn btn-light btn-icon-notika waves-effect cancel-account-posting" type="button">Cancel</button>
+                                    <button class="btn btn-primary btn-icon-notika waves-effect add-account-posting" orderid="{{$order->id}}" type="button">Add</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -97,9 +101,11 @@
                     </div>
                     <div class="row mt-20">
                         <div class="col-md-12 text-center">
-                            <div class="form-btn">
-                                <button class="btn btn-light btn-icon-notika waves-effect cancel-account-posting" type="button">Cancel</button>
-                                <button class="btn btn-primary btn-icon-notika waves-effect add-account-posting" orderid="{{$order->id}}" type="button">Add</button>
+                            <div class="account_posting_buttons">
+                                <div class="form-btn">
+                                    <button class="btn btn-light btn-icon-notika waves-effect cancel-account-posting" type="button">Cancel</button>
+                                    <button class="btn btn-primary btn-icon-notika waves-effect add-account-posting" orderid="{{$order->id}}" type="button">Add</button>
+                                </div>
                             </div>
                         </div>
                     </div>
