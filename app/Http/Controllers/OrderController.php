@@ -336,6 +336,7 @@ class OrderController extends Controller
             'job-details',
             'inscription-details',
             'accounts-posting',
+            'email',
             'document',
             'print-history',
         ];
@@ -345,6 +346,7 @@ class OrderController extends Controller
             'fa-folder-open-o',
             'fa-text-height',
             'fa-calculator',
+            'fa-envelope',
             'fa-file-o',
             'fa-print',
         ];
@@ -409,6 +411,12 @@ class OrderController extends Controller
                     ->withOrderTypes($orderTypes)
                     ->withBranches($branches);
                 break;
+            case 'email':
+                return view($url)
+                    ->withTabs($tabs)
+                    ->withIcons($icons)
+                    ->withOrderTypes($orderTypes);
+                break;
             case 'print-history':
                 return view($url)
                     ->withTabs($tabs);
@@ -426,6 +434,7 @@ class OrderController extends Controller
             'job-details',
             'inscription-details',
             'accounts-posting',
+            'email',
             'document',
             'print-history',
         ];
@@ -435,6 +444,7 @@ class OrderController extends Controller
             'fa-folder-open-o',
             'fa-text-height',
             'fa-calculator',
+            'fa-envelope',
             'fa-file-o',
             'fa-print',
         ];
@@ -500,6 +510,11 @@ class OrderController extends Controller
                     ->withOrderTypes($orderTypes)
                     ->withBranches($branches);
                 break;
+            case 'email':
+                return view($url)
+                    ->withTabs($tabs)
+                    ->withIcons($icons);
+                break;
             case 'print-history':
                 return view($url)
                     ->withTabs($tabs);
@@ -542,6 +557,7 @@ class OrderController extends Controller
             'inscription-details',
             'accounts-posting',
             'document',
+            'email',
             'print-history',
         ];
 
@@ -551,13 +567,14 @@ class OrderController extends Controller
             'fa-text-height',
             'fa-calculator',
             'fa-file-o',
+            'fa-envelope',
             'fa-print',
         ];
 
         $url = 'pages.order.tabs.' . $tab;
 
-        $order          = Order::findOrFail($order_id);
-        $customer       = Customer::findOrFail($order->customer_id);
+        $order = Order::findOrFail($order_id);
+        $customer = Customer::findOrFail($order->customer_id);
 
         // GENERAL DETAILS - JOB DETAILS DATA
         $jobDetails     = JobDetail::where("order_id",$order_id)->get();
@@ -670,6 +687,20 @@ class OrderController extends Controller
                     ->withOrderBalance($orderBalance);
                 break;
             case 'document':
+                return view($url)
+                    ->withTabs($tabs)
+                    ->withIcons($icons)
+                    ->withOrderTypes($orderTypes)
+                    ->withBranches($branches)
+                    ->withOrder($order)
+                    ->withCustomer($customer)
+                    ->withDocumentTypes($documentTypes)
+                    ->withDocuments($documents)
+                    ->withJobValue($jobValue)
+                    ->withHasInvoice($hasInvoice)
+                    ->withOrderBalance($orderBalance);
+                break;
+            case 'email':
                 return view($url)
                     ->withTabs($tabs)
                     ->withIcons($icons)
