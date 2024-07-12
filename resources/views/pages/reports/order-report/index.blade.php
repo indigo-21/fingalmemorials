@@ -97,5 +97,5 @@
     </div>
 @endsection
 @section('page-scripts')
-<script src="{{ asset('js/order-report.js') }}"></script>
+    <script src="{{ asset('js/order-report.js') }}"></script>
 @endsection

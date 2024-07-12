@@ -47,5 +47,6 @@
 @endsection
 
 @section('page-scripts')
+    <script src="{{ asset('js/tabs/print-history.js') }}"></script>
     <script src="{{ asset('js/delete-script.js') }}"></script>
 @endsection

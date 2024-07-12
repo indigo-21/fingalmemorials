@@ -1,5 +1,14 @@
 // INITIAL LOAD OF THE PAGE FUNCTION
 $(document).ready(function() {
+    $('#data-table-job-details').DataTable({
+        "paging": true,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+     });
     const  SYSTEM_URL = $("body").attr("url"); 
     const  HAS_INVOICE  = $("#order_form").attr("hasinvoice") ? true : false;
 
@@ -11,12 +20,7 @@ $(document).ready(function() {
         $("#job_details_buttons").remove();
     }
 
-
-
-
-
-
-    $('#data-table-basic').DataTable();
+    // $('#data-table-basic').DataTable();
 
     function getJobDetails(order_id){
         let data = {

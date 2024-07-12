@@ -1,4 +1,13 @@
 $(document).ready(function(){
+    $('#data-table-basic').DataTable({
+        "paging": true,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+     });
     const  SYSTEM_URL = $("body").attr("url");
     const  HAS_INVOICE  = $("#order_form").attr("hasinvoice") ? true : false;
 
