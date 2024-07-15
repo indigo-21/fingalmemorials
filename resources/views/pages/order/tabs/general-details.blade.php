@@ -182,31 +182,18 @@
 
             @if (!isset($order))
                 <div class="col-12 col-md-12 mb-10">
-                    {{-- <div class="fm-checkbox">
-                        <label>
-                            <input type="checkbox" class="input-form  checkBox-newCustomer  " id="checkBox-newCustomer"
-                                name="newCustomer">
-
-                            <i></i> New Customer
-                        </label>
-                    </div> --}}
-                    {{-- <div class="form-check">
-                        <input type="checkbox" class="form-check-input checkBox-newCustomer  " id="checkBox-newCustomer"
-                            name="newCustomer">
-                        <label class="form-check-label">New Customer</label>
-                    </div> --}}
                     <div class="customer-exists text-center">
                         <h4>Does this customer already exists?</h4>
                         <div class="form-check">
                             <span style="margin-right:10px;">
-                                <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                <input class="form-check-input checkBox-newCustomer" type="radio" isexist="1" name="flexRadioDefault"
                                     id="flexRadioDefault1">
                                 <label class="form-check-label" for="flexRadioDefault1">
                                     Yes
                                 </label>
                             </span>
                             <span>
-                                <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                <input class="form-check-input checkBox-newCustomer" type="radio" isexist="0" name="flexRadioDefault"
                                     id="flexRadioDefault2" >
                                 <label class="form-check-label" for="flexRadioDefault2">
                                     No
@@ -214,9 +201,9 @@
                             </span>
                         </div>
                     </div>
-                    <div class="chosen-select-act fm-cmp-mg mb-20 choose-customer-text">
+                    <div class="chosen-select-act fm-cmp-mg mb-20 choose-customer-text" hidden="true">
                         <label>Customers</label>
-                        <select class="input-form selectpicker chosen-customer" data-placeholder="" name="customer"
+                        <select class="input-form selectpicker chosen-customer" id="searchCustomer" data-placeholder="" name="customer"
                             data-live-search="true">
                             <option disabled selected>Choose a Customer...</option>
                             @php
@@ -224,7 +211,7 @@
                             @endphp
 
                             @foreach ($customers as $findCustomer)
-                                <option value="{{ $findCustomer->id }}"
+                                <option value="{{ $findCustomer->id }}" class="customer_info_{{$findCustomer->id}}"
                                     @if(isset($customerId) && $findCustomer->id == $customerId )
                                         selected
                                     @endif

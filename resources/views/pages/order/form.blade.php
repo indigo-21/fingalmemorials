@@ -10,18 +10,23 @@
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <h3>{{isset($order) ? "Update" : "Create" }} Orders</h3>
                                 @if(isset($order))
-                                    <div class="order-status open-order">
-                                        <span><b>Status:</b> Open Order</span>
-                                    </div>
-                                    <div class="order-status invoiced">
-                                        <span><b>Status:</b> Invoiced</span>
-                                    </div>
-                                    <div class="order-status order-cancelled">
-                                        <span><b>Status:</b> Order Cancelled</span>
-                                    </div>
-                                    <div class="order-status complete-order">
-                                        <span><b>Status:</b> Complete Order</span>
-                                    </div>
+                                    @if($order->status_id == "1")
+                                        <div class="order-status open-order">
+                                            <span><b>Status:</b> Open Order</span>
+                                        </div>
+                                    @elseif($order->status_id == "2")
+                                        <div class="order-status invoiced">
+                                            <span><b>Status:</b> Invoiced</span>
+                                        </div>
+                                    @elseif($order->status_id == "3")
+                                        <div class="order-status order-cancelled">
+                                            <span><b>Status:</b> Order Cancelled</span>
+                                        </div>
+                                    @else
+                                        <div class="order-status complete-order">
+                                            <span><b>Status:</b> Complete Order</span>
+                                        </div>
+                                    @endif
                                 @endif
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">

@@ -112,7 +112,6 @@
                                 <th>Net Amount</th>
                                 <th>VAT Rate</th>
                                 <th>Analysis</th>
-                                <!-- <th>Discount</th> -->
                                 <th>VAT Amount</th>
                                 <th>Gross</th>
                                 <th>Action</th>
@@ -129,12 +128,13 @@
                                             {{ $jobDetail->vatCode->vat_description }}</td>
                                         <td class="analysis_id" id="{{ $jobDetail->analysis_id }}">
                                             {{ $jobDetail->analysis->description }}</td>
-                                        <!-- <td class="discount">{{ $jobDetail->discount == '' ? '0.00' : $jobDetail->discount }}</td> -->
                                         <td class="vat">{{ $jobDetail->vat_amount }}</td>
                                         <td class="gross">{{ $jobDetail->gross_amount }}</td>
                                         <td class="popover-cl-pro">
                                             <button class="btn btn-primary edit-job-detail" data-trigger="hover"
                                                 data-toggle="popover" data-placement="bottom" data-content="Edit"
+                                                headstoneshape="{{$jobDetail->headstone_shape}}"
+                                                chippingcolor="{{$jobDetail->chipping_color}}"
                                                 jobcost="{{$jobDetail->job_cost}}"
                                                 discount="{{$jobDetail->discount == '' ? '0.00' : $jobDetail->discount }}"
                                                 subtotal="{{$jobDetail->total}}"
@@ -150,17 +150,13 @@
                                         </td>
                                     </tr>
                                 @endforeach
-                            @else
-                                <tr class="no-record-found">
-                                    <td colspan="9" class="text-center">No record found.</td>
-                                </tr>
                             @endif
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td colspan="5"></td>
                                 <td colspan="2" style="text-align:right"><h4>TOTAL GROSS:</h4></td>
-                                <td colspan="2">200.00</td>
+                                <td colspan="2">{{number_format($jobValue, 2)}}</td>
                             </tr>
                         </tfoot>
                     </table>

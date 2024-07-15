@@ -73,6 +73,8 @@ class OrderController extends Controller
                 $data = [
                     "analysis_id"           => "<strong>Analysis</strong>", 
                     "details_of_work"       => "<strong>Details of Work</strong>", 
+                    "headstone_shape"       => "<strong>Headstone Shape</strong>", 
+                    "chipping_color"       => "<strong>Chipping Color</strong>", 
                     "job_cost"              => "<strong>Job Cost</strong>", 
                     "discount"              => "<strong>Discount</strong>",
                     "total"                 => "<strong>Total</strong>",
@@ -165,6 +167,8 @@ class OrderController extends Controller
                 $data = [
                     "analysis_id"           => ['required'],
                     "details_of_work"       => ['required','string','min:2','max:300'], 
+                    "headstone_shape"       => ['string','min:2','max:300'], 
+                    "chipping_color"        => ['string','min:2','max:300'], 
                     "job_cost"              => ['required','min:1'], 
                     "discount"              => ['nullable','min:1'], 
                     "total"                 => ['required','min:1'], 
@@ -573,8 +577,8 @@ class OrderController extends Controller
 
         $url = 'pages.order.tabs.' . $tab;
 
-        $order = Order::findOrFail($order_id);
-        $customer = Customer::findOrFail($order->customer_id);
+        $order          = Order::findOrFail($order_id);
+        $customer       = Customer::findOrFail($order->customer_id);
 
         // GENERAL DETAILS - JOB DETAILS DATA
         $jobDetails     = JobDetail::where("order_id",$order_id)->get();
@@ -872,6 +876,8 @@ class OrderController extends Controller
         $jobDetailData->order_id                = $request->order_id;
         $jobDetailData->analysis_id             = $request->analysis_id;
         $jobDetailData->details_of_work         = $request->details_of_work;
+        $jobDetailData->headstone_shape         = $request->headstone_shape;
+        $jobDetailData->chipping_color          = $request->chipping_color;
         $jobDetailData->job_cost                = $request->job_cost;
         $jobDetailData->discount                = $request->discount;
         $jobDetailData->total                   = $request->total;
@@ -1160,6 +1166,10 @@ class OrderController extends Controller
         $printHistoryData->save();
     }
 
+
+    public function emailCustomer($emailType){
+        dd($emailType);
+    }
 
 
 }

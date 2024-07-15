@@ -1,5 +1,9 @@
+const  SYSTEM_URL   = $("body").attr("url"); 
+const  HAS_INVOICE  = $("#order_form").attr("hasinvoice") ? true : false;
+
 // INITIAL LOAD OF THE PAGE FUNCTION
 $(document).ready(function() {
+
     $('#data-table-job-details').DataTable({
         "paging": true,
         "lengthChange": true,
@@ -9,8 +13,8 @@ $(document).ready(function() {
         "autoWidth": false,
         "responsive": true,
      });
-    const  SYSTEM_URL = $("body").attr("url"); 
-    const  HAS_INVOICE  = $("#order_form").attr("hasinvoice") ? true : false;
+
+    
 
     if(HAS_INVOICE){
         $("#job-details").find("input").attr("disabled", true);
@@ -27,6 +31,8 @@ $(document).ready(function() {
             order_id:          order_id,
             analysis_id:       $("[name=analysis_id]").find(":selected").val(),
             details_of_work:   $("[name=details_of_work]").val(),
+            headstone_shape:   $("[name=headstone_shape]").val(),
+            chipping_color:    $("[name=chipping_color]").val(),
             job_cost:          $("[name=job_cost]").val(),
             discount:          $("[name=discount]").val(),
             total:             $("[name=total]").val(),
@@ -46,12 +52,7 @@ $(document).ready(function() {
     $(document).on("click", ".add-job-detail",function(){
    
         modifyJobDetails($(this));
-        
-
-        
-        
-        
-        
+    
     }); 
 
     // EVENT FOR UPDATING DATA
@@ -131,6 +132,11 @@ $(document).ready(function() {
         
 
         let details_of_work = !element_data ?  "" : element_data.closest(".job-details-row").find(".details_of_work").text();
+        let headstone_shape = !element_data ?  "" : element_data.attr("headstoneshape");
+        let chipping_color  = !element_data ?  "" : element_data.attr("chippingcolor");
+        
+        
+        
         let analysis_id     = !element_data ?  "" : element_data.closest(".job-details-row").find(".analysis_id").attr("id");
         let vat_code_id     = !element_data ?  "" : element_data.closest(".job-details-row").find(".vat_code_id").attr("id");
         
@@ -152,6 +158,8 @@ $(document).ready(function() {
        let gross           = !element_data ?  "" : element_data.closest(".job-details-row").find(".gross").text();
 
         $("[name=details_of_work]").val(details_of_work);
+        $("[name=headstone_shape]").val(headstone_shape);
+        $("[name=chipping_color]").val(chipping_color);
         $("[name=analysis_id]").val(analysis_id).trigger("change");
         $("[name=vat_code_id]").val(vat_code_id).trigger("change");
 

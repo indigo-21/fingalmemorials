@@ -1,5 +1,11 @@
-const  SYSTEM_URL   = $("body").attr("url");
-const  HAS_INVOICE  = $("#order_form").attr("hasinvoice") ? true : false;
+const SYSTEM_URL   = $("body").attr("url");
+const HAS_INVOICE  = $("#order_form").attr("hasinvoice") ? true : false;
+const CURRENT_DATE = new Date();
+const YEAR         = CURRENT_DATE.getFullYear();
+const MONTH        = String(CURRENT_DATE.getMonth() + 1).padStart(2,"0");
+const DAY          = String(CURRENT_DATE.getDate()).padStart(2,"0");
+const DATE_STRING  = `${MONTH}/${DAY}/${YEAR}`;
+
 
 $(document).ready(function(){
 
@@ -19,11 +25,20 @@ $(document).ready(function(){
         $("[name=customer]").trigger("change");
     }
 
+
 });
 
 
-$(document).on("change", ".fm-checkbox", function(){
-   
+
+
+
+
+$(document).on("click", "[name=inscription_completed]",function(){
+    let isChecked = $(this).is(":checked");
+    $("[name=inscription_completed_date]").val("");
+    if(isChecked){
+        $("[name=inscription_completed_date]").val(DATE_STRING);
+    }
 });
 
 
@@ -33,6 +48,83 @@ $(document).on("change","#input-cemetery",function(){
     $("#cemetery_area").val(area);
     $("#cemetery_group").val(group);
 });
+
+
+// Related on CUSTOMER DETAILS
+    $(document).on("click", ".checkBox-newCustomer", function (e) {
+        let isExist  = $(this).attr("isexist") == 1;
+
+        if (!isExist) {
+            
+            $(".choose-customer-text").attr("hidden", true);
+            // $(".customer-form").attr("hidden", false);
+            $(".customer-form .input-form").val("");
+            $(".customer-form .input-form .selectpicker")
+                .find("option:selected")
+                .remove();
+            $(".chosen-customer option:first").prop('selected',true).trigger("change");
+            $("[name=title_id] option:first").prop('selected',true).trigger("change");
+            
+            let hideCustomerForm = false;
+            customerForm(false,hideCustomerForm);
+            
+        } else {
+            $(".choose-customer-text").attr("hidden", false);
+            $(".customer-form").attr("hidden", false);
+            
+            let hideCustomerForm = true;
+            customerForm(false, hideCustomerForm);
+            
+        }
+    });
+
+    $(document).on("click",".chosen-customer",function(){
+        let customerId = $(this).find("select option:selected").val();
+
+        if(customerId){
+            $.ajax({
+                type: "GET",
+                async: false,
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+                url: `${SYSTEM_URL}/order/create/findCustomer/${customerId}`,
+                beforeSend:function(){
+                    customerForm(true);
+                    $(".customer-form").attr("hidden", false);
+                },
+                success: function (data) {
+                    console.log(data);
+                    $("[name=title_id]").val(data.title_id).trigger("change");
+                    $("[name=firstname]").val(data.firstname);
+                    $("[name=middlename]").val(data.middlename);
+                    $("[name=surname]").val(data.surname);
+                    $("[name=mobile]").val(data.mobile);
+                    $("[name=telno]").val(data.telno);
+                    $("[name=email]").val(data.email);
+                    $("[name=account_number ]").val(data.account_number);
+                    $("[name=address1]").val(data.address1);
+                    $("[name=address2]").val(data.address2);
+                    $("[name=address3]").val(data.address3);
+                    $("[name=town]").val(data.town);
+                    $("[name=county]").val(data.county);
+                    $("[name=postcode]").val(data.postcode);
+                    $(".create-submit").attr("customerid", data.id);
+
+                   
+                    $("[name=customer]").attr("disabled", false);
+                    $("[name=customer]").selectpicker("destroy");
+                    $("[name=customer]").selectpicker();
+                },
+
+                error: function (error) {},
+            });
+        }
+
+
+        
+    });
+// END Related on CUSTOMER DETAILS
 
 
 // Related on GENERAL DETAILS
@@ -155,73 +247,6 @@ $(document).on("change","#input-cemetery",function(){
 // END Related on GENERAL DETAILS
 
 
-// Related on CUSTOMER DETAILS
-    $(document).on("click", ".checkBox-newCustomer", function (e) {
-        let isChecked = $(this).closest(".new-customer");
-        
-        if (e.target.checked === true) {
-            
-            $(".choose-customer-text").attr("hidden", true);
-            // $(".customer-form").attr("hidden", false);
-            $(".customer-form .input-form").val("");
-            $(".customer-form .input-form .selectpicker")
-                .find("option:selected")
-                .remove();
-            $(".chosen-customer option:first").prop('selected',true).trigger("change");
-            $("[name=title_id] option:first").prop('selected',true).trigger("change");
-            let hideCustomerForm = false;
-            customerForm(false,hideCustomerForm);
-            
-        } else {
-            $(".choose-customer-text").attr("hidden", false);
-            $(".customer-form").attr("hidden", false);
-            
-            let hideCustomerForm = true;
-            customerForm(false, hideCustomerForm);
-            
-        }
-    });
-
-    $(document).on("change", ".chosen-customer", function (e) {
-        let customerId = e.target.value;
-
-        $.ajax({
-            type: "GET",
-            async: false,
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-            url: `${SYSTEM_URL}/order/create/findCustomer/${customerId}`,
-            beforeSend:function(){
-                customerForm(true);
-            },
-            success: function (data) {
-                
-                $("[name=title_id]").val(data.title_id).trigger("change");
-                $("[name=firstname]").val(data.firstname);
-                $("[name=middlename]").val(data.middlename);
-                $("[name=surname]").val(data.surname);
-                $("[name=mobile]").val(data.mobile);
-                $("[name=telno]").val(data.telno);
-                $("[name=email]").val(data.email);
-                $("[name=account_number ]").val(data.account_number);
-                $("[name=address1]").val(data.address1);
-                $("[name=address2]").val(data.address2);
-                $("[name=address3]").val(data.address3);
-                $("[name=town]").val(data.town);
-                $("[name=county]").val(data.county);
-                $("[name=postcode]").val(data.postcode);
-                $(".create-submit").attr("customerid", data.id);
-
-            },
-
-            error: function (error) {},
-        });
-        
-    });
-
-
-// END Related on CUSTOMER DETAILS
 
 function customerForm(disabled = true, hideCustomerForm = false){
     $(".customer-form").show();
