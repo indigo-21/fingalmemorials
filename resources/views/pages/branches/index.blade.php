@@ -36,13 +36,8 @@
                                         <th>No.</th>
                                         <th>Code</th>
                                         <th>Branch Name</th>
-                                        <th>Address 1</th>
-                                        <th>Address 2</th>
-                                        <th>Address 3</th>
-                                        <th>Town</th>
-                                        <th>County</th>
+                                        <th>Address</th>
                                         <th>Post Code</th>
-                                        <th>Last Updated</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -52,13 +47,8 @@
                                             <td id="tr{{$branch->id}}" >{{ $loop->iteration }}</td>
                                             <td>{{ $branch->code }}</td>
                                             <td>{{ $branch->name }}</td>
-                                            <td>{{ $branch->address1 }}</td>
-                                            <td>{{ $branch->address1 }}</td>
-                                            <td>{{ $branch->address1 }}</td>
-                                            <td>{{ $branch->town }}</td>
-                                            <td>{{ $branch->county }}</td>
+                                            <td>{{ $branch->address1 }} {{ $branch->address2 }} {{ $branch->address3 }}</td>      
                                             <td>{{ $branch->phone }}</td>
-                                            <td>{{ $branch->updated_at }}</td>
                                             <td class="popover-cl-pro">
                                                 <a href="branches/edit/{{ $branch->id }}"class="btn btn-primary"
                                                     data-trigger="hover" data-toggle="popover" data-placement="bottom"
@@ -100,6 +90,7 @@
 
 
 @section('page-scripts')
-    <script src="{{ asset('js/datatables/admin-utilities.js')}} "></script>
+	<script src="{{ asset('js/datatables/admin-utilities.js')}} "></script>
     <script src="{{ asset('js/delete-script.js') }}"></script>
+    
 @endsection

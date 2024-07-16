@@ -40,7 +40,7 @@
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Code</label>
                                     <input type="text" name="code" class="form-control"
-                                        value="{{ isset($cemetery) ? $cemetery->code : '' }}" placeholder="Code">
+                                        value="{{ isset($cemetery) ? $cemetery->code : old('code') }}" placeholder="Code">
                                 </div>
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Name</label>

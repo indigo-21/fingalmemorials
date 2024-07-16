@@ -22,7 +22,7 @@
                             </button>
                             <ul>
                                 @foreach ($errors->all() as $error)
-                                    <li> <strong>- </strong>{{ $error }}</li>
+                                    <li> <strong>- </strong>{!! $error !!}</li>
                                 @endforeach
                             </ul>
                         </div>
@@ -42,9 +42,9 @@
                                         value="{{ isset($vatCode) ? $vatCode->vat_description : old('vat_description') }}" placeholder="Vat Description">
                                 </div>
                                 <div class="nk-int-st" style="margin-bottom:20px;">
-                                    <label>Vat</label>
+                                    <label>Vat Rate</label>
                                     <input type="text" name="vat" class="form-control"
-                                        value="{{ isset($vatCode) ? $vatCode->vat : old('vat') }}" placeholder="Vat">
+                                        value="{{ isset($vatCode) ? $vatCode->vat : old('vat') }}" placeholder="Vat Rate">
                                 </div>
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Code</label>

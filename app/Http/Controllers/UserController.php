@@ -38,7 +38,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(self::formRule());
+        $request->validate(self::formRule(),[],self::changeAttribute());
         
         $request->merge([
             'password' => Hash::make($request->password),
@@ -93,7 +93,7 @@ class UserController extends Controller
             'updated_by' => Auth::id()
         ]);               
 
-        $request->validate(self::formRule($id));
+        $request->validate(self::formRule($id),[],self::changeAttribute());
 
         $user->update($request->all());
         return redirect('/users')
@@ -114,12 +114,33 @@ class UserController extends Controller
     }
     public function formRule($id = false){
         return [
-            "firstname"    => ['required','string'],
-            "lastname"   => ['required','string'],
-            "username"   => ['required','string',Rule::unique('users')->ignore($id ? $id : "")->whereNull('deleted_at')],
+            "firstname"    => ['required','string','min:2','max:50'],
+            "lastname"   => ['required','string','min:2','max:50'],
+            "username"   => ['required','string','min:2','max:50',Rule::unique('users')->ignore($id ? $id : "")->whereNull('deleted_at')],
             "access_level_id"   => ['required','integer'],
             "email"   => ['required','string',Rule::unique('users')->ignore($id ? $id : "")->whereNull('deleted_at')],
             "password"   => ['required','string'],
+        ];
+    }
+
+    public function errorMessage(){
+        return [
+            "username.min"          => "The <strong> Code </strong> field must be between 2 and 10 characters long.",
+            "username.max"          => "The <strong> Code </strong> field must be between 2 and 10 characters long.",
+            "code.regex"        => "The <strong> Code </strong> field only accepts alphanumeric characters. ",
+            "vat.regex"         => "The <strong> VAT </strong> field only accepts numeric values. "
+           ];
+    }
+           
+    public function changeAttribute($id = false){
+        return [
+            "firstname"         => "<strong> First Name </strong>",
+            "lastname"          => "<strong> Last Name </strong>",
+            "username"          => "<strong> Username </strong>",
+            "access_level_id"   => "<strong> Access Level </strong>",
+            "email"             => "<strong> Email </strong>",
+            "password"          => "<strong> Password </strong>"
+            
         ];
     }
 

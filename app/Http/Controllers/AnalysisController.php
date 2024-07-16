@@ -36,7 +36,7 @@ class AnalysisController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(self::formRule(), [], self::changeAttribute());
+        $request->validate(self::formRule(), self::errorMessage(), self::changeAttribute());
         $request->merge([
             'created_by' => Auth::id()
         ]);
@@ -71,7 +71,7 @@ class AnalysisController extends Controller
      */
     public function update(Request $request, Analysis $analysis, string $id)
     {
-        $request->validate(self::formRule($id), [], self::changeAttribute());
+        $request->validate(self::formRule($id),  self::errorMessage(),  self::changeAttribute());
         $analysis = Analysis::find($id);
         $request->merge([
             'updated_by' => Auth::id()
@@ -106,18 +106,27 @@ class AnalysisController extends Controller
     {
         return [
             "branch_id" => ['required'],
-            "code" => ['required', 'regex:/^[A-Za-z ]+$/', 'min:2', 'max:10', 'string', Rule::unique('analyses')->ignore($id ? $id : "")],
-            "description" => ['required', 'min:3', 'max:100', 'string'],
-            "nominal" => ['required', 'regex:/^[0-9 ]+$/', 'string'],
+            "code" => ['required', 'regex:/^[A-Za-z 0-9 ]+$/', 'min:2', 'max:10', 'string', Rule::unique('analyses')->ignore($id ? $id : "")->whereNUll("deleted_at")],
+            "description" => ['required', 'min:2', 'max:50', 'string'],
+            "nominal" => ['required', 'regex:/^[0-9 . ]+$/', 'string'],
+        ];
+    }
+
+    public function errorMessage(){
+        return[
+            "code.min"          => "The <strong>Code</strong> field must be between 2 and 10 characters long.",
+            "code.max"          => "The <strong>Code</strong> field must be between 2 and 10 characters long.",
+            "code.regex"        => "The <strong>Code</strong> field only accepts alphanumeric characters. ",
+            "nominal.regex"     => "The <strong>Nominal</strong> field only accepts numeric values.",
         ];
     }
     public function changeAttribute()
     {
         return [
-            "branch_id" => 'Branch',
-            "code" => 'Code',
-            "description" => 'Description',
-            "nominal" => 'Nominal',
+            "branch_id"         => '<strong> Branch </strong>',
+            "code"              => '<strong> Code </strong>',
+            "description"       => '<strong> Description </strong> ',
+            "nominal"           => '<strong> Nominal </strong>',
         ];
     }
 }

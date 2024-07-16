@@ -6,9 +6,9 @@
                 <div class="breadcrumbs-content">
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <h3>{{ isset($analysis) ? 'Update' : 'Create' }} Analysis</h3>
+                            <h3>{{ isset($id) ? 'Update' : 'Create' }} Analysis</h3>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                             <p class="breadcrumbs-link"><a href="/">Dashboard</a> <i class="fa fa-angle-right"
                                     aria-hidden="true"></i>
                                 <a href="/analysis">Analysis</a> <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -24,7 +24,7 @@
                             </button>
                             <ul>
                                 @foreach ($errors->all() as $error)
-                                    <li> <strong>- </strong>{{ $error }}</li>
+                                    <li> <strong>- </strong>{!! $error !!}</li>
                                 @endforeach
                             </ul>
                         </div>
@@ -40,17 +40,25 @@
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;">
                                     <label>Branch</label>
-                                    <select class="selectpicker" name="branch_id">
+                                    <select class="selectpicker" name="branch_id" data-live-search="true">
                                         <option value="">-- SELECT BRANCH --</option>
                                         @foreach ($branches as $branch)
-                                            <option value="{{ $branch->id }}"
-                                                {{ isset($id) && $branch->id == $analysis->branch_id ? 'selected' : '' }}
-                                                >
-                                                {{ $branch->code }}</option>
+                                            @if (isset($analysis))
+                                                <option value="{{ $branch->id }}"
+                                                    {{ $branch->id == $analysis->branch_id ? 'selected' : '' }}>
+                                                    {{ $branch->code }}
+                                                </option>
+                                            @else                                                
+                                                <option value="{{ $branch->id }}"
+                                                    {{  old('branch_id') == $branch->id ? 'selected' : '' }}>
+                                                    {{ $branch->code }}
+                                                </option>
+                                            @endif
                                         @endforeach
 
                                     </select>
                                 </div>
+                                <h1></h1>
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Code</label>
                                     <input type="text" name="code" class="form-control"
@@ -59,12 +67,14 @@
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Description</label>
                                     <input type="text" name="description" class="form-control"
-                                        value="{{ isset($analysis) ? $analysis->description : old('description') }}" placeholder="Description">
+                                        value="{{ isset($analysis) ? $analysis->description : old('description') }}"
+                                        placeholder="Description">
                                 </div>
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Nominal</label>
                                     <input type="text" name="nominal" class="form-control"
-                                        value="{{ isset($analysis) ? $analysis->nominal : old('nominal') }}" placeholder="Nominal">
+                                        value="{{ isset($analysis) ? $analysis->nominal : old('nominal') }}"
+                                        placeholder="Nominal">
                                 </div>
 
                             </div>

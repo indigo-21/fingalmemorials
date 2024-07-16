@@ -34,7 +34,6 @@
                                         <th>No.</th>
                                         <th>Code</th>
                                         <th>Area Name</th>
-                                        <th>Last update</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -44,7 +43,6 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $cemeteryArea->code }}</td>
                                             <td>{{ $cemeteryArea->name }}</td>
-                                            <td>{{ $cemeteryArea->updated_at }}</td>
                                             <td class="popover-cl-pro">
                                                 <a href="{{ route('cemetery-area.edit', [$cemeteryArea]) }}"class="btn btn-primary"
                                                     data-trigger="hover" data-toggle="popover" data-placement="bottom"

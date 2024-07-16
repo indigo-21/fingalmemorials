@@ -33,7 +33,6 @@
                                         <th>No.</th>
                                         <th>Code</th>
                                         <th>Name</th>
-                                        <th>Last Updated</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -43,7 +42,6 @@
                                             <td id="tr {{ $accountType->id }}">{{ $loop->iteration }}</td>
                                             <td>{{ $accountType->code }}</td>
                                             <td>{{ $accountType->name }}</td>
-                                            <td>{{ $accountType->updated_at }}</td>
                                             <td class="popover-cl-pro">
                                                 <a href="account-types/edit/{{ $accountType->id }}"class="btn btn-primary"
                                                     data-trigger="hover" data-toggle="popover" data-placement="bottom"

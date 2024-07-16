@@ -92,7 +92,7 @@ class AccountTypeController extends Controller
 
     public function formRule($id = false){
         return [
-            "code"    => ['required','regex:/^[A-Za-z ]+$/','min:2','max:','string', Rule::unique('account_types')->ignore($id ? $id : "")],
+            "code"    => ['required','regex:/^[A-Za-z 0-9]+$/','min:2','max:10','string', Rule::unique('account_types')->ignore($id ? $id : "")],
             "name"   => ['required','string','min:3','max:100']
         ];
     }

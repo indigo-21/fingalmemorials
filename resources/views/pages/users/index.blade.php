@@ -92,5 +92,6 @@
 
 
 @section('page-scripts')
+<script src="{{ asset('js/datatables/admin-utilities.js')}} "></script>
     <script src="{{ asset('js/delete-script.js') }}"></script>
 @endsection

@@ -34,7 +34,7 @@ class VatCodeController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(self::formRule(),[],self::changeAttribute());
+        $request->validate(self::formRule(),self::errorMessage(),self::changeAttribute());
         $request->merge([
             'created_by' => Auth::id()
         ]);
@@ -67,7 +67,7 @@ class VatCodeController extends Controller
      */
     public function update(Request $request, VatCode $vatCode, String $id)
     {
-        $request->validate(self::formRule($id),[],self::changeAttribute());
+        $request->validate(self::formRule($id),self::errorMessage(),self::changeAttribute());
         $vatCode = VatCode::find($id);
         $request->merge([
             'updated_by' => Auth::id()
@@ -93,14 +93,23 @@ class VatCodeController extends Controller
         return [
             "vat_description"    => ['required','min:3','max:100','string'],
             "vat"   => ['required','regex:/^[0-9.]+$/','decimal:0,2'],
-            "code"   => ['required','regex:/^[A-Za-z0-9.]+$/','string','max:20', Rule::unique('vat_codes')->ignore($id ? $id : "")],
+            "code"   => ['required','regex:/^[A-Za-z0-9]+$/','string','min:2','max:10', Rule::unique('vat_codes')->ignore($id ? $id : "")->whereNull("deleted_at")],
         ];
     }
+    public function errorMessage(){
+        return [
+            "code.min"          => "The <strong> Code </strong> field must be between 2 and 10 characters long.",
+            "code.max"          => "The <strong> Code </strong> field must be between 2 and 10 characters long.",
+            "code.regex"        => "The <strong> Code </strong> field only accepts alphanumeric characters. ",
+            "vat.regex"         => "The <strong> VAT </strong> field only accepts numeric values. "
+           ];
+    }
+           
     public function changeAttribute($id = false){
         return [
-            "vat_description"    => "Vat Description",
-            "vat"   => "Vat",
-            "code"   => "Code"
+            "vat_description"    => "<strong> Vat Description </strong>",
+            "vat"                => "<strong> Vat Rate </strong>",
+            "code"               => "<strong> Code </strong> "
             
         ];
     }

@@ -22,7 +22,7 @@
                             </button>
                             <ul>
                                 @foreach ($errors->all() as $error)
-                                    <li> <strong>- </strong>{{ $error }}</li>
+                                    <li> <strong>- </strong>{!! $error !!}</li>
                                 @endforeach
                             </ul>
                         </div>
@@ -38,12 +38,12 @@
                                 <div class="nk-int-st" style="margin-bottom:20px;">
                                     <label>Code</label>
                                     <input type="text" name="code" class="form-control"
-                                        value="{{ isset($source) ? $source->code : '' }}" placeholder="Code">
+                                        value="{{ isset($source) ? $source->code : old('code') }}" placeholder="Code">
                                 </div>
                                 <div class="nk-int-st" style="margin-bottom:20px;">
-                                    <label>Name</label>
+                                    <label>Source Name</label>
                                     <input type="text" name="name" class="form-control"
-                                        value="{{ isset($source) ? $source->name : '' }}" placeholder="Name">
+                                        value="{{ isset($source) ? $source->name : old('name') }}" placeholder="Source Name">
                                 </div>
                             </div>
                         </div>

@@ -33,7 +33,6 @@
                                         <th>No.</th>
                                         <th>Code</th>
                                         <th>Source Name</th>
-                                        <th>Last update</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -43,7 +42,6 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $source->code }}</td>
                                             <td>{{ $source->name }}</td>
-                                            <td>{{ $source->updated_at }}</td>
                                             <td class="popover-cl-pro">
                                                 <a href="{{ route('source.edit', [$source]) }}"class="btn btn-primary"
                                                     data-trigger="hover" data-toggle="popover" data-placement="bottom"

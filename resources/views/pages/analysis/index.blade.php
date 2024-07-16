@@ -34,7 +34,6 @@
                                         <th>Code</th>
                                         <th>Description</th>
                                         <th>Nominal</th>
-                                        <th>Last Update</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -46,7 +45,6 @@
                                             <td>{{ $analysis->code }}</td>
                                             <td>{{ $analysis->description }}</td>
                                             <td>{{ $analysis->nominal }}</td>
-                                            <td>{{ $analysis->updated_at }}</td>
                                             <td class="popover-cl-pro">
                                                 <a href="analysis/edit/{{ $analysis->id }}"class="btn btn-primary"
                                                     data-trigger="hover" data-toggle="popover" data-placement="bottom"
@@ -90,6 +88,6 @@
 @endsection
 
 @section('page-scripts')
-    <script src="{{ asset('js/datatables/admin-utilities.js')}} "></script>
+<script src="{{ asset('js/datatables/admin-utilities.js')}} "></script>
     <script src="{{ asset('js/delete-script.js') }}"></script>
 @endsection

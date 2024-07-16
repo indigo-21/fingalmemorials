@@ -28,10 +28,12 @@ $(".deleteDataInfo").click(function (e) {
                 data: { id: dataID },
                 success: function (data) {
                     table.row(`#tr${dataID}`).remove().draw(false);
-                    Swal.fire(
-                        "Deleted!",
-                        "Your file has been deleted.",
-                        "success"
+                    Swal.fire({
+                        icon: "success",
+                        title: "Deleted Successfully",
+                        showConfirmButton: false,
+                        timer: 1500
+                    }
                     ).then(function () {
                         location.reload();
                     });

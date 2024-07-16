@@ -6,7 +6,7 @@
     }
 
     .pwd-restriction-checked:before {
-        content: '?';
+        content: '\2714';
         padding-right: 10px;
     }
     
@@ -32,7 +32,7 @@
                             </button>
                             <ul>
                                 @foreach ($errors->all() as $error)
-                                    <li> <strong>- </strong>{{ $error }}</li>
+                                    <li> <strong>- </strong>{!! $error !!}</li>
                                 @endforeach
                             </ul>
                         </div>

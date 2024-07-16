@@ -31,10 +31,9 @@
                                 <thead>
                                     <tr>
                                         <th>No.</th>
+                                        <th>Vat Description</th>
+                                        <th>Vat Rate</th>
                                         <th>Code</th>
-                                        <th>Description</th>
-                                        <th>Nominal</th>
-                                        <th>Last Update</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -43,9 +42,8 @@
                                         <tr>
                                             <td id="tr {{ $vatCode->id }}">{{ $loop->iteration }}</td>
                                             <td>{{ $vatCode->vat_description }}</td>
-                                            <td>{{ $vatCode->vat }}</td>
-                                            <td>{{ $vatCode->code }}</td>
-                                            <td>{{ $vatCode->updated_at }}</td>
+                                            <td>{{ number_format($vatCode->vat,2,'.','') }}</td>
+                                            <td>{{$vatCode->code }}</td>
                                             <td class="popover-cl-pro">
                                                 <a href="vat-codes/edit/{{ $vatCode->id }}"class="btn btn-primary"
                                                     data-trigger="hover" data-toggle="popover" data-placement="bottom"

@@ -22,7 +22,7 @@
                             </button>
                             <ul>
                                 @foreach ($errors->all() as $error)
-                                    <li> <strong>- </strong>{{ $error }}</li>
+                                    <li> <strong>- </strong>{!! $error !!}</li>
                                 @endforeach
                             </ul>
                         </div>
@@ -41,9 +41,9 @@
                                         value="{{ isset($cemeteryArea) ? $cemeteryArea->code : old('code') }}" placeholder="Code">
                                 </div>
                                 <div class="nk-int-st" style="margin-bottom:20px;">
-                                    <label>Name</label>
+                                    <label>Area Name</label>
                                     <input type="text" name="name" class="form-control"
-                                        value="{{ isset($cemeteryArea) ? $cemeteryArea->name : old('name') }}" placeholder="Name">
+                                        value="{{ isset($cemeteryArea) ? $cemeteryArea->name : old('name') }}" placeholder="Area Name">
                                 </div>
                             </div>
                         </div>

@@ -7,7 +7,7 @@
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <h3>Categories</h3>
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <p class="breadcrumbs-link"><a href="/">Dashboard</a> <i class="fa fa-angle-right" aria-hidden="true"></i> <b>Categories</b></p>
                     </div>
                 </div>
@@ -33,8 +33,7 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Code</th>
-                                        <th>Name</th>
-                                        <th>Last Update</th>
+                                        <th>Category Name</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -44,7 +43,6 @@
                                             <td id="tr{{ $category->id }}">{{ $loop->iteration }}</td>
                                             <td>{{ $category->code }}</td>
                                             <td>{{ $category->name }}</td>
-                                            <td>{{ $category->updated_at }}</td>
                                             <td class="popover-cl-pro">
                                                 <a href="categories/edit/{{ $category->id }}"class="btn btn-primary"
                                                     data-trigger="hover" data-toggle="popover" data-placement="bottom"

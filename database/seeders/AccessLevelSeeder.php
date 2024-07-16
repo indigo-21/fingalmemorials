@@ -15,6 +15,9 @@ class AccessLevelSeeder extends Seeder
     {
         $data = [
             [
+                "type" => "Super Admin",
+            ],
+            [
                 "type" => "Admin",
             ],
             [
