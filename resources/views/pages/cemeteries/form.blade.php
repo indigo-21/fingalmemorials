@@ -22,7 +22,7 @@
                             </button>
                             <ul>
                                 @foreach ($errors->all() as $error)
-                                    <li> <strong>- </strong>{{ $error }}</li>
+                                    <li> <strong>- </strong>{!! $error !!}</li>
                                 @endforeach
                             </ul>
                         </div>

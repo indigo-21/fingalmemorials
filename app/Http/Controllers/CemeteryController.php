@@ -43,7 +43,7 @@ class CemeteryController extends Controller
     public function store(Request $request)
     {
 
-        $request->validate(self::formRule(), [], self::changeAttribute());
+        $request->validate(self::formRule(), self::errorMessage(), self::changeAttribute());
         $request->merge([
             'created_by' => Auth::id()
         ]);
@@ -80,7 +80,7 @@ class CemeteryController extends Controller
      */
     public function update(Request $request, String $id)
     {
-        $request->validate(self::formRule($id), [], self::changeAttribute());
+        $request->validate(self::formRule($id), self::errorMessage(), self::changeAttribute());
         $request->merge([
             'updated_by' => Auth::id()
         ]);
@@ -105,35 +105,43 @@ class CemeteryController extends Controller
     public function formRule($id = false)
     {
         return [
-            "code" => ['required','regex:/^[A-Za-z ]+$/', 'min:2', 'max:10', 'string', Rule::unique('cemeteries')->ignore($id ? $id : "")],
-            "name" => ['required','min:3', 'max:100','string'],
-            "email" => ['required','email' ,'string'],
-            "phone" => ['required', 'string'],       
-            "address1" => ['required', 'string'],
-            "address2" => ['required', 'string'],
-            "address3" => ['required', 'string'],
-            "town" => ['required', 'string'],
-            "county" => ['required', 'string'],
+            "code" => ['required','regex:/^[A-Za-z0-9 ]+$/', 'min:2', 'max:10', 'string', Rule::unique('cemeteries')->ignore($id ? $id : "")->whereNUll('deleted_at')],
+            "name" => ['required','min:3', 'max:50','string'],
+            "email" => ['required','min:3', 'max:50','email' ,'string'],
+            "phone" => ['required', 'min:3', 'max:50','string'],       
+            "address1" => ['required','min:3', 'max:50', 'string'],
+            "address2" => ['nullable','min:3', 'max:50', 'string'],
+            "address3" => ['nullable','min:3', 'max:50', 'string'],
+            "town" => ['nullable', 'min:3', 'max:50', 'string'],
+            "county" => ['nullable', 'min:3', 'max:50', 'string'],
             "postcode" => ['required', 'string'],
             "cemetery_group_id" => ['required', 'Integer'],
             "cemetery_area_id" => ['required', 'Integer'],
         ];
     }
 
+    public function errorMessage(){
+        return [
+            "code.min"          => "The <strong> Code </strong> field must be between 2 and 10 characters long.",
+            "code.max"          => "The <strong> Code </strong> field must be between 2 and 10 characters long.",
+            "code.regex"        => "The <strong> Code </strong> field only accepts alphanumeric characters. ",
+           ];
+    }
+
     public function changeAttribute($id = false){
         return [
-            "code" => "Code",
-            "name" => "Name",
-            "email" => "Email",
-            "phone" => "Phone",       
-            "address1" => "Address 1",
-            "address2" => "Address 2",
-            "address3" => "Address 3",
-            "town" => "Town",
-            "county" => "County",
-            "postcode" => "Postcode",
-            "cemetery_group_id" => "Group",
-            "cemetery_area_id" => "Area",
+            "code" => "<strong> Code</strong>",
+            "name" => "<strong>Name</strong>",
+            "email" => "<strong>Email</strong>",
+            "phone" => "<strong>Phone</strong>",       
+            "address1" => "<strong>Address 1</strong>",
+            "address2" => "<strong>Address 2</strong>",
+            "address3" => "<strong>Address 3</strong>",
+            "town" => "<strong>Town</strong>",
+            "county" => "<strong>County</strong>",
+            "postcode" => "<strong>Postcode</strong>",
+            "cemetery_group_id" => "<strong>Group</strong>",
+            "cemetery_area_id" => "<strong>Area</strong>",
         ];
     }
 }

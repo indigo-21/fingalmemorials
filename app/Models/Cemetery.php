@@ -16,7 +16,7 @@ class Cemetery extends Model
         'name',
         'address1',
         'address2',
-        'address2',
+        'address3',
         'postcode',
         'town',
         'county',

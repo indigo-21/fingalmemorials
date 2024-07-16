@@ -33,7 +33,7 @@ class OrderTypeController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(self::formRule(), [], self::changeAttribute());
+        $request->validate(self::formRule(),self::errorMessage(), self::changeAttribute());
         $request->merge([
             'created_by' => Auth::id()
         ]);
@@ -66,7 +66,7 @@ class OrderTypeController extends Controller
      */
     public function update(Request $request, OrderType $orderType,String $id)
     {
-        $request->validate(self::formRule($id), [], self::changeAttribute());
+        $request->validate(self::formRule($id), self::errorMessage(), self::changeAttribute());
         $request->merge([
             'updated_by' => Auth::id()
         ]);
@@ -90,15 +90,24 @@ class OrderTypeController extends Controller
 
     public function formRule($id = false){
         return [
-            "name"    => ['required','string','min:3','max:100', Rule::unique('order_types')->ignore($id ? $id : "")],
+            "name"    => ['required','regex:/^[A-Za-z0-9 ]+$/','string','min:2','max:10', Rule::unique('order_types')->ignore($id ? $id : "")->whereNUll('deleted_at')],
             "active"   => ['required','Integer']
+        ];
+    }
+
+    public function errorMessage(){
+        return[
+            "code.min"          => "The <strong> Code </strong> field must be between 2 and 10 characters long.",
+            "code.max"          => "The <strong> Code </strong> field must be between 2 and 10 characters long.",
+            "code.regex"        => "The <strong> Code </strong> field only accepts alphanumeric characters. ",
+            
         ];
     }
 
     public function changeAttribute($id = false){
         return [
-            "name" => "Name",
-            "active" => "Access Level",
+            "name" => "<strong> Name </strong>",
+            "active" => "<strong> Status </strong>",
         ];
     }
 

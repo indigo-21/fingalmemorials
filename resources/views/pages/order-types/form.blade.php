@@ -9,9 +9,11 @@
                             <h3>{{ isset($id) ? 'Update' : 'Create' }} Order Types</h3>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <p class="breadcrumbs-link"><a href="/">Dashboard</a> <i class="fa fa-angle-right" aria-hidden="true"></i>
+                            <p class="breadcrumbs-link"><a href="/">Dashboard</a> <i class="fa fa-angle-right"
+                                    aria-hidden="true"></i>
                                 <a href="/order-types">Order Types</a> <i class="fa fa-angle-right" aria-hidden="true"></i>
-                                <b> {{ isset($id) ? 'Update' : 'Create' }} Order Types </b></p>
+                                <b> {!! isset($id) ? 'Update' : 'Create' !!} Order Types </b>
+                            </p>
                         </div>
                     </div>
 
@@ -22,7 +24,7 @@
                             </button>
                             <ul>
                                 @foreach ($errors->all() as $error)
-                                    <li> <strong>- </strong>{{ $error }}</li>
+                                    <li> <strong>- </strong>{!! $error !!}</li>
                                 @endforeach
                             </ul>
                         </div>
@@ -42,15 +44,23 @@
                                         value="{{ isset($orderType) ? $orderType->name : old('name') }}" placeholder="Name">
                                 </div>
                                 <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;">
-                                    <label>Access Level</label>
+                                    <label>Status</label>
                                     <select class="selectpicker" name="active">
-                                        <option value="">-- SELECT ACCESS LEVEL --</option>
-                                        <option value="1"
-                                            {{ isset($orderType) && $orderType->active == '1' ? 'selected' : '' }}>Active
-                                        </option>
-                                        <option value="2"
-                                            {{ isset($orderType) && $orderType->active == '0' ? 'selected' : '' }}>Inactive
-                                        </option>
+                                        <option value="">-- SELECT Status --</option>
+                                        @if (isset($orderType))
+                                            <option value="1" {{ $orderType->active == '1' ? 'selected' : '' }}>Active
+                                            </option>
+                                            <option value="0" {{ $orderType->active == '0' ? 'selected' : '' }}>
+                                                Inactive
+                                            </option>
+                                        @else
+                                            <option value="1" {{ old('active') == '1' ? 'selected' : '' }}>Active
+                                            </option>
+                                            <option value="0" {{ old('active') == '0' ? 'selected' : '' }}>
+                                                Inactive
+                                            </option>
+                                        @endif
+
                                     </select>
                                 </div>
 

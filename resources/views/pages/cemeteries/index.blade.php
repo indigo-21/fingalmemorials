@@ -35,7 +35,6 @@
                                         <th>Cemetery Name</th>
                                         <th>Group </th>
                                         <th>Area</th>
-                                        <th>Last update</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -47,7 +46,6 @@
                                             <td>{{ $cemetery->name }}</td>
                                             <td>{{ $cemetery->cemeteryGroup->code }}</td>
                                             <td>{{ $cemetery->cemeteryArea->code }}</td>
-                                            <td>{{ $cemetery->updated_at }}</td>
                                             <td class="popover-cl-pro">
                                                 <a href="{{ route('cemetery.edit', [$cemetery]) }}"class="btn btn-primary"
                                                     data-trigger="hover" data-toggle="popover" data-placement="bottom"
