@@ -71,5 +71,6 @@
     </div>
 @endsection
 @section('page-scripts')
+    <script src="{{ asset('js/datatables/customer.js') }}"></script>
     <script src="{{ asset('js/delete-script.js') }}"></script>
 @endsection
