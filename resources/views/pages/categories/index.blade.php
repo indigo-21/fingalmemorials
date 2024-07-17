@@ -7,7 +7,7 @@
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <h3>Categories</h3>
                     </div>
-                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <p class="breadcrumbs-link"><a href="/">Dashboard</a> <i class="fa fa-angle-right" aria-hidden="true"></i> <b>Categories</b></p>
                     </div>
                 </div>

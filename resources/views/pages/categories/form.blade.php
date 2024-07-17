@@ -6,9 +6,9 @@
                 <div class="breadcrumbs-content">
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <h3>{{ isset($id) ? 'Update' : 'Create' }} Categories</h3>
+                            <h3>{{ isset($category) ? 'Update' : 'Create' }} Categories</h3>
                         </div>
-                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                             <p class="breadcrumbs-link"><a href="">Dashboard</a> <i class="fa fa-angle-right" aria-hidden="true"></i> 
                                  <a href="/categories">Categories</a> <i class="fa fa-angle-right" aria-hidden="true"></i>
                                 <b> {{ isset($category) ? 'Update' : 'Create' }} Categories </b></p>
