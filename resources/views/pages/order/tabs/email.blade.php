@@ -7,15 +7,15 @@
     </div>
     <div class="row">
         <div class="col-lg-12 col-md-12">
-            <form action="" enctype="multipart/form-data">
+            <form action="" enctype="multipart/form-data" class="email-form" orderid="{{ $order->id }}">
                 <div class="nk-int-st mb-20">
                     <label>Email To</label>
-                    <input type="text" class="form-control" placeholder="Email To" name="email_to">
+                    <input type="text" class="form-control" placeholder="Email To" value="{{$customer->email}}" disabled name="email_to">
                 </div>
                 <div class="nk-int-st mb-20">
                     <label>Message</label>
-                    <textarea class="form-control" placeholder="Message Here" rows="10">
-                        Dear Mr. Browne,
+                    <textarea class="form-control" placeholder="Message Here" rows="10" name="email_message">
+                        Dear {{$customer->title->name}} {{$customer->firstname}} {{$customer->surname}},
 
                         Please find attached details of your order.
 
@@ -30,24 +30,24 @@
                     <label>Attachments</label>
                     <div class="form-check email-tab-checkbox">
                         <span>
-                            <input type="checkbox" class="form-check-input">
+                            <input type="checkbox" class="form-check-input" value="" name="order_details">
                             <label class="form-check-label">Order</label>
                         </span>
                         <span>
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                            <label class="form-check-label" for="flexCheckDefault">
+                            <input class="form-check-input" type="checkbox" value="" name="order_inscription" >
+                            <label class="form-check-label">
                                 Inscription
                             </label>
                         </span>
                         <span>
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                            <label class="form-check-label" for="flexCheckDefault">
+                            <input class="form-check-input" type="checkbox" value="" name="order_invoice" >
+                            <label class="form-check-label">
                                 Invoice
                             </label>
                         </span>
                         <span>
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                            <label class="form-check-label" for="flexCheckDefault">
+                            <input class="form-check-input" type="checkbox" value="" name="order_receipt" >
+                            <label class="form-check-label">
                                 Receipt
                             </label>
                         </span>
@@ -61,8 +61,8 @@
                     <div class="col-md-12 text-center">
                         <div class="form-btn">
                             <button class="btn btn-light btn-icon-notika waves-effect" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-icon-notika waves-effect add-document"
-                                orderid="{{ $order->id }}" type="button">Create</button>
+                            <button class="btn btn-primary btn-icon-notika waves-effect send-email"
+                                type="button">Create</button>
                         </div>
                     </div>
                 </div>
@@ -80,19 +80,17 @@
                             <tr>
                                 <th>Email Date</th>
                                 <th>Email To</th>
-                                <th>Email Body</th>
+                                <!-- <th>Email Body</th> -->
                                 <th>Email By</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($documents as $document)
+                            @foreach ($attachments as $attachment)
                                 <tr>
-                                    <td>{{ $loop->index + 1 }}</td>
-                                    <td>{{ $document->documentType->name }}</td>
-                                    <td>{{ $document->description }}</td>
-                                    <td><a href="{{ url('documents/' . $document->filename) }}"
-                                            target="_blank">{{ $document->filename }}</a></td>
-                                    <td>{{ $document->user->firstname }} {{ $document->user->lastname }}</td>
+                                    <td>{{ $attachment->created_at->format("d/m/Y") }}</td>
+                                    <td>{{ $attachment->email_to }}</td>
+                                    <!-- <td>{{ $attachment->description }}</td> -->
+                                    <td>{{ $attachment->user->firstname }} {{ $attachment->user->lastname }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

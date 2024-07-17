@@ -24,6 +24,7 @@ use App\Models\PaymentType;
 use App\Models\DocumentType;
 use App\Models\Document;
 use App\Models\PrintHistory;
+use App\Models\EmailHistory;
 use Carbon\Carbon;
 use DB;
 
@@ -623,6 +624,11 @@ class OrderController extends Controller
         $documentTypes = DocumentType::All();
         $documents = Document::where("order_id", $order_id)->get();
 
+
+        // ORDERS ATTACHMENT
+        
+        $attachments    = EmailHistory::where("order_id", $order_id)->get();
+
         // PRINT HISTORY 
         $printHistories = PrintHistory::where("order_id",$order_id)->get();
 
@@ -716,7 +722,8 @@ class OrderController extends Controller
                     ->withDocuments($documents)
                     ->withJobValue($jobValue)
                     ->withHasInvoice($hasInvoice)
-                    ->withOrderBalance($orderBalance);
+                    ->withOrderBalance($orderBalance)
+                    ->withAttachments($attachments);
                 break;
             case 'print-history':
                 return view($url)
@@ -1167,8 +1174,42 @@ class OrderController extends Controller
     }
 
 
-    public function emailCustomer($emailType){
-        dd($emailType);
+    public function sendOrderEmail(Request $request){
+
+        $order_id               = $request->order_id;
+        $email_to               = $request->email_to;
+        $email_body             = $request->email_message;
+        $hasOrderDetails        = $request->order_details === "true" ? 1 : 0;
+        $hasOrderInscription    = $request->order_inscription === "true" ? 1 : 0;
+        $hasOrderInvoice        = $request->order_invoice === "true" ? 1 : 0;
+        $hasOrderReceipt        = $request->order_receipt === "true" ? 1 : 0;
+        $order_attachment       = $request->file("attachment");
+        $original_name          = $order_attachment->getClientOriginalName();
+        $attachment_extension   = $order_attachment->getClientOriginalExtension();
+        $attachment_name        = pathinfo($original_name, PATHINFO_FILENAME);
+
+
+        $new_name               = $order_id."_".date("YmdHis")."_".$attachment_name.".".$attachment_extension;
+
+        $request->attachment->move(public_path("order_attachment"), $new_name);
+
+
+
+        $emailData          = new EmailHistory;
+
+        $emailData->order_id                        = $order_id;
+        $emailData->email_to                        = $email_to;
+        $emailData->email_body                      = $email_body;
+        $emailData->has_order_attachment            = $hasOrderDetails;
+        $emailData->has_inscription_attachment      = $hasOrderInscription;
+        $emailData->has_invoice_attachment          = $hasOrderInvoice;
+        $emailData->has_receipt_attachment          = $hasOrderReceipt;
+        $emailData->emailed_by                      = Auth::id();
+        
+        $emailData->save();
+
+        return response()->json($order_id);
+
     }
 
 
