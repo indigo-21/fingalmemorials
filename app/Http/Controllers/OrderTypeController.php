@@ -90,16 +90,15 @@ class OrderTypeController extends Controller
 
     public function formRule($id = false){
         return [
-            "name"    => ['required','regex:/^[A-Za-z0-9 ]+$/','string','min:2','max:10', Rule::unique('order_types')->ignore($id ? $id : "")->whereNUll('deleted_at')],
+            "name"    => ['required','string','min:3','max:50', Rule::unique('order_types')->ignore($id ? $id : "")->whereNUll('deleted_at')],
             "active"   => ['required','Integer']
         ];
     }
 
     public function errorMessage(){
         return[
-            "code.min"          => "The <strong> Code </strong> field must be between 2 and 10 characters long.",
-            "code.max"          => "The <strong> Code </strong> field must be between 2 and 10 characters long.",
-            "code.regex"        => "The <strong> Code </strong> field only accepts alphanumeric characters. ",
+            "name.min"          => "The <strong> Code </strong> field must be between 3 and 50 characters long.",
+            "name.max"          => "The <strong> Code </strong> field must be between 3 and 50 characters long.",
             
         ];
     }
