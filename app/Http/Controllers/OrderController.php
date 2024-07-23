@@ -6,6 +6,8 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\PDF;
 use App\Models\Customer;
 use App\Models\OrderType;
 use App\Models\Branch;
@@ -1079,13 +1081,13 @@ class OrderController extends Controller
                                                     ->get();
         $payments                 = AccountPosting::where("order_id", $order_id)->get()->sum("credit");
         $orderBalance             = floatval($jobValue) - floatval($payments);
-        // dd($jobValue." - ".$payments." = " .$orderBalance);
         
        if($is_view == false){
            self::createPrintHistory($order_id, "Invoice", url('/order/invoice/')."/".$order_id."/".$invoice_number);
        }
         
-        return view('pdf-templates.invoice')
+       // return view('pdf-templates.invoice')
+       return view('pdf-templates.new-invoice')
                 ->withOrder($order)
                 ->withCustomer($customer)
                 ->withJobDetails($jobDetails)
@@ -1095,6 +1097,7 @@ class OrderController extends Controller
                 ->withTotalNet($totalNet)
                 ->withTotalVat($totalVat)
                 ->withTotalZeroRated($totalZeroRated)
+                ->withTotalPayments($payments)
                 ->withJobValue($jobValue);
     }
 
@@ -1141,7 +1144,7 @@ class OrderController extends Controller
             $documentData   = new Document;
 
             $documentData->order_id         = $request->order_id;
-            $documentData->document_type_id = $request->document_type_id;
+            $documentData->document_type_id = "1";
             $documentData->description      = $request->description;
             $documentData->filename         = $newName;
             $documentData->created_by       = Auth::id();
@@ -1177,23 +1180,53 @@ class OrderController extends Controller
     public function sendOrderEmail(Request $request){
 
         $order_id               = $request->order_id;
+        
         $email_to               = $request->email_to;
         $email_body             = $request->email_message;
         $hasOrderDetails        = $request->order_details === "true" ? 1 : 0;
         $hasOrderInscription    = $request->order_inscription === "true" ? 1 : 0;
         $hasOrderInvoice        = $request->order_invoice === "true" ? 1 : 0;
         $hasOrderReceipt        = $request->order_receipt === "true" ? 1 : 0;
-        $order_attachment       = $request->file("attachment");
-        $original_name          = $order_attachment->getClientOriginalName();
-        $attachment_extension   = $order_attachment->getClientOriginalExtension();
-        $attachment_name        = pathinfo($original_name, PATHINFO_FILENAME);
 
 
-        $new_name               = $order_id."_".date("YmdHis")."_".$attachment_name.".".$attachment_extension;
+        // EMAIL ATTACHMENT & PDF 
+            $attachments            = [];
 
-        $request->attachment->move(public_path("order_attachment"), $new_name);
+            $request->attachment->move(public_path("order_attachment"), $new_name);
 
+            if($request->order_details === "true"){
+                self::createPdf($order_id, "order_details");
+                $attachments["order_details"] = "Order-".$order_id.".pdf";
+            }
 
+            if($request->order_inscription === "true"){
+                self::createPdf($order_id, "inscription");
+                $attachments["inscription"] = "Inscription-".$order_id.".pdf";
+            }
+
+            if($request->order_invoice === "true"){
+                self::createPdf($order_id, "invoice");
+                $attachments["invoice"] = "Invoice-".$order_id.".pdf";
+            }
+
+            if($request->order_receipt === "true"){
+                self::createPdf($order_id, "receipt");
+                $attachments["receipt"] = "Receipt-".$order_id.".pdf";
+            }
+            
+            if($request->file("attachment")){
+                $order_attachment                     = $request->file("attachment");
+                $original_name                        = $order_attachment->getClientOriginalName();
+                $attachment_extension                 = $order_attachment->getClientOriginalExtension();
+                $attachment_name                      = pathinfo($original_name, PATHINFO_FILENAME);
+                $new_name                             = $order_id."_".date("YmdHis")."_".$attachment_name.".".$attachment_extension;
+                $attachments["additional_attachment"] = $new_name;
+            }
+            
+            // self::attachment_email($email_to, $attachments);
+            self::attachment_email("charles.verdadero@indigo21.com", $attachments);
+
+        // EMAIL ATTACHMENT & PDF 
 
         $emailData          = new EmailHistory;
 
@@ -1212,5 +1245,117 @@ class OrderController extends Controller
 
     }
 
+    public function createPdf($order_id, $type = "order_details"){
+        
+        if($order_id){
+            if (!Storage::exists('pdf')) {
+                Storage::makeDirectory('pdf');
+            }
+
+            $filename   = "testdata.pdf";
+            $order_data = Order::findOrFail($order_id);
+
+            $data               = [ "order" => $order_data];
+            $data["customer"]   = Customer::findOrFail($order_data->customer_id);
+
+            switch ($type) {
+                case 'order_details':
+
+                        
+                        $data["job_details"]        = JobDetail::where("order_id", $order_id)->get();
+                        $data["account_posting"]    = AccountPosting::where("order_id", $order_id)->get();
+                        $data["inscription"]        = Inscription::findOrFail($order_id);
+                        $pdf                        = PDF::loadView("pdf-templates.order", $data);
+                        $filename                   = "Order-".$order_id.".pdf";
+
+                break;
+
+                case 'invoice':
+                    $jobDetails                 = JobDetail::where("order_id",$order_id)->get();
+                    $jobValue                   = $jobDetails->sum("gross_amount");
+                    $totalAdditional            = $jobDetails->sum("additional_fee");
+                    $totalNet                   = $jobDetails->sum("net_amount");
+                    $totalVat                   = $jobDetails->sum("vat_amount");
+                    $totalZeroRated             = $jobDetails->sum("zero_rated_amount");
+                    $payments                   = AccountPosting::where("order_id", $order_id)->get()->sum("credit");
+                    $orderBalance               = floatval($jobValue) - floatval($payments);
+                    
+                    
+                    
+                    $data["jobDetails"]         = $jobDetails;
+                    $data["accountPostings"]    = AccountPosting::where("order_id", $order_id)->first();
+                    $data["orderBalance"]       = $orderBalance == $jobValue ? 0 : $orderBalance;
+                    $data["totalAdditional"]    = $totalAdditional;
+                    $data["totalNet"]           = $totalNet;
+                    $data["totalVat"]           = $totalVat;
+                    $data["totalZeroRated"]     = $totalZeroRated;
+                    $data["totalPayments"]      = $payments;
+                    $data["jobValue"]           = $jobValue;
+                    
+
+                    $pdf                        = PDF::loadView("pdf-templates.new-invoice", $data);
+                
+                    $filename                   = "Invoice-".$order_id.".pdf";
+                    
+                break;
+
+                case 'receipt':
+                        $data["account_postings"]    = AccountPosting::where("order_id", $order_id)
+                                                                        ->where("account_type_id", 1)
+                                                                        ->get();
+                        $pdf                        = PDF::loadView("pdf-templates.receipt", $data);
+                
+                        $filename                   = "Receipt-".$order_id.".pdf";
+
+
+                break;
+                
+                default:
+                    # code...
+                    break;
+            }
+            
+
+        
+            if(Storage::exists("pdf/".$filename)){
+                Storage::delete(["pdf/".$filename]);
+            }
+
+            // SAVE THE PDF TO A FOLDER
+            $output     = $pdf->output();
+            Storage::put("pdf/".$filename, $output);
+        }
+
+    }
+
+    public function attachment_email($email_to = "charles.verdadero@indigo21.com", $attachments = []) 
+    {   
+
+        $data = array('name'=>"Virat Gandhi");
+        Mail::send('welcome', $data, function($message) {         
+                        $message->to($email_to, 'Tutorials Point')
+                                ->subject('Laravel Testing Mail with Attachment');
+
+                        if(isset($attachments["order_details"])){
+                            $message->attach(Storage::get("pdf/".$attachments["order_details"]));  
+                        }   
+                        
+                        if(isset($attachments["inscription"])){
+                            $message->attach(Storage::get("pdf/".$attachments["inscription"]));  
+                        }
+
+                        if(isset($attachments["invoice"])){
+                            $message->attach(Storage::get("pdf/".$attachments["invoice"]));  
+                        }
+
+                        if(isset($attachments["receipt"])){
+                            $message->attach(Storage::get("pdf/".$attachments["receipt"]));  
+                        }
+
+                        if(isset($attachments["additional_attachment"])){
+                            $message->attach(public_path("order_attachment/".$attachments["additional_attachment"]));  
+                        }
+                    });    
+    }
 
 }

@@ -10,8 +10,8 @@
     <style>
         @page {
             size: A4;
-            margin-left: 2cm;
-            margin-right: 2cm;
+            margin-left: 1cm;
+            margin-right: 1cm;
             font-size: 80%;
         }
 
@@ -68,15 +68,8 @@
             padding: 10px;
             font-size: 20px;
         }
-        .content tbody{
-            display: block;
-            border: 1px solid #000;
-            border-collapse: separate;
-            border-spacing: 4px;
-            margin-top: 30px;
-            margin-bottom: 20px;
-            padding: 30px 50px;
-        }
+        
+        
 
         .main-content .job,
         .main-content .value {
@@ -150,30 +143,27 @@
                 <p><b>Address: </b>{{$customer->address1}}, {{$customer->town}}, {{$customer->county}}, {{$customer->postcode}} </p>
             </td>
             <td style="border: 1px solid #000; padding:10px 20px;">
-                <p><b>Invoice Date: {{date('m/d/Y', strtotime($accountPostings->created_at)) }}</b></p>
-                <p><b>Invoice No.: {{$accountPostings->invoice_number}}</b></p>
-                <p><b>Order No.: </b></p>
+                <p><b>Invoice Date:</b> {{date('m/d/Y', strtotime($accountPostings->created_at)) }}</p>
+                <p><b>Invoice No.: </b> {{$accountPostings->invoice_number}}</p>
+                <p><b>Order No.: </b>{{$order->id}}</p>
             </td>
         </tr>
     </table>
     <table class="content">
         <tbody class="main-content">
-            <tr>
-                <td class="job">
-                    <p>Renovation:</p>
-                </td>
-                <td class="value">
-                    <p>300.00</p>
-                </td>
-            </tr>
-            <tr>
-                <td class="job">
-                    <p>Renovation:</p>
-                </td>
-                <td class="value">
-                    <p>300.00</p>
-                </td>
-            </tr>
+
+            @foreach($jobDetails as $jobDetail)
+                <tr>
+                    <td class="job">
+                        <p>{{ $jobDetail->headstone_shape }} - {{ $jobDetail->chipping_color }}
+                            <small>{{$jobDetail->details_of_work}}</small>
+                        </p>
+                    </td>
+                    <td class="value">
+                        <p>{{number_format($jobDetail->job_cost, 2)}}</p>
+                    </td>
+                </tr>
+            @endforeach
         </tbody>
     </table>
     <table class="footer">
@@ -188,11 +178,11 @@
                     <p>IBAN:IE72BOFI90458740858677</p>
                 </td>
                 <td class="total-value">
-                    <p><b>Total Cost of Memorial:</b> <span>264.32</span></p>
-                    <p><b>VAT:</b> <span>264.32</span></p>
-                    <p><b>Total Value:</b> <span>300.00</span></p>
-                    <p><b>Less Paid:</b> <span>264.32</span></p>
-                    <p><b>Balance Due:</b> <span>0.00</span></p>
+                    <p><b>Total Cost of Memorial:</b> <span>{{number_format($totalNet,2) }}</span></p>
+                    <p><b>VAT:</b> <span>{{number_format($totalVat , 2) }}</span></p>
+                    <p><b>Total Value:</b> <span>{{number_format($jobValue, 2) }}</span></p>
+                    <p><b>Less Paid:</b> <span>{{number_format($totalPayments, 2) }}</span></p>
+                    <p><b>Balance Due:</b> <span>{{number_format( $order->balance , 2) }}</span></p>
                 </td>
             </tr>
         </tbody>

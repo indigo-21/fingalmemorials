@@ -10,8 +10,8 @@
     <style>
         @page {
             size: A4;
-            margin-left: 2cm;
-            margin-right: 2cm;
+            margin-left: 1cm;
+            margin-right: 1cm;
             font-size: 80%;
         }
 
@@ -29,7 +29,7 @@
         }
 
         h1 {
-            font-size: 23px;
+            font-size: 15px;
         }
 
         h3 {
@@ -59,8 +59,8 @@
         .top-content,
         .content,
         .footer {
-            padding-left: 40px;
-            padding-right: 40px;
+            padding-left: 20px;
+            padding-right: 20px;
         }
 
         .title-receipt {
@@ -102,7 +102,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <h3 class="title-receipt">ORDER NO. 2 (Order Type)</h3>
+                <h3 class="title-receipt">ORDER NO. {{$order->id}} ({{$order->orderType->name}})</h3>
             </td>
         </tr>
 
@@ -116,14 +116,14 @@
             </tr>
             <tr>
                 <td style="border: 1px solid #000; padding:10px 20px;">
-                    <p><b>Name: </b>Name</p>
-                    <p><b>Address: </b>Address </p>
+                    <p><b>Name: </b>{{$customer->title->name}} {{$customer->first_name}} {{$customer->middlename}} {{$customer->surname}} </p>
+                    <p><b>Address: </b>{{$customer->address1}}, {{$customer->town}}, {{$customer->county}}, {{$customer->postcode}}  </p>
                 </td>
                 <td style="border: 1px solid #000; padding:10px 20px;">
-                    <p><b>Order Date: </b></p>
-                    <p><b>Email: </b></p>
-                    <p><b>Phone: </b></p>
-                    <p><b>Mobile: </b></p>
+                    <p><b>Order Date:</b> {{date('m/d/Y', strtotime($order->order_date)) }}</p>
+                    <p><b>Email:</b> {{$customer->email}}</p>
+                    <p><b>Phone/Mobile:</b> {{$customer->mobile}}</p>
+                    <p><b>Tel No.:</b> {{$customer->telno}}</p>
                 </td>
             </tr>
             <tr>
@@ -133,27 +133,27 @@
             </tr>
             <tr>
                 <td style="border: 1px solid #000; padding:10px 20px;">
-                    <p><b>Deceased: </b>Name</p>
-                    <p><b>Cemetery: </b>Address </p>
-                    <p><b>Grave No.: </b>Address </p>
-                    <p><b>Letter Type: </b>Address </p>
+                    <p><b>Deceased: </b> {{$order->deceased_name}}</p>
+                    <p><b>Cemetery: </b> {{$order->cemetery->name}}</p>
+                    <p><b>Grave No.: </b> {{$order->plot_grave}} </p>
+                    <!-- <p><b>Letter Type: </b> Address </p>
                     <p><b>Base/Ledger: </b>Address </p>
                     <p><b>Material: </b>Address </p>
-                    <p><b>Memorial Dimensions: </b>Address </p>
+                    <p><b>Memorial Dimensions: </b>Address </p> -->
                 </td>
                 <td style="border: 1px solid #000; padding:10px 20px;">
-                    <p><b>Date of Death: </b></p>
-                    <p><b>Future Ins: </b></p>
-                    <p><b>Grave Space: </b></p>
-                    <p><b>Chippings / Soil: </b></p>
+                    <p><b>Date of Death:</b> {{date('m/d/Y', strtotime($order->date_of_death)) }}</p>
+                    <!-- <p><b>Future Ins: </b> </p> -->
+                    <p><b>Grave Space:</b> {{$order->graveSpace->name}}</p>
+                    <!-- <p><b>Chippings / Soil: </b></p>
                     <p><b>Flower Containers: </b></p>
-                    <p><b>Grave Clearly Marked: </b></p>
+                    <p><b>Grave Clearly Marked: </b></p> -->
                 </td>
             </tr>
             <tr>
                 <td colspan="2" style="border: 1px solid #000; padding:5px 20px;">
                     <p><b>Description:</b></p>
-                    <p>Lorem Ipsum</p>
+                    <p></p>
                 </td>
             </tr>
             <tr>
@@ -163,24 +163,27 @@
             </tr>
             <tr>
                 <td style="border: 1px solid #000; padding:10px 20px;">
-                    <p><b>Memorial: </b> <span>500.00</span></p>
-                    <p><b>100 Extra letters: </b> <span>500.00</span> </p>
-                    <p><b>Cemetery Fees: </b> <span>500.00</span> </p>
-                    <p><b>Total: </b> <span>500.00</span> </p>
-                    <p><b>Grand Total: </b> <span>500.00</span> </p>
-                    <p><b>Deposit/s: </b> <span>500.00</span> </p>
-                    <p><b>Balance: </b> <span>500.00</span> </p>
+                    <p><b>Job Cost: </b> <span>{{ number_format($job_details->sum("job_cost"), 2) }}</span></p>
+                    <p><b>Additional Fee: </b> <span>{{ number_format($job_details->sum("additional_fee"), 2) }}</span> </p>
+                    <!-- <p><b>Cemetery Fees: </b> <span>500.00</span> </p> -->
+                    <p><b>Total: </b> <span>{{ number_format($job_details->sum("gross_amount"), 2) }}</span> </p>
+                    <p><b>Deposit/s: </b> <span>{{ number_format($account_posting->sum("credit"), 2) }}</span> </p>
+                    <p><b>Balance: </b> <span>{{ number_format($order->balance, 2 ) }}</span> </p>
 
                 </td>
                 <td style="border: 1px solid #000; padding:10px 20px;">
                     <p><b>Special Instructions:</b></p>
-                    <p>Lorem Ipsuim</p>
+                    <p>
+                        {{$customer->special_instructions}}
+                    </p>
                 </td>
             </tr>
             <tr>
                 <td colspan="2" style="border: 1px solid #000; padding:10px 20px;">
                     <p><b>Inscription:</b></p>
-                    <p>Lorem Ipsuim</p>
+                    <p>
+                        {!!$inscription->inscription_details!!}
+                    </p>
                 </td>
             </tr>
             <tr>
@@ -188,7 +191,7 @@
                     <h3>NOTES</h3>
                     <p><b>Estimated lead times are 18 – 26 weeks (from CAD approval if req).</b></p>
                     <p>The above price includes 0 free letters. Extra letters are charged at £3.00 Each.
-                        All goods remain the property of ROCHDALE MEMORIALS until paid for in full.
+                        All goods remain the property of FINGAL MEMORIALS until paid for in full.
                         This document was produced on 14-Jun-2024</p>
                     <h3>DECLARATION</h3>
                     <p>I the undersigned, agree that the memorial detailed above is to my specification.
