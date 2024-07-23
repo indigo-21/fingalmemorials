@@ -45,15 +45,15 @@ class AuthController extends Controller
 
         // $user     = User::where('email', $request->email)->first();
 
-        // $email = $request->email;
-        // $email_content = array(
-        //     'link' => 'https://dev-beautyguild.indigo21.com/resetPassword/' . $user->id
-        // );
+        $email = $request->email;
+        $email_content = array(
+            'link' => 'https://dev-beautyguild.indigo21.com/resetPassword/' . $user->id
+        );
 
-        // Mail::send(('/emailTemplates.request-new-password'), $email_content,function($message) use ($email) {
-        //     $message->to($email, 'user_name')
-        //     ->subject('Request for Reset Password');
-        // });
+        Mail::send(('/email-templates.request-new-password'), $email_content,function($message) use ($email) {
+            $message->to($email, 'user_name')
+            ->subject('Request for Reset Password');
+        });
         return redirect('/');
 
         // dd($request->email);
