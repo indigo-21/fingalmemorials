@@ -119,7 +119,7 @@
                                 <span class="input-group-addon"></span>
                                 <input type="text" class="input-form form-control" name="inscription_completed_date"
                                     @if(isset($order))
-                                        value="{{$order->inscription_completed_date ? date('m/d/Y', strtotime($order->inscription_completed_date)) : '' }}"
+                                        value="{{$order->inscription_completed_date ? date('d/m/Y', strtotime($order->inscription_completed_date)) : '' }}"
                                     @else
                                         disabled
                                         value=""
@@ -136,7 +136,7 @@
                         <input type="text" class="input-form form-control"
                         
                         @if(isset($order))
-                            value="{{$order->job_was_fixed_on ? date('m/d/Y', strtotime($order->job_was_fixed_on)) : '' }}"
+                            value="{{$order->job_was_fixed_on ? date('d/m/Y', strtotime($order->job_was_fixed_on)) : '' }}"
                         @else
                             value=""
                             disabled

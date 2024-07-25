@@ -27,7 +27,7 @@
                             <input type="text" class="form-control" placeholder="Headstone Shape" name="headstone_shape">
                         </div>
                         <div class="nk-int-st mb-20">
-                            <label>Chipping Color</label>
+                            <label>Chipping Colour</label>
                             <input type="text" class="form-control" placeholder="Chipping Color" name="chipping_color">
                         </div>
                         <div class="nk-int-st mb-20">

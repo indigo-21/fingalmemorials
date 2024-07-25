@@ -143,7 +143,7 @@
                 <p><b>Address: </b>{{$customer->address1}}, {{$customer->town}}, {{$customer->county}}, {{$customer->postcode}} </p>
             </td>
             <td style="border: 1px solid #000; padding:10px 20px;">
-                <p><b>Invoice Date:</b> {{date('m/d/Y', strtotime($accountPostings->created_at)) }}</p>
+                <p><b>Invoice Date:</b> {{date('d/m/Y', strtotime($accountPostings->created_at)) }}</p>
                 <p><b>Invoice No.: </b> {{$accountPostings->invoice_number}}</p>
                 <p><b>Order No.: </b>{{$order->id}}</p>
             </td>

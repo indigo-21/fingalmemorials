@@ -120,7 +120,7 @@
                     <p><b>Address: </b>{{$customer->address1}}, {{$customer->town}}, {{$customer->county}}, {{$customer->postcode}}  </p>
                 </td>
                 <td style="border: 1px solid #000; padding:10px 20px;">
-                    <p><b>Order Date:</b> {{date('m/d/Y', strtotime($order->order_date)) }}</p>
+                    <p><b>Order Date:</b> {{date('d/m/Y', strtotime($order->order_date)) }}</p>
                     <p><b>Email:</b> {{$customer->email}}</p>
                     <p><b>Phone/Mobile:</b> {{$customer->mobile}}</p>
                     <p><b>Tel No.:</b> {{$customer->telno}}</p>
@@ -142,7 +142,7 @@
                     <p><b>Memorial Dimensions: </b>Address </p> -->
                 </td>
                 <td style="border: 1px solid #000; padding:10px 20px;">
-                    <p><b>Date of Death:</b> {{date('m/d/Y', strtotime($order->date_of_death)) }}</p>
+                    <p><b>Date of Death:</b> {{date('d/m/Y', strtotime($order->date_of_death)) }}</p>
                     <!-- <p><b>Future Ins: </b> </p> -->
                     <p><b>Grave Space:</b> {{$order->graveSpace->name}}</p>
                     <!-- <p><b>Chippings / Soil: </b></p>

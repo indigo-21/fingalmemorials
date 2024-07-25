@@ -109,7 +109,7 @@
             </td>
             <td style="border: 1px solid #000; padding:10px 20px;">
                 <p><b>Invoice No.: </b>{{$accountPostings->invoice_number}}</p>
-                <p><b>Invoice Date: </b>{{date('m/d/Y', strtotime($accountPostings->created_at)) }}</p>
+                <p><b>Invoice Date: </b>{{date('d/m/Y', strtotime($accountPostings->created_at)) }}</p>
                 <p><b>Order Value: </b>{{number_format($jobValue, 2)}}</p>
                 <p><b>Balance now Due: </b>{{number_format($orderBalance, 2)}}</p>
             </td>

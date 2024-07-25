@@ -18,7 +18,7 @@
                         <label>Date Payment Received</label>
                         <div class="input-group date nk-int-st">
                             <span class="input-group-addon"></span>
-                            <input type="text" class="form-control" value="{{date('m/d/Y')}}" name="date_received">
+                            <input type="text" class="form-control" value="{{date('d/m/Y')}}" name="date_received">
                         </div>
                     </div>
                     <div class="chosen-select-act fm-cmp-mg mb-20">
@@ -55,7 +55,7 @@
                         <label>Date of Refund</label>
                         <div class="input-group date nk-int-st">
                             <span class="input-group-addon"></span>
-                            <input type="text" class="form-control" value="{{date('m/d/Y')}}" name="date_received">
+                            <input type="text" class="form-control" value="{{date('d/m/Y')}}" name="date_received">
                         </div>
                     </div>
                     <div class="chosen-select-act fm-cmp-mg mb-20">
@@ -92,7 +92,7 @@
                         <label>Date of the Invoice</label>
                         <div class="input-group date nk-int-st">
                             <span class="input-group-addon"></span>
-                            <input type="text" class="form-control" value="{{date('m/d/Y')}}" name="date_received">
+                            <input type="text" class="form-control" value="{{date('d/m/Y')}}" name="date_received">
                         </div>
                     </div>
                     <div class="nk-int-st mb-20">
@@ -147,7 +147,7 @@
                                                     orderid="{{$accountPosting->order_id}}" 
                                                     accountpostingid="{{$accountPosting->id}}"
                                                     accounttypeid="{{$accountPosting->account_type_id}}"
-                                                    datereceived="{{ date('m/d/Y', strtotime($accountPosting->created_at)) }}"
+                                                    datereceived="{{ date('d/m/Y', strtotime($accountPosting->created_at)) }}"
                                                     paymenttypeid="{{$accountPosting->payment_type_id}}"
                                                     payment="{{$accountPosting->payment}}"
                                             

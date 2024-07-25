@@ -43,9 +43,9 @@
                                         <span class="input-group-addon"></span>
                                         <input type="text" class="input-form form-control" 
                                             @if(isset($order))
-                                                value="{{date('m/d/Y', strtotime($order->created_at)) }}"
+                                                value="{{date('d/m/Y', strtotime($order->created_at)) }}"
                                             @else
-                                                value="{{date('m/d/Y')}}"
+                                                value="{{date('d/m/Y')}}"
                                             @endif
                                             
                                             name="order_date" >
@@ -76,7 +76,7 @@
                                     <label>Date of Death</label>
                                     <div class="input-group date nk-int-st">
                                         <span class="input-group-addon"></span>
-                                        <input type="text" class="input-form form-control" value="{{date('m/d/Y')}}" name="date_of_death">
+                                        <input type="text" class="input-form form-control" value="{{date('d/m/Y')}}" name="date_of_death">
                                     </div>
                                 </div>
                             </div>

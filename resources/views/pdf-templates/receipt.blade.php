@@ -110,7 +110,7 @@
             </td>
             <td style="border: 1px solid #000; padding:10px 20px;">
                 <p><b>Order No.: </b> {{$order->id}}</p>
-                <p><b>Receipt Date: </b>{{date('m/d/Y', strtotime($order->created_at)) }}</p>
+                <p><b>Receipt Date: </b>{{date('d/m/Y', strtotime($order->created_at)) }}</p>
                 <p><b>Order Value: </b>{{number_format($order->value, 2)}}</p>
                 <p><b>Balance now Due: </b>{{number_format($order->balance, 2)}}</p>
             </td>
@@ -148,7 +148,7 @@
                                 @foreach($account_postings as $account_posting)
                                     <tr>
                                         <td>
-                                            <p>{{date('m/d/Y', strtotime($account_posting->created_at)) }}</p>
+                                            <p>{{date('d/m/Y', strtotime($account_posting->created_at)) }}</p>
                                         </td>
                                         <td>
                                             <p>{{$account_posting->payment_type->name}}</p>
@@ -164,7 +164,7 @@
                             @else
                                 <tr>
                                     <td>
-                                        <p>{{date('m/d/Y', strtotime($order->created_at)) }}</p>
+                                        <p>{{date('d/m/Y', strtotime($order->created_at)) }}</p>
                                     </td>
                                     <td>
                                         <p>{{$accountPosting->payment_type->name}}</p>
