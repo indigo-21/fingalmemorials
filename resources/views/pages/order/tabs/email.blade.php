@@ -14,16 +14,10 @@
                 </div>
                 <div class="nk-int-st mb-20">
                     <label>Message</label>
-                    <textarea class="form-control" placeholder="Message Here" rows="10" name="email_message">
-                        Dear {{$customer->title->name}} {{$customer->firstname}} {{$customer->surname}},
-
+                    <textarea class="form-control" placeholder="Message Here" rows="5" name="email_message">
                         Please find attached details of your order.
-
+                        
                         If you have any questions, please do not hesitate to contact us.
-
-                        Kind Regards,
-
-                        Fingal Memorials
                     </textarea>
                 </div>
                 <div class="mb-20">
@@ -33,24 +27,35 @@
                             <input type="checkbox" class="form-check-input" value="" name="order_details">
                             <label class="form-check-label">Order</label>
                         </span>
-                        <span>
+
+                        @if($hasInscription)
+
+                        <!-- <span>
                             <input class="form-check-input" type="checkbox" value="" name="order_inscription" >
                             <label class="form-check-label">
                                 Inscription
                             </label>
-                        </span>
-                        <span>
-                            <input class="form-check-input" type="checkbox" value="" name="order_invoice" >
-                            <label class="form-check-label">
-                                Invoice
-                            </label>
-                        </span>
-                        <span>
-                            <input class="form-check-input" type="checkbox" value="" name="order_receipt" >
-                            <label class="form-check-label">
-                                Receipt
-                            </label>
-                        </span>
+                        </span> -->
+
+                        @endif
+
+                        @if($hasInvoice)
+                            <span>
+                                <input class="form-check-input" type="checkbox" value="" name="order_invoice" >
+                                <label class="form-check-label">
+                                    Invoice
+                                </label>
+                            </span>
+                        @endif
+
+                        @if($hasReceipt)
+                            <span>
+                                <input class="form-check-input" type="checkbox" value="" name="order_receipt" >
+                                <label class="form-check-label">
+                                    Receipt
+                                </label>
+                            </span>
+                        @endif
                     </div>
                 </div>
                 <div class="nk-int-st mb-20">

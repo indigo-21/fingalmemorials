@@ -38,9 +38,9 @@
             </tr>
             <tr class="content">
                 <td>
-                    <h3>Dear Ms. Name,</h3>
-                    <p>Please find attached details of your order.</p>
-                    <p>If you have any questions, please do not hesitate to contact us.</p>
+                    <h3>Dear {{$customer->title->name}} {{$customer->firstname}} {{$customer->surname}},</h3>
+                    <p>{{$email_body}}</p>
+                    <br>
                 </td>
             </tr>
             <tr class="signature">

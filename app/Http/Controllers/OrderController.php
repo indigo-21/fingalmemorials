@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
-use Barryvdh\DomPDF\Facade\PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Customer;
 use App\Models\OrderType;
 use App\Models\Branch;
@@ -29,8 +29,7 @@ use App\Models\PrintHistory;
 use App\Models\EmailHistory;
 use Carbon\Carbon;
 use DB;
-
-
+use Mail;
 use Auth;
 
 
@@ -636,6 +635,22 @@ class OrderController extends Controller
 
         // dd($printHistories->first()->user->firstname);
 
+        // INSCRIPTION - checking if there was an Inscription
+        $inscriptions       = Inscription::where("order_id",$order_id)->get();
+        $hasInscription     = !$inscriptions->isEmpty(); 
+        
+        // INVOICE - checking if there was an Invoice
+        $invoices           = AccountPosting::where("order_id",$order_id)
+                                                    ->where("account_type_id",3)
+                                                    ->get();
+        $hasInvoice         = !$invoices->isEmpty();
+
+        // RECEIPT - checking if there was an Receipt
+        $receipts           = AccountPosting::where("order_id", $order_id)
+                                            ->where("account_type_id", 1)
+                                            ->get();
+        $hasReceipt         = !$receipts->isEmpty();
+
         
         switch ($tab) {
             case 'general-details':
@@ -725,7 +740,10 @@ class OrderController extends Controller
                     ->withJobValue($jobValue)
                     ->withHasInvoice($hasInvoice)
                     ->withOrderBalance($orderBalance)
-                    ->withAttachments($attachments);
+                    ->withAttachments($attachments)
+                    ->withHasInscription($hasInscription)
+                    ->withHasInvoice($hasInvoice)
+                    ->withHasReceipt($hasReceipt);
                 break;
             case 'print-history':
                 return view($url)
@@ -1180,7 +1198,7 @@ class OrderController extends Controller
     public function sendOrderEmail(Request $request){
 
         $order_id               = $request->order_id;
-        
+        $orderData              = Order::findOrFail($order_id);
         $email_to               = $request->email_to;
         $email_body             = $request->email_message;
         $hasOrderDetails        = $request->order_details === "true" ? 1 : 0;
@@ -1191,8 +1209,6 @@ class OrderController extends Controller
 
         // EMAIL ATTACHMENT & PDF 
             $attachments            = [];
-
-            $request->attachment->move(public_path("order_attachment"), $new_name);
 
             if($request->order_details === "true"){
                 self::createPdf($order_id, "order_details");
@@ -1214,17 +1230,23 @@ class OrderController extends Controller
                 $attachments["receipt"] = "Receipt-".$order_id.".pdf";
             }
             
-            if($request->file("attachment")){
+            if($request->attachment !== "undefined"){
                 $order_attachment                     = $request->file("attachment");
                 $original_name                        = $order_attachment->getClientOriginalName();
                 $attachment_extension                 = $order_attachment->getClientOriginalExtension();
                 $attachment_name                      = pathinfo($original_name, PATHINFO_FILENAME);
                 $new_name                             = $order_id."_".date("YmdHis")."_".$attachment_name.".".$attachment_extension;
                 $attachments["additional_attachment"] = $new_name;
+
+                $request->attachment->move(public_path("order_attachment"), $new_name);
             }
             
-            // self::attachment_email($email_to, $attachments);
-            self::attachment_email("charles.verdadero@indigo21.com", $attachments);
+            // Setting Data's on the Email
+            $data   = [
+                "customer"    => Customer::findOrFail($orderData->customer_id),
+                "email_body"  => $email_body,
+            ];
+            self::attachment_email($email_to, $data ,$attachments);
 
         // EMAIL ATTACHMENT & PDF 
 
@@ -1261,11 +1283,18 @@ class OrderController extends Controller
             switch ($type) {
                 case 'order_details':
 
+                        $inscription            = Inscription::where("order_id", $order_id)->get();  
+                      
                         
                         $data["job_details"]        = JobDetail::where("order_id", $order_id)->get();
                         $data["account_posting"]    = AccountPosting::where("order_id", $order_id)->get();
-                        $data["inscription"]        = Inscription::findOrFail($order_id);
-                        $pdf                        = PDF::loadView("pdf-templates.order", $data);
+
+                        if(!$inscription->isEmpty()){
+                            $data["inscription"]    = $inscription;
+                        }
+                    
+                        
+                        $pdf                        = Pdf::loadView("pdf-templates.order", $data);
                         $filename                   = "Order-".$order_id.".pdf";
 
                 break;
@@ -1328,28 +1357,28 @@ class OrderController extends Controller
 
     }
 
-    public function attachment_email($email_to = "charles.verdadero@indigo21.com", $attachments = []) 
+    public function attachment_email($email_to = "charles.verdadero@indigo21.com", $data = ['email_body' => "No Content"],  $attachments = []) 
     {   
-
-        $data = array('name'=>"Virat Gandhi");
-        Mail::send('welcome', $data, function($message) {         
-                        $message->to($email_to, 'Tutorials Point')
-                                ->subject('Laravel Testing Mail with Attachment');
-
+      
+        Mail::send('email-templates.email-template', $data, function($message) use ($email_to, $attachments) {   
+           
+                        $message->to($email_to, 'Fingal Memorials Order')
+                                ->subject('Fingal Memorials Order');
+                
                         if(isset($attachments["order_details"])){
-                            $message->attach(Storage::get("pdf/".$attachments["order_details"]));  
+                            $message->attach(Storage::path("pdf/".$attachments["order_details"]));  
                         }   
                         
                         if(isset($attachments["inscription"])){
-                            $message->attach(Storage::get("pdf/".$attachments["inscription"]));  
+                            $message->attach(Storage::path("pdf/".$attachments["inscription"]));  
                         }
 
                         if(isset($attachments["invoice"])){
-                            $message->attach(Storage::get("pdf/".$attachments["invoice"]));  
+                            $message->attach(Storage::path("pdf/".$attachments["invoice"]));  
                         }
 
                         if(isset($attachments["receipt"])){
-                            $message->attach(Storage::get("pdf/".$attachments["receipt"]));  
+                            $message->attach(Storage::path("pdf/".$attachments["receipt"]));  
                         }
 
                         if(isset($attachments["additional_attachment"])){

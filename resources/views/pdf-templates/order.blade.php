@@ -182,7 +182,9 @@
                 <td colspan="2" style="border: 1px solid #000; padding:10px 20px;">
                     <p><b>Inscription:</b></p>
                     <p>
-                        {!!$inscription->inscription_details!!}
+                        @if(isset($inscription))
+                            {!!$inscription->inscription_details!!}
+                        @endif
                     </p>
                 </td>
             </tr>
