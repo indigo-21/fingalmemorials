@@ -40,9 +40,18 @@
                                     <div class="col-lg-6">
                                         <select class="selectpicker" name="order_month">
                                             @foreach ($orderDates as $orderDate)
-                                                <option 
-                                                    {{$orderDate->month == date("m") ? "selected":""}}
-                                                    value="{{$orderDate->month}}" >{{$orderDate->month_name}}</option>
+                                                <option {{ date("m") == "01" ? "selected" : "" }} value="01">January</option>
+                                                <option {{ date("m") == "02" ? "selected" : "" }} value="02">February</option>
+                                                <option {{ date("m") == "03" ? "selected" : "" }} value="03">March</option>
+                                                <option {{ date("m") == "04" ? "selected" : "" }} value="04">April</option>
+                                                <option {{ date("m") == "05" ? "selected" : "" }} value="05">May</option>
+                                                <option {{ date("m") == "06" ? "selected" : "" }} value="06">June</option>
+                                                <option {{ date("m") == "07" ? "selected" : "" }} value="07">July</option>
+                                                <option {{ date("m") == "08" ? "selected" : "" }} value="08">August</option>
+                                                <option {{ date("m") == "09" ? "selected" : "" }} value="09">September</option>
+                                                <option {{ date("m") == "10" ? "selected" : "" }} value="10">October</option>
+                                                <option {{ date("m") == "11" ? "selected" : "" }} value="11">November</option>
+                                                <option {{ date("m") == "12" ? "selected" : "" }} value="12">December</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -50,8 +59,8 @@
                                         <select class="selectpicker" name="order_year">
                                             @foreach ($orderDates as $orderDate)
                                                 <option 
-                                                    {{$orderDate->year == date("Y") ? "selected":""}}
-                                                    value="{{$orderDate->year}}" >{{$orderDate->year}}</option>
+                                                    {{$orderDate->year_list == date("Y") ? "selected":""}}
+                                                    value="{{$orderDate->year_list}}" >{{$orderDate->year_list}}</option>
                                             @endforeach
                                         </select>
                                     </div>

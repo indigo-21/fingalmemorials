@@ -67,7 +67,7 @@
                         <div class="form-btn">
                             <button class="btn btn-light btn-icon-notika waves-effect" type="button">Cancel</button>
                             <button class="btn btn-primary btn-icon-notika waves-effect send-email"
-                                type="button">Create</button>
+                                type="button">Send</button>
                         </div>
                     </div>
                 </div>

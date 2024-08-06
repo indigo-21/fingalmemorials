@@ -46,9 +46,15 @@ $(document).ready(function(){
 
             },
             success:function(data){
+              
                 let order_status    = ``;
-                let table_row       = ``;
+                let table_row       = data.length === 0 ?`
+                                        <tr style="border-bottom: 1px solid rgba(0, 0, 0, 0.3);">
+                                            <td colspan="8" class="text-center">No data available in table</td>
+                                        <tr>
+                                        ` : "";
                 data.map((data, index)=>{
+
                                 if(data.status_id == "1"){
                                     order_status =  `<div class="open-order">
                                                         Open Order
