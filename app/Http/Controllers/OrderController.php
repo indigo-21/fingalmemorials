@@ -281,12 +281,12 @@ class OrderController extends Controller
             "orders.*", 
         ]);
 
+        $query->whereMonth('orders.order_date', $month)
+        ->whereYear('orders.order_date', $year);
+
         if ($search_field == 'invoice_no') {
             $query->addSelect('account_postings.invoice_number AS invoice_number');
         }
-
-            $query->whereMonth('orders.order_date', $month)
-            ->whereYear('orders.order_date', $year);
 
         if ($order_type != 0) {
             $query->where('order_type_id', $order_type);
@@ -319,8 +319,8 @@ class OrderController extends Controller
         $orders         = self::retriveData();
         // $orders         = Order::where("deleted_at", "=", "NULL");
         $orderTypes     = OrderType::All();
-        $orderDates     = Order::selectRaw('DATE_FORMAT(order_date, "%m") as month, DATE_FORMAT(order_date, "%M") as month_name, YEAR(order_date) as year')
-                            ->groupBy('month','month_name', 'year')
+        $orderDates     = Order::selectRaw('YEAR(order_date) as year_list')
+                            ->groupBy('year_list')
                             ->get();
         $branches       = Branch::All();
 
