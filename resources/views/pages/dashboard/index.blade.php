@@ -44,7 +44,7 @@
                                 <thead>
                                     <tr>
                                         <th>Order No.</th>
-                                        <th>Date Job Fixed</th>
+                                        <th>Order Date</th>
                                         <th>Cemetery</th>
                                         <th>Customer</th>
                                         <th>Value</th>

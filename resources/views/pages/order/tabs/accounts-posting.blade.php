@@ -26,7 +26,15 @@
                         <select class="selectpicker payment-type" data-placeholder="Choose a Payment Type..." name="payment_type_id">
                             <option disabled selected value="">- Select Payment Type</option>
                             @foreach($paymentTypes as $paymentType)
-                                <option value="{{$paymentType->id}}" reason="Deposit paid by {{$paymentType->name}}">{{$paymentType->name}}</option>
+                                <option value="{{$paymentType->id}}" 
+
+                                        @if($hasInvoice)
+                                            reason="Payment Received by {{$paymentType->name}}"
+                                        @else
+                                            reason="Deposit paid by {{$paymentType->name}}"
+                                        @endif
+                                    
+                                    >{{$paymentType->name}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -133,11 +141,12 @@
                                         <td>{{$accountPosting->account_type->code}}</td>
                                         <td>{{$accountPosting->invoice_number ? $accountPosting->invoice_number : "-"}}</td>
                                         <td>
-                                            @if(isset($accountPosting->payment_type->name))
-                                                <span class="reason">Deposit paid by {{$accountPosting->payment_type->name}}<span>
+                                            @if($accountPosting->description)
+                                                <span class="reason"> {{$accountPosting->description}}<span>
                                             @else
-                                                
+                                                <span class="reason"> Invoice Ord No. {{$accountPosting->order_id}}  <span>
                                             @endif
+                                            
                                         </td>
                                         <td>{{number_format($accountPosting->debit, 2)}}</td>
                                         <td>{{number_format($accountPosting->credit,2)}}</td>

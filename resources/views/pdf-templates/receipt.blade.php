@@ -182,7 +182,7 @@
                     </table>
                 </td>
             </tr>
-            <tr>
+            <!-- <tr>
                 <td colspan="3" style="padding-top:20px;">This receipt is only valid if signed by a Fingal Memorials employee.</td>
             </tr>
             <tr>
@@ -194,7 +194,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-            </tr>
+            </tr> -->
         </tbody>
     </table>
 </body>

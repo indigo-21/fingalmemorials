@@ -221,8 +221,7 @@
                     </div>
                 </div>
             @endif
-
-
+            
             <div class="customer-form"  {{ !isset($order) ? "hidden" : "" }}>
                 <div class="col-12 col-md-6 ">
                     <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;">
@@ -302,7 +301,7 @@
                     </div>
                     <div class="nk-int-st mb-20">
                         <label>Account Number</label>
-                        <input type="text" disabled class="input-form form-control" placeholder="MON01" value="MON01"  name="account_number">
+                        <input type="text" class="input-form form-control" placeholder="MON01" value="MON01"  name="account_number">
                     </div>
                 </div>
             </div>

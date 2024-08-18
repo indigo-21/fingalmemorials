@@ -19,19 +19,19 @@
                                 <div class="input-group date nk-int-st">
                                     <span class="input-group-addon"></span>
                                     <input type="text" class="input-form form-control" 
-                                        value="{{date('d/m/Y', strtotime($orderDateStart)) }}"
+                                        value="{{$orderDateStart}}"
                                         
                                         name="order_date_start" >
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <div class="nk-datapk-ctm form-elet-mg" id="data_1" style="margin-bottom:20px;">
+                            <div class="nk-datapk-ctm form-elet-mg" id="data_1_2" style="margin-bottom:20px;">
                                 <label>Order Date End</label>
                                 <div class="input-group date nk-int-st">
                                     <span class="input-group-addon"></span>
                                     <input type="text" class="input-form form-control" 
-                                        value="{{date('d/m/Y', strtotime($orderDateEnd)) }}"
+                                        value="{{$orderDateEnd}}"
                                         
                                         name="order_date_end" >
                                 </div>

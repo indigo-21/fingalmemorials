@@ -28,7 +28,7 @@
                         </div>
                         <div class="nk-int-st mb-20">
                             <label>Chipping Colour</label>
-                            <input type="text" class="form-control" placeholder="Chipping Color" name="chipping_color">
+                            <input type="text" class="form-control" placeholder="Chipping Colour" name="chipping_color">
                         </div>
                         <div class="nk-int-st mb-20">
                             <label>Job Cost</label>
