@@ -14,13 +14,13 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $order = Order::orderBy('created_at','desc')->get();
-        $customer = Customer::orderBy('created_at','desc')
-            ->limit(10)
-            ->get();
+        $order      = Order::orderBy('order_date','desc')->get();
+        $customer   = Customer::orderBy('created_at','desc')
+                        ->limit(10)
+                        ->get();
         return view('pages.dashboard.index')
-            ->with('orders', $order)
-            ->with('customers', $customer);
+                    ->with('orders', $order)
+                    ->with('customers', $customer);
     }
 
     /**

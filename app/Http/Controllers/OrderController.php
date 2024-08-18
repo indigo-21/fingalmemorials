@@ -31,6 +31,7 @@ use Carbon\Carbon;
 use DB;
 use Mail;
 use Auth;
+use DateTime;
 
 
 class OrderController extends Controller
@@ -76,7 +77,7 @@ class OrderController extends Controller
                     "analysis_id"           => "<strong>Analysis</strong>", 
                     "details_of_work"       => "<strong>Details of Work</strong>", 
                     "headstone_shape"       => "<strong>Headstone Shape</strong>", 
-                    "chipping_color"       => "<strong>Chipping Color</strong>", 
+                    "chipping_color"       => "<strong>Chipping Colour</strong>", 
                     "job_cost"              => "<strong>Job Cost</strong>", 
                     "discount"              => "<strong>Discount</strong>",
                     "total"                 => "<strong>Total</strong>",
@@ -139,7 +140,8 @@ class OrderController extends Controller
                         "customerData.surname"       => ['required','string'],
                         "customerData.mobile"        => ['nullable','string','min:5','max:900'],
                         "customerData.telno"         => ['nullable','string','min:5','max:900'],
-                        "customerData.email"         => ['required','email','string','min:5','max:900', Rule::unique('customers', 'email')->ignore($id ? $id : "")],
+                        // "customerData.email"         => ['required','email','string','min:5','max:900', Rule::unique('customers', 'email')->ignore($id ? $id : "")],
+                        "customerData.email"         => ['required','email','string','min:5','max:900'],
                         "customerData.address1"      => ['nullable','string','min:2','max:900'],
                         "customerData.address2"      => ['nullable','string','min:2','max:900'],
                         "customerData.address3"      => ['nullable','string','min:2','max:900'],
@@ -154,11 +156,11 @@ class OrderController extends Controller
                             "orderData.order_type_id"             => ['required'],
                             "orderData.order_date"                => ['required'],
                             "orderData.order_branch"              => ['required'],
-                            "orderData.deceased_name"             => ['required','min:2','max:150'],
-                            "orderData.date_of_death"             => ['required'],
+                            "orderData.deceased_name"             => ['nullable','min:2','max:150'],
+                            "orderData.date_of_death"             => ['required','date_format:d/m/Y'],
                             "orderData.order_headline"            => ['nullable','string','min:5','max:50'],
                             "orderData.cemetery_id"               => ['nullable'],
-                            "orderData.plot_grave"                => ['nullable','string','min:5','max:20'],
+                            "orderData.plot_grave"                => ['nullable','string','min:3','max:20'],
                             "orderData.grave_space_id"            => ['nullable'],
                             "orderData.special_instructions"      => ['nullable','string','min:5','max:150'],
                             "orderData.source_id"                 => ['nullable'],
@@ -169,18 +171,18 @@ class OrderController extends Controller
                 $data = [
                     "analysis_id"           => ['required'],
                     "details_of_work"       => ['required','string','min:2','max:300'], 
-                    "headstone_shape"       => ['string','min:2','max:300'], 
-                    "chipping_color"        => ['string','min:2','max:300'], 
+                    "headstone_shape"       => ['nullable','max:300'], 
+                    "chipping_color"        => ['nullable','max:300'], 
                     "job_cost"              => ['required','min:1'], 
                     "discount"              => ['nullable','min:1'], 
-                    "total"                 => ['required','min:1'], 
+                    "total"                 => ['nullable','min:1'], 
                     "additional_fee"        => ['nullable','min:1'], 
-                    "net_amount"            => ['required','min:1'], 
+                    "net_amount"            => ['nullable','min:1'], 
                     "vat_code_id"           => ['required'],
-                    "vat_amount"            => ['required','min:1'],
+                    "vat_amount"            => ['nullable','min:1'],
                     "zero_rated_amount"     => ['nullable','min:1'],
                     "adjusment_amount"      => ['nullable','min:1'],
-                    "gross_amount"          => ['required','min:1'],
+                    "gross_amount"          => ['nullable','min:1'],
                 ];
 
             break;
@@ -361,7 +363,9 @@ class OrderController extends Controller
 
         $orderTypes     = OrderType::where("active", 1)->get();
         $branches       = Branch::All();
-        $cemeteries     = Cemetery::All();
+        // $cemeteries     = Cemetery::All();
+        $cemeteries     = Cemetery::orderBy("name","asc")->get();
+
         $sources        = Source::All();
         $categories     = Category::All();
         $graveSpaces    = GraveSpace::All();
@@ -459,7 +463,7 @@ class OrderController extends Controller
 
         $orderTypes     = OrderType::where("active", 1)->get();
         $branches       = Branch::All();
-        $cemeteries     = Cemetery::All();
+        $cemeteries     = Cemetery::orderBy("name","asc")->get();
         $sources        = Source::All();
         $categories     = Category::All();
         $graveSpaces    = GraveSpace::All();
@@ -604,7 +608,8 @@ class OrderController extends Controller
         // GENERAL DETAILS DATA ONLY
         $orderTypes     = OrderType::where("active", 1)->get();
         $branches       = Branch::where("id",$order->branch_id)->get();
-        $cemeteries     = Cemetery::All();
+        // $cemeteries     = Cemetery::All();
+        $cemeteries     = Cemetery::orderBy("name","asc")->get();
         $sources        = Source::All();
         $categories     = Category::All();
         $graveSpaces    = GraveSpace::All();
@@ -787,19 +792,20 @@ class OrderController extends Controller
     
         $customerData               = $isInsert ? new Customer : Customer::findOrFail($customer_id);
         // Setting the column values
-        $customerData->title_id     = $data["title_id"];
-        $customerData->firstname    = $data["firstname"];
-        $customerData->middlename   = $data["middlename"];
-        $customerData->surname      = $data["surname"];
-        $customerData->mobile       = $data["mobile"];
-        $customerData->telno        = $data["telno"];
-        $customerData->email        = $data["email"];
-        $customerData->address1     = $data["address1"];
-        $customerData->address2     = $data["address2"];
-        $customerData->address3     = $data["address3"];
-        $customerData->town         = $data["town"];
-        $customerData->county       = $data["county"];
-        $customerData->postcode     = $data["postcode"];
+        $customerData->title_id           = $data["title_id"];
+        $customerData->firstname          = $data["firstname"];
+        $customerData->middlename         = $data["middlename"];
+        $customerData->surname            = $data["surname"];
+        $customerData->mobile             = $data["mobile"];
+        $customerData->telno              = $data["telno"];
+        $customerData->email              = $data["email"];
+        $customerData->address1           = $data["address1"];
+        $customerData->address2           = $data["address2"];
+        $customerData->address3           = $data["address3"];
+        $customerData->town               = $data["town"];
+        $customerData->county             = $data["county"];
+        $customerData->postcode           = $data["postcode"];
+        $customerData->account_number     = $data["account_number"];
 
         if($isInsert){
             $customerData->created_by = Auth::id();
@@ -816,25 +822,30 @@ class OrderController extends Controller
     // INSERT OR UPDATE IN `order` TABLE
     public function modifyOrder($data, $customer_id, $order_id = false){
 
-        // Indenty the function what will be the action taken
+        // Declaring DATE Format
+        $date_of_death      = DateTime::createFromFormat("d/m/Y", $data["date_of_death"]);
+        $job_was_fixed_on   = DateTime::createFromFormat("d/m/Y", $data["job_was_fixed_on"]);
+        $order_date         = DateTime::createFromFormat("d/m/Y", $data["order_date"]);
+        
+        // Indentify the function what will be the action taken
         $isInsert                           = !$order_id ? true : false;
         $orderData                          = $isInsert ? new Order : Order::findOrFail($order_id);
         // Setting the column values
         $orderData->order_type_id           = $data["order_type_id"];    
         $orderData->branch_id               = $data["order_branch"];
         $orderData->deceased_name           = $data["deceased_name"];
-        $orderData->date_of_death           = date('Y-m-d H:i:s', strtotime($data["date_of_death"]));
+        $orderData->date_of_death           = $date_of_death->format("Y-m-d H:i:s");
         $orderData->order_headline          = $data["order_headline"];
         $orderData->cemetery_id             = $data["cemetery_id"];
         $orderData->plot_grave              = $data["plot_grave"];
         $orderData->inscription_completed   = $data["inscription_completed"] == "on" ? "1" : "0";
-        $orderData->job_was_fixed_on        = $data["job_was_fixed_on"] ? date('Y-m-d H:i:s', strtotime($data["job_was_fixed_on"])) : NULL;
+        $orderData->job_was_fixed_on        = $data["job_was_fixed_on"] ? $job_was_fixed_on->format("Y-m-d H:i:s") : NULL;
         $orderData->source_id               = $data["source_id"];
         $orderData->category_id             = $data["category_id"];
         $orderData->customer_id             = $customer_id;
         $orderData->grave_space_id          = $data["grave_space_id"];
         $orderData->special_instructions    = $data["special_instructions"];
-        $orderData->order_date              = date('Y-m-d H:i:s', strtotime($data["order_date"]));
+        $orderData->order_date              = $order_date->format("Y-m-d H:i:s");
 
         if($isInsert){
             $orderData->balance             = number_format(0, 2);
@@ -981,12 +992,12 @@ class OrderController extends Controller
                 break;
 
             case '2':
-                $ruleType = "account_posting_refund";
+                    $ruleType = "account_posting_refund";
                 break;
             
             default:
                 // 3 = INVOICE
-                $ruleType = "account_posting_invoice";
+                    $ruleType = "account_posting_invoice";
                 break;
         }
 
@@ -1001,19 +1012,33 @@ class OrderController extends Controller
         $accountPostingData->order_id           = $request->order_id;
         $accountPostingData->payment_type_id    = $request->payment_type_id;
         $accountPostingData->payment            = $request->payment;
+        $accountPostingData->description        = $request->reason;
         
         if($request->account_type_id != "3"){
             // PAYMENT = CREDIT
             $accountPostingData->credit        = $request->payment; 
+
+            // CHECK IF THERE WAS AN INVOICE
+                    $hasOrderInvoice                   = AccountPosting::where("order_id",$request->order_id)
+                    ->where("account_type_id", 3)
+                    ->exists();
+            // 1201 = PAYMENT RECEIVED
+            // 2112 = DEPOSIT
+            $accountPostingData->nominal       = $hasOrderInvoice ? "1201": "2112"; 
+
         }else{
              // INVOICE = DEBIT
             $accountPostingData->debit         = $request->payment; 
-            
+            // INVOICING (NOMINAL = 4100)
+            $accountPostingData->nominal       = "4100"; 
+            $accountPostingData->description   = "Invoice To: $request->invoice_to - Order No. $order_id";
+
             // MODIFY ORDER STATUS
             $orderData                         = Order::findOrFail($request->order_id);
             $orderData->status_id              = 2;
             $orderData->updated_by             = Auth::id();  
             $orderData->save();
+
         }
 
         $accountPostingData->account_type_id    = $request->account_type_id;
@@ -1025,8 +1050,12 @@ class OrderController extends Controller
 
             $accountPostingData->invoice_number     = $lastInvoice; 
         }
+        
 
-        $accountPostingData->created_at    = date('Y-m-d H:i:s', strtotime($request->date_received));
+        
+
+        $date_received                     = DateTime::createFromFormat("d/m/Y",$request->date_received);
+        $accountPostingData->created_at    = $date_received->format('Y-m-d H:i:s');
 
         if($isInsert){
             $accountPostingData->created_by = Auth::id();
@@ -1070,6 +1099,7 @@ class OrderController extends Controller
         }
 
 
+        // 
 
     }
 

@@ -7,6 +7,7 @@ use App\Models\Order;
 use Carbon\Carbon;
 use Response;
 use DB;
+use DateTime;
 
 class OrderReportController extends Controller
 {
@@ -15,7 +16,11 @@ class OrderReportController extends Controller
      */
     public function showData($order_date_start = false, $order_date_end = false)
     {
-        
+
+        $start_date     = DateTime::createFromFormat("d/m/Y", $order_date_start)->format("Y-m-d");     
+        $end_date       = DateTime::createFromFormat("d/m/Y", $order_date_end)->format("Y-m-d");     
+
+   
         $orderReport = Order::leftJoin("order_types", "orders.order_type_id", "=", "order_types.id")
             ->leftJoin("branches", "orders.branch_id", "=", "branches.id")
             ->leftJoin("customers", "orders.customer_id", "=", "customers.id")
@@ -26,16 +31,16 @@ class OrderReportController extends Controller
                 DB::raw("CONCAT(customers.firstname, ' ' , customers.surname) as customer_name")
             ]);
         if ($order_date_start && $order_date_end) {
-            $orderReport->whereBetween('order_date', [$order_date_start, $order_date_end]);
+            $orderReport->whereBetween('order_date', [$start_date, $end_date]);
         }
         return $orderReport->get();
     }
     public function index()
     {
-        $orderDateStart = Carbon::now()->subWeek()->format('Y-m-d');
-        $orderDateEnd = Carbon::now()->format('Y-m-d');
-
-        $orderReports = self::showData($orderDateStart, $orderDateEnd);
+        $orderDateStart = Carbon::now()->subWeek()->format("d/m/Y");
+        $orderDateEnd   = Carbon::now()->format("d/m/Y");
+        // dd($orderDateEnd);
+        $orderReports   = self::showData($orderDateStart, $orderDateEnd);
 
         return view('pages.reports.order-report.index')
             ->withOrderReports($orderReports)
@@ -45,9 +50,9 @@ class OrderReportController extends Controller
 
     public function search(Request $request)
     {
-        $order_date_start = date('Y-m-d', strtotime($request->startDate));
-        $order_date_end = date('Y-m-d', strtotime($request->endDate));
-
+        $order_date_start     = DateTime::createFromFormat("d/m/Y", $request->startDate)->format("d/m/Y");  
+        $order_date_end       = DateTime::createFromFormat("d/m/Y", $request->endDate)->format("d/m/Y");  
+    
         $orderReports = self::showData($order_date_start, $order_date_end);
 
         return Response::json($orderReports);
