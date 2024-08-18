@@ -75,7 +75,7 @@ $(document).ready(function(){
 
                                 table_row       += `
                                                         <tr>
-                                                            <td><a href="${SYSTEM_URL}/order/edit/general-details/${data.id}">${index + 1}</a></td>
+                                                            <td><a href="${SYSTEM_URL}/order/edit/general-details/${data.id}">${data.id}</a></td>
                                                             <td>${data.order_date_format}</td>
                                                             <td>${data.branch_name}</td>
                                                             <td>${data.order_type}</td>

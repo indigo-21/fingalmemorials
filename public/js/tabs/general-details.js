@@ -164,7 +164,7 @@ $(document).on("change","#input-cemetery",function(){
             mobile:             $("[name=mobile]").val(),
             telno:              $("[name=telno]").val(),
             email:              $("[name=email]").val(),
-            account_number :    $("[name=account_number ]").val(),
+            account_number :    $("[name=account_number]").val(),
             address1:           $("[name=address1]").val(),
             address2:           $("[name=address2]").val(),
             address3:           $("[name=address3]").val(),

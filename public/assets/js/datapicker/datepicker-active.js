@@ -5,7 +5,17 @@
 		keyboardNavigation: false,
 		forceParse: false,
 		calendarWeeks: true,
-		autoclose: true
+		autoclose: true,
+		format: "dd/mm/yyyy"
+	});
+
+	$('#data_1_2 .input-group.date').datepicker({
+		todayBtn: "linked",
+		keyboardNavigation: false,
+		forceParse: false,
+		calendarWeeks: true,
+		autoclose: true,
+		format: "dd/mm/yyyy"
 	});
 
 	$('#data_2 .input-group.date').datepicker({

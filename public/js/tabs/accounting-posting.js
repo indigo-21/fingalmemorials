@@ -39,13 +39,16 @@ $(document).ready(function(){
             payment = $("#order-value").val(); 
         }
 
-
-
         let data = {
             order_id,account_posting_id, account_type_id, date_received, payment_type_id,reason,payment,invoice_to
         };
         
-        modifyAccountPosting(data, isInsert);
+        if($("#order-value").val() == "0.00"){
+            errorMessage(`<strong>Job Details Not Found.</strong> Please fill out the Job details first.`, true);
+        }else{
+            modifyAccountPosting(data, isInsert);
+        }
+        
 
     });
 
@@ -147,13 +150,20 @@ $(document).ready(function(){
 
 
 
-    function errorMessage(error){
-        let errorArray  = error.responseJSON.errors;
+    function errorMessage(error, fromCustom = false){
+        let errorArray  = "";
         let errorList   = "";
-    
-        $.each(errorArray, function(key, value){
-            errorList += `<li> <strong>- </strong>${value[0]}</li>`;
-        });
+       if(!fromCustom){
+            errorArray  = error.responseJSON.errors;
+            errorList   = "";
+        
+            $.each(errorArray, function(key, value){
+                errorList += `<li> <strong>- </strong>${value[0]}</li>`;
+            });
+
+       }else{
+            errorList += `<li> <strong>- </strong> ${error}</li>`;
+       }
         
         let html = `<div class="alert alert-danger alert-dismissible alert-mg-b-0" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
