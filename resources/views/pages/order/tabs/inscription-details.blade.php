@@ -1,5 +1,11 @@
 @extends ('pages.order.form')
 @section('tab-inscription-details')
+<style>
+    .note-editable{
+        height: 650px !important;
+    }
+
+</style>
 <div>
     <div class="row mt-50">
         <h3 class="title text-center">Inscription Details</h3>

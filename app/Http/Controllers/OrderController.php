@@ -135,13 +135,13 @@ class OrderController extends Controller
             case 'customer':
                 $data = [
                         "customerData.title_id"      => ['required'],
-                        "customerData.firstname"     => ['required','string'],
+                        "customerData.firstname"     => ['nullable','string'],
                         "customerData.middlename"    => ['nullable','string'],
                         "customerData.surname"       => ['required','string'],
                         "customerData.mobile"        => ['nullable','string','min:5','max:900'],
                         "customerData.telno"         => ['nullable','string','min:5','max:900'],
                         // "customerData.email"         => ['required','email','string','min:5','max:900', Rule::unique('customers', 'email')->ignore($id ? $id : "")],
-                        "customerData.email"         => ['required','email','string','min:5','max:900'],
+                        "customerData.email"         => ['nullable','email','string','max:900'],
                         "customerData.address1"      => ['nullable','string','min:2','max:900'],
                         "customerData.address2"      => ['nullable','string','min:2','max:900'],
                         "customerData.address3"      => ['nullable','string','min:2','max:900'],
@@ -157,7 +157,7 @@ class OrderController extends Controller
                             "orderData.order_date"                => ['required'],
                             "orderData.order_branch"              => ['required'],
                             "orderData.deceased_name"             => ['nullable','min:2','max:150'],
-                            "orderData.date_of_death"             => ['required','date_format:d/m/Y'],
+                            "orderData.date_of_death"             => ['nullable','date_format:d/m/Y'],
                             "orderData.order_headline"            => ['nullable','string','min:5','max:50'],
                             "orderData.cemetery_id"               => ['nullable'],
                             "orderData.plot_grave"                => ['nullable','string','min:3','max:20'],
@@ -177,7 +177,7 @@ class OrderController extends Controller
                     "discount"              => ['nullable','min:1'], 
                     "total"                 => ['nullable','min:1'], 
                     "additional_fee"        => ['nullable','min:1'], 
-                    "net_amount"            => ['nullable','min:1'], 
+                    "net_amount"            => ['required','min:1'], 
                     "vat_code_id"           => ['required'],
                     "vat_amount"            => ['nullable','min:1'],
                     "zero_rated_amount"     => ['nullable','min:1'],
@@ -209,6 +209,11 @@ class OrderController extends Controller
                 ];
             break;
             case 'account_posting_invoice':
+                $data = [
+                    "date_received"       => ['required'],
+                ];
+            break;
+            case 'account_posting_credit':
                 $data = [
                     "date_received"       => ['required'],
                 ];
@@ -805,7 +810,7 @@ class OrderController extends Controller
         $customerData->town               = $data["town"];
         $customerData->county             = $data["county"];
         $customerData->postcode           = $data["postcode"];
-        $customerData->account_number     = $data["account_number"];
+        $customerData->account_number     = $data["account_number"] == "" ? "MON01" : $data["account_number"];
 
         if($isInsert){
             $customerData->created_by = Auth::id();
@@ -987,17 +992,20 @@ class OrderController extends Controller
     public function modifyAccountPosting(Request $request){
 
         switch ($request->account_type_id) {
-            case '1':
+            case '1': // PAYMENT
                     $ruleType = "account_posting_payment";
                 break;
 
-            case '2':
+            case '2': //REFUND
                     $ruleType = "account_posting_refund";
+                break;
+            case '3': //INVOICE
+                    $ruleType = "account_posting_invoice";
                 break;
             
             default:
-                // 3 = INVOICE
-                    $ruleType = "account_posting_invoice";
+                // 4 = Credits
+                    $ruleType = "account_posting_credit";
                 break;
         }
 
@@ -1011,7 +1019,7 @@ class OrderController extends Controller
         
         $accountPostingData->order_id           = $request->order_id;
         $accountPostingData->payment_type_id    = $request->payment_type_id;
-        $accountPostingData->payment            = $request->payment;
+        $accountPostingData->payment            = str_replace(",", "", $request->payment);
         $accountPostingData->description        = $request->reason;
         
         if($request->account_type_id != "3"){
@@ -1028,7 +1036,7 @@ class OrderController extends Controller
 
         }else{
              // INVOICE = DEBIT
-            $accountPostingData->debit         = $request->payment; 
+            $accountPostingData->debit         = str_replace(",", "",$request->payment); 
             // INVOICING (NOMINAL = 4100)
             $accountPostingData->nominal       = "4100"; 
             $accountPostingData->description   = "Invoice To: $request->invoice_to - Order No. $order_id";
@@ -1313,9 +1321,8 @@ class OrderController extends Controller
             switch ($type) {
                 case 'order_details':
 
-                        $inscription            = Inscription::where("order_id", $order_id)->get();  
+                        $inscription                = Inscription::where("order_id", $order_id)->first();  
                       
-                        
                         $data["job_details"]        = JobDetail::where("order_id", $order_id)->get();
                         $data["account_posting"]    = AccountPosting::where("order_id", $order_id)->get();
 
@@ -1323,7 +1330,6 @@ class OrderController extends Controller
                             $data["inscription"]    = $inscription;
                         }
                     
-                        
                         $pdf                        = Pdf::loadView("pdf-templates.order", $data);
                         $filename                   = "Order-".$order_id.".pdf";
 

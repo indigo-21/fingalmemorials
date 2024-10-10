@@ -133,9 +133,9 @@
             </tr>
             <tr>
                 <td style="border: 1px solid #000; padding:10px 20px;">
-                    <p><b>Deceased: </b> {{$order->deceased_name}}</p>
-                    <p><b>Cemetery: </b> {{$order->cemetery->name}}</p>
-                    <p><b>Grave No.: </b> {{$order->plot_grave}} </p>
+                    <p><b>Deceased: </b> {{ $order->deceased_name   ? $order->deceased_name     :  "-" }}</p>
+                    <p><b>Cemetery: </b> {{ $order->cemetery_id     ? $order->cemetery->name    :  "-" }}</p>
+                    <p><b>Grave No.: </b> {{ $order->plot_grave     ? $order->plot_grave        :  "-" }} </p>
                     <!-- <p><b>Letter Type: </b> Address </p>
                     <p><b>Base/Ledger: </b>Address </p>
                     <p><b>Material: </b>Address </p>
@@ -144,7 +144,7 @@
                 <td style="border: 1px solid #000; padding:10px 20px;">
                     <p><b>Date of Death:</b> {{date('d/m/Y', strtotime($order->date_of_death)) }}</p>
                     <!-- <p><b>Future Ins: </b> </p> -->
-                    <p><b>Grave Space:</b> {{$order->graveSpace->name}}</p>
+                    <p><b>Grave Space:</b> {{$order->grave_space_id ? $order->graveSpace->name : "-"}}</p>
                     <!-- <p><b>Chippings / Soil: </b></p>
                     <p><b>Flower Containers: </b></p>
                     <p><b>Grave Clearly Marked: </b></p> -->
@@ -153,7 +153,9 @@
             <tr>
                 <td colspan="2" style="border: 1px solid #000; padding:5px 20px;">
                     <p><b>Description:</b></p>
-                    <p></p>
+                    @foreach ($job_details as $job_detail)
+                        <p>{{$job_detail->details_of_work}}</p>
+                    @endforeach
                 </td>
             </tr>
             <tr>
@@ -174,7 +176,7 @@
                 <td style="border: 1px solid #000; padding:10px 20px;">
                     <p><b>Special Instructions:</b></p>
                     <p>
-                        {{$customer->special_instructions}}
+                        {{$order->special_instructions}}
                     </p>
                 </td>
             </tr>

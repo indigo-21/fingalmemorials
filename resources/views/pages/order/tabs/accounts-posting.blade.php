@@ -80,7 +80,7 @@
                         <input type="text" class="form-control" placeholder="Reason" disabled name="reason">
                     </div>
                     <div class="nk-int-st" style="margin-bottom:20px;">
-                        <label>Payment</label>
+                        <label>Refund Amount</label>
                         <input type="text" class="form-control" placeholder="Payment" name="payment">
                     </div>
                     <div class="row mt-20">
@@ -106,6 +106,34 @@
                     <div class="nk-int-st mb-20">
                         <label>Invoice To</label>
                         <input type="text" class="form-control" disabled placeholder="Reason" name="invoice_to" value="{{$customer->title->name}} {{$customer->firstname}} {{$customer->middlename}} {{$customer->surname}}">
+                    </div>
+                    <div class="row mt-20">
+                        <div class="col-md-12 text-center">
+                            <div class="account_posting_buttons">
+                                <div class="form-btn">
+                                    <button class="btn btn-light btn-icon-notika waves-effect cancel-account-posting" type="button">Cancel</button>
+                                    <button class="btn btn-primary btn-icon-notika waves-effect add-account-posting" orderid="{{$order->id}}" type="button">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-form-content" id="tab-form-content-4" style="display:none;">
+                    <h4 class="title-header title-header-md">Credits Details</h4>
+                    <div class="nk-datapk-ctm form-elet-mg bv-20" id="data_1" style="margin-bottom:20px;">
+                        <label>Date of the Credits</label>
+                        <div class="input-group date nk-int-st">
+                            <span class="input-group-addon"></span>
+                            <input type="text" class="form-control" value="{{date('d/m/Y')}}" name="date_received">
+                        </div>
+                    </div>
+                    <div class="nk-int-st mb-20">
+                        <label>Credits To</label>
+                        <input type="text" class="form-control" disabled placeholder="Reason" name="credits_to" value="{{$customer->title->name}} {{$customer->firstname}} {{$customer->middlename}} {{$customer->surname}}">
+                    </div>
+                    <div class="nk-int-st mb-20">
+                        <label>Reason</label>
+                        <input type="text" class="form-control" placeholder="Reason" name="reason">
                     </div>
                     <div class="row mt-20">
                         <div class="col-md-12 text-center">

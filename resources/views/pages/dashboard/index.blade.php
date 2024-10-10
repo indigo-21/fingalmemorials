@@ -58,7 +58,7 @@
                                                     href="{{ url('order/edit/general-details') }}/{{ $order->id }}">{{ $order->id }}</a>
                                             </td>
                                             <td>{{ date('d/m/Y', strtotime($order->created_at)) }}</td>
-                                            <td>{{ $order->cemetery->name }}</td>
+                                            <td>{{ $order->cemetery->name ?? "-" }}</td>
                                             <td>{{ $order->customer->firstname }} {{ $order->customer->surname }}</td>
                                             <td>{{ number_format($order->value,2) }}</td>
                                             <td>{{ number_format($order->balance,2) }}</td>

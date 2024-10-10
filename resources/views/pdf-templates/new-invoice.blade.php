@@ -122,13 +122,13 @@
     <table class="top-content" style="">
         <tr>
             <td colspan="2">
-                <h1>Fingal Memorials</h1>
+                <h1>{{$order->branch->name}}</h1>
             </td>
         </tr>
         <tr>
             <td colspan="2" class="p-address">
-                <p>Malahide Road, Balgriffin Dublin D17DR58</p>
-                <p>Tel : 8484843</p>
+                <p>{{$order->branch->address1}} {{$order->branch->address2}} {{$order->branch->address2}} {{$order->branch->county}} {{$order->branch->town}} {{$order->branch->postcode}}</p>
+                <p>Phone : {{$order->branch->phone}} </p>
                 <p>Email : info@fingalmemorials.ie</p>
             </td>
         </tr>
@@ -140,7 +140,7 @@
         <tr>
             <td style="border: 1px solid #000; padding:10px 20px;">
                 <p><b>Name: </b>{{$customer->title->name}} {{$customer->firsname}} {{$customer->middlename}} {{$customer->surname}}</p>
-                <p><b>Address: </b>{{$customer->address1}}, {{$customer->town}}, {{$customer->county}}, {{$customer->postcode}} </p>
+                <p><b>Address: </b>{{$customer->address1}},{{$customer->address2}},{{$customer->address3}} {{$customer->town}}, {{$customer->county}}, {{$customer->postcode}} </p>
             </td>
             <td style="border: 1px solid #000; padding:10px 20px;">
                 <p><b>Invoice Date:</b> {{date('d/m/Y', strtotime($accountPostings->created_at)) }}</p>

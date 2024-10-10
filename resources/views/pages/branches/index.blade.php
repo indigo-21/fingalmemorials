@@ -37,7 +37,7 @@
                                         <th>Code</th>
                                         <th>Branch Name</th>
                                         <th>Address</th>
-                                        <th>Post Code</th>
+                                        <th>Phone No.</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>

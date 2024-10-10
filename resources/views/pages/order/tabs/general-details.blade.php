@@ -74,10 +74,6 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="nk-int-st" style="margin-bottom:20px;">
-                    <label>Special Instructions</label>
-                    <textarea class="form-control" placeholder="Special Instructions" style="height:90px;" name="special_instructions">{{isset($order) ? $order->special_instructions : ''}}</textarea>
-                </div>
             </div>
             
             <div class="col-12 col-md-6">
@@ -173,6 +169,20 @@
                             >{{$category->name}}</option>
                         @endforeach
                     </select>
+                </div>
+            </div>
+            
+            <div class="col-12">
+                <div class="nk-int-st" style="margin-bottom:20px;">
+                    <label>Special Instructions</label>
+                    <textarea class="form-control" placeholder="Special Instructions" style="height:90px;" name="special_instructions">{{isset($order) ? $order->special_instructions : ''}}</textarea>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="nk-int-st" style="margin-bottom:20px;">
+                    <label>Notes (For admin Only)</label>
+                    <textarea class="form-control" placeholder="Notes" style="height:90px;" name="order_notes"></textarea>
                 </div>
             </div>
         </div>

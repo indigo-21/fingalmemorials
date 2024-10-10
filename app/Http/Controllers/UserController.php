@@ -114,12 +114,13 @@ class UserController extends Controller
     }
     public function formRule($id = false){
         return [
-            "firstname"    => ['required','string','min:2','max:50'],
-            "lastname"   => ['required','string','min:2','max:50'],
-            "username"   => ['required','string','min:2','max:50',Rule::unique('users')->ignore($id ? $id : "")->whereNull('deleted_at')],
+            "firstname"         => ['required','string','min:2','max:50'],
+            "lastname"          => ['required','string','min:2','max:50'],
+            "username"          => ['required','string','min:2','max:50',Rule::unique('users')->ignore($id ? $id : "")->whereNull('deleted_at')],
             "access_level_id"   => ['required','integer'],
-            "email"   => ['required','string',Rule::unique('users')->ignore($id ? $id : "")->whereNull('deleted_at')],
-            "password"   => ['required','string'],
+            // "email"   => ['required','string',Rule::unique('users')->ignore($id ? $id : "")->whereNull('deleted_at')],
+            "email"             => ['required','string', 'email'],
+            "password"          => ['required','string'],
         ];
     }
 
