@@ -182,7 +182,7 @@
             <div class="col-12">
                 <div class="nk-int-st" style="margin-bottom:20px;">
                     <label>Notes (For admin Only)</label>
-                    <textarea class="form-control" placeholder="Notes" style="height:90px;" name="order_notes"></textarea>
+                    <textarea class="form-control" placeholder="Notes" style="height:90px;" name="notes">{{isset($order) ? $order->notes : ''}}</textarea>
                 </div>
             </div>
         </div>

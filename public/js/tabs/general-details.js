@@ -150,6 +150,7 @@ $(document).on("change","#input-cemetery",function(){
             area:                       $("[name=area]").val(),
             order_date:                 $("[name=order_date]").val(),
             special_instructions:       $("[name=special_instructions]").val(),
+            notes:                      $("[name=notes]").val(),
 
         };
         return data;

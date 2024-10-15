@@ -223,6 +223,7 @@ $(document).ready(function() {
 
 
     function errorMessage(error){
+        console.log(error);
         let errorArray  = error.responseJSON.errors;
         let errorList   = "";
     

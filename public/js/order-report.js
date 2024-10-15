@@ -46,7 +46,7 @@ $(document).ready(function() {
                 </tr>
                 `;  
                 data.map((orderData, index) => {
-                    tableRow = `
+                    tableRow += `
                     <tr>
                         <td>${orderData.id}</td>
                         <td>${orderData.order_date}</td>

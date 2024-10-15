@@ -3,7 +3,7 @@
     <div id="account-posting-container" orderid="{{$order->id}}">
         <div class="row mt-40 mb-40">
             <h3 class="title text-center">Accounts Posting</h3>
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-12">
                 <div class="chosen-select-act fm-cmp-mg mb-40">
                     <label>Type</label>
                     <select class="selectpicker" id="payment_type" name="account_type_id">
@@ -39,8 +39,8 @@
                         </select>
                     </div>
                     <div class="nk-int-st mb-20">
-                        <label>Reason</label>
-                        <input type="text" class="form-control" placeholder="Reason" disabled name="reason">
+                        <label>Details</label>
+                        <input type="text" class="form-control" placeholder="Details" disabled name="reason">
                     </div>
                     <div class="nk-int-st" style="margin-bottom:20px;">
                         <label>Payment</label>
@@ -71,17 +71,17 @@
                         <select class="selectpicker payment-type" data-placeholder="Choose a Country..." name="payment_type_id">
                             <option disabled selected value="">- Select Payment Type</option>
                             @foreach($paymentTypes as $paymentType)
-                                <option value="{{$paymentType->id}}" reason="Deposit paid by {{$paymentType->name}}">{{$paymentType->name}}</option>
+                                <option value="{{$paymentType->id}}" reason="Refund paid by {{$paymentType->name}}">{{$paymentType->name}}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="nk-int-st mb-20">
-                        <label>Reason</label>
+                        <label>Details</label>
                         <input type="text" class="form-control" placeholder="Reason" disabled name="reason">
                     </div>
                     <div class="nk-int-st" style="margin-bottom:20px;">
                         <label>Refund Amount</label>
-                        <input type="text" class="form-control" placeholder="Payment" name="payment">
+                        <input type="number" class="form-control" placeholder="Payment" name="payment">
                     </div>
                     <div class="row mt-20">
                         <div class="col-md-12 text-center">
@@ -129,7 +129,7 @@
                     </div>
                     <div class="nk-int-st mb-20">
                         <label>Credits To</label>
-                        <input type="text" class="form-control" disabled placeholder="Reason" name="credits_to" value="{{$customer->title->name}} {{$customer->firstname}} {{$customer->middlename}} {{$customer->surname}}">
+                        <input type="text" class="form-control" disabled placeholder="Reason" name="invoice_to" value="{{$customer->title->name}} {{$customer->firstname}} {{$customer->middlename}} {{$customer->surname}}">
                     </div>
                     <div class="nk-int-st mb-20">
                         <label>Reason</label>
@@ -147,15 +147,16 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-md-12">
                 <div class="data-table-list">
                     <div class="table-responsive">
                         <table id="data-table-basic" class="table table-striped">
                             <thead>
                                 <tr>
+                                    <th>#</th>
                                     <th>Date</th>
                                     <th>Type</th>
-                                    <th>Inv No.</th>
+                                    <th>Inv/Cred No.</th>
                                     <th>Details</th>
                                     <th>Debit</th>
                                     <th>Credit</th>
@@ -166,13 +167,34 @@
                                 @foreach($accountPostings as $accountPosting)
                                     <tr>
                                         <td>{{$loop->index + 1 }}</td>
+                                        <td>
+                                            <strong>
+                                                @switch($accountPosting->account_type_id)
+                                                    @case("1")
+                                                        Date Received
+                                                    @break
+                                                    @case("2")
+                                                        Date Refund
+                                                    @break    
+                                                    @case("3")
+                                                        Date Invoice
+                                                    @break    
+                                                    @case("4")
+                                                        Date Credits
+                                                    @break    
+                                                    @default
+                                                @endswitch
+                                            </strong>
+                                                <br>
+                                            {{date('d/m/Y', strtotime($accountPosting->created_at))}}
+                                        </td>
                                         <td>{{$accountPosting->account_type->code}}</td>
                                         <td>{{$accountPosting->invoice_number ? $accountPosting->invoice_number : "-"}}</td>
                                         <td>
                                             @if($accountPosting->description)
-                                                <span class="reason"> {{$accountPosting->description}}<span>
+                                                <span class="reason" reasons="{{$accountPosting->reasons}}"> {{$accountPosting->description}}<span>
                                             @else
-                                                <span class="reason"> Invoice Ord No. {{$accountPosting->order_id}}  <span>
+                                                <span class="reason" reasons="{{$accountPosting->reasons}}"> Invoice Ord No. {{$accountPosting->order_id}}  <span>
                                             @endif
                                             
                                         </td>

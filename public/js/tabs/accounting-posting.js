@@ -35,7 +35,7 @@ $(document).ready(function(){
         let invoice_to          = thisForm.find("[name=invoice_to]").val();
         let isInsert            = !account_posting_id ? true : false;
         // IS INVOICE
-        if(account_type_id == "3"){
+        if(account_type_id == "3" || account_type_id == "4"  ){
             payment = $("#order-value").val(); 
         }
 
@@ -60,6 +60,10 @@ $(document).ready(function(){
         let payment_type_id     = $(this).attr("paymenttypeid");
         let reason              = $(this).closest("tr").find(".reason").text();
         let payment             = $(this).attr("payment");
+
+        if(account_type_id == 4){
+            reason              = $(this).closest("tr").find(".reason").attr("reasons");
+        }
 
             $("[name=account_type_id]").val(account_type_id).trigger("change");   
             $(`#${div_id}`).find("[name=date_received]").val(date_received);   

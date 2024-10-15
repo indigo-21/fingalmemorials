@@ -63,6 +63,9 @@ function sendOrderEmail(){
             cache: false,
             contentType: false,
             processData: false,
+            beforeSend: function(){
+                
+            },
             success:function(data){
                 let order_id = data;
                 Swal.fire({

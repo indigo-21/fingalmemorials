@@ -70,7 +70,8 @@ class OrderController extends Controller
                          "orderData.grave_space_id"            => "<strong>Grave Space</strong>",
                          "orderData.special_instructions"      => "<strong>Special Instruction</strong>",
                          "orderData.source_id"                 => "<strong>Source</strong>",
-                         "orderData.category_id"               => "<strong>Category</strong>"];
+                         "orderData.category_id"               => "<strong>Category</strong>",
+                         "orderData.notes"                     => "<strong>Notes</strong>"];
            break;
            case 'job_details':
                 $data = [
@@ -165,6 +166,7 @@ class OrderController extends Controller
                             "orderData.special_instructions"      => ['nullable','string','min:5','max:150'],
                             "orderData.source_id"                 => ['nullable'],
                             "orderData.category_id"               => ['nullable'],
+                            "orderData.notes"                     => ['nullable'],
                         ];
             break;
             case 'job_details':
@@ -602,7 +604,8 @@ class OrderController extends Controller
                                                     ->where('account_type_id', 3)
                                                     ->get();
         $hasInvoice               = false;
-        $orderBalance             = floatval($jobValue) - floatval($accountPostings->sum("credit"));
+        // $orderBalance             = floatval($jobValue) - floatval($accountPostings->sum("credit"));
+        $orderBalance             = floatval($order->balance);
 
         
         if($accountPostingInvoice->isNotEmpty()){
@@ -828,18 +831,21 @@ class OrderController extends Controller
     public function modifyOrder($data, $customer_id, $order_id = false){
 
         // Declaring DATE Format
-        $date_of_death      = DateTime::createFromFormat("d/m/Y", $data["date_of_death"]);
         $job_was_fixed_on   = DateTime::createFromFormat("d/m/Y", $data["job_was_fixed_on"]);
         $order_date         = DateTime::createFromFormat("d/m/Y", $data["order_date"]);
         
         // Indentify the function what will be the action taken
         $isInsert                           = !$order_id ? true : false;
         $orderData                          = $isInsert ? new Order : Order::findOrFail($order_id);
+
+        if($data["date_of_death"]){
+            $date_of_death                  = DateTime::createFromFormat("d/m/Y", $data["date_of_death"]);
+            $orderData->date_of_death       = $date_of_death->format("Y-m-d H:i:s");
+        }
         // Setting the column values
         $orderData->order_type_id           = $data["order_type_id"];    
         $orderData->branch_id               = $data["order_branch"];
         $orderData->deceased_name           = $data["deceased_name"];
-        $orderData->date_of_death           = $date_of_death->format("Y-m-d H:i:s");
         $orderData->order_headline          = $data["order_headline"];
         $orderData->cemetery_id             = $data["cemetery_id"];
         $orderData->plot_grave              = $data["plot_grave"];
@@ -851,6 +857,7 @@ class OrderController extends Controller
         $orderData->grave_space_id          = $data["grave_space_id"];
         $orderData->special_instructions    = $data["special_instructions"];
         $orderData->order_date              = $order_date->format("Y-m-d H:i:s");
+        $orderData->notes                   = $data["notes"];
 
         if($isInsert){
             $orderData->balance             = number_format(0, 2);
@@ -1022,33 +1029,56 @@ class OrderController extends Controller
         $accountPostingData->payment            = str_replace(",", "", $request->payment);
         $accountPostingData->description        = $request->reason;
         
-        if($request->account_type_id != "3"){
-            // PAYMENT = CREDIT
-            $accountPostingData->credit        = $request->payment; 
+        // HERE
 
-            // CHECK IF THERE WAS AN INVOICE
-                    $hasOrderInvoice                   = AccountPosting::where("order_id",$request->order_id)
-                    ->where("account_type_id", 3)
-                    ->exists();
-            // 1201 = PAYMENT RECEIVED
-            // 2112 = DEPOSIT
-            $accountPostingData->nominal       = $hasOrderInvoice ? "1201": "2112"; 
+        switch ($request->account_type_id) {
+            case '1':
+                // PAYMENT = Credit column in DB
+                $accountPostingData->credit                 = str_replace(",", "",$request->payment); 
+                // CHECK IF THERE WAS AN INVOICE
+                        $hasOrderInvoice                    = AccountPosting::where("order_id",$request->order_id)
+                        ->where("account_type_id", 3)
+                        ->exists();
+                // 1201 = PAYMENT RECEIVED
+                // 2112 = DEPOSIT
+                $accountPostingData->nominal                = $hasOrderInvoice ? "1201": "2112";
 
-        }else{
-             // INVOICE = DEBIT
-            $accountPostingData->debit         = str_replace(",", "",$request->payment); 
-            // INVOICING (NOMINAL = 4100)
-            $accountPostingData->nominal       = "4100"; 
-            $accountPostingData->description   = "Invoice To: $request->invoice_to - Order No. $order_id";
+                break;
+            case '2':
+                # REFUND
+                $accountPostingData->nominal                = "0000";
+                $accountPostingData->debit                 = str_replace(",", "",$request->payment); 
 
-            // MODIFY ORDER STATUS
-            $orderData                         = Order::findOrFail($request->order_id);
-            $orderData->status_id              = 2;
-            $orderData->updated_by             = Auth::id();  
-            $orderData->save();
+                break;
+            case '3':
+                # INVOICE
+                    $accountPostingData->debit         = str_replace(",", "",$request->payment); 
+                    // INVOICING (NOMINAL = 4100)
+                    $accountPostingData->nominal       = "4100"; 
+                    $accountPostingData->description   = "Invoice To: $request->invoice_to - Order No. $order_id";
+                
+                    // MODIFY ORDER STATUS
+                    $orderData                         = Order::findOrFail($request->order_id);
+                    $orderData->status_id              = 2;
+                    $orderData->updated_by             = Auth::id();  
+                    $orderData->save();
 
+                break;
+            case '4':
+                # CREDITS
+                $accountPostingData->nominal          = "0001";
+                $accountPostingData->debit            = str_replace(",", "",$request->payment); 
+                $accountPostingData->description      = "Credits To: $request->invoice_to - Order No. $order_id";
+                $accountPostingData->reasons           = $request->reason;
+
+                break;
+            default:
+                # ADDITIONAL
+                break;
         }
 
+
+        // HERE
         $accountPostingData->account_type_id    = $request->account_type_id;
 
         if($request->invoice_to){
@@ -1102,12 +1132,18 @@ class OrderController extends Controller
 
         }else{
             #ACCOUNT POSTING
+
+            // ALTER THE VALUE OF THE BALANCE WHEN ITS REFUND
+            if($data->account_type_id == 2){
+                $order_balance = floatval($order_data->balance) + floatval($data->payment);
+            }
+            // END ALTER THE VALUE OF THE BALANCE WHEN ITS REFUND
+
             $order_data->balance  = floatval($order_balance);
             $order_data->save() || dd("Error: Updating Order Value"); 
         }
 
 
-        // 
 
     }
 
@@ -1136,7 +1172,8 @@ class OrderController extends Controller
                                                     ->where('account_type_id', 3)
                                                     ->get();
         $payments                 = AccountPosting::where("order_id", $order_id)->get()->sum("credit");
-        $orderBalance             = floatval($jobValue) - floatval($payments);
+        // $orderBalance             = floatval($jobValue) - floatval($payments);
+        $orderBalance             = floatval($order->balance);
         
        if($is_view == false){
            self::createPrintHistory($order_id, "Invoice", url('/order/invoice/')."/".$order_id."/".$invoice_number);
@@ -1167,7 +1204,8 @@ class OrderController extends Controller
 
         $jobValue       = $jobDetails->sum("gross_amount");
         $payments       = AccountPosting::where("order_id",$order_id)->get()->sum("credit");
-        $orderBalance   = floatval($jobValue) - floatval($payments);
+        // $orderBalance   = floatval($jobValue) - floatval($payments);
+        $orderBalance   = floatval($order->balance);
 
         if($is_view == false){
             self::createPrintHistory($order_id,"Receipt", url('/order/receipt/')."/".$order_id."/".$account_posting_id );
@@ -1326,7 +1364,7 @@ class OrderController extends Controller
                         $data["job_details"]        = JobDetail::where("order_id", $order_id)->get();
                         $data["account_posting"]    = AccountPosting::where("order_id", $order_id)->get();
 
-                        if(!$inscription->isEmpty()){
+                        if($inscription){
                             $data["inscription"]    = $inscription;
                         }
                     
@@ -1343,7 +1381,8 @@ class OrderController extends Controller
                     $totalVat                   = $jobDetails->sum("vat_amount");
                     $totalZeroRated             = $jobDetails->sum("zero_rated_amount");
                     $payments                   = AccountPosting::where("order_id", $order_id)->get()->sum("credit");
-                    $orderBalance               = floatval($jobValue) - floatval($payments);
+                    // $orderBalance               = floatval($jobValue) - floatval($payments);
+                    $orderBalance               = floatval($order_data->balance);
                     
                     
                     
