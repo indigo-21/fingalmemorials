@@ -76,6 +76,7 @@ class BranchController extends Controller
         $request->merge([
             'updated_by' => Auth::id()
         ]);
+        // dd($request->all());
         $branch->update($request->all());
 
         return redirect('/branches')
@@ -104,6 +105,7 @@ class BranchController extends Controller
             "town"              => ['nullable','min:2','max:50','string'],
             "county"            => ['nullable','min:2','max:50','string'],
             "phone"             => ['nullable','regex:/^[0-9*#+]+$/','min:2','max:20'],
+            "email"             => ['nullable','email','string','min:5','max:900', Rule::unique('branches')->ignore($id ? $id : "")->whereNull('deleted_at')],
         ];
     }
     public function errorMessage(){
@@ -128,6 +130,7 @@ class BranchController extends Controller
             "town"              => "<strong> Town </strong>",
             "county"            => "<strong> County </strong>",
             "phone"             => "<strong> Phone </strong>",
+            "email"             => "<strong> Email </strong>",
         ];
     }
 }

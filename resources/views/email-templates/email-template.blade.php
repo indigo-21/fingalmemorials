@@ -5,7 +5,7 @@
         <meta name="viewport"
             content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Invoice</title>
+        <title>Receipt</title>
         <style type="text/css">
             body{
                 font-family: 'open sans', 'helvetica neue', sans-serif;
@@ -33,7 +33,7 @@
         <table>
             <tr class="header">
                 <td>
-                    <h1>Fingal Memorials</h1>
+                    <h1>{{$order->branch->name}}</h1>
                 </td>
             </tr>
             <tr class="content">
@@ -46,7 +46,7 @@
             <tr class="signature">
                 <td>
                     <p><b>Kind Regards,</b></p>
-                    <p><b>Fingal Memorials</b></p>
+                    <p><b>{{$order->branch->name}}</b></p>
                 </td>
             </tr>
         </table>

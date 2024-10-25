@@ -35,7 +35,7 @@ $(document).ready(function(){
         let invoice_to          = thisForm.find("[name=invoice_to]").val();
         let isInsert            = !account_posting_id ? true : false;
         // IS INVOICE
-        if(account_type_id == "3" || account_type_id == "4"  ){
+        if(account_type_id == "3"){
             payment = $("#order-value").val(); 
         }
 
@@ -166,7 +166,11 @@ $(document).ready(function(){
             });
 
        }else{
-            errorList += `<li> <strong>- </strong> ${error}</li>`;
+            errorList += `<li> <strong>- </strong> ${error.responseJSON.message}</li>`;
+       }
+
+       if(error.responseJSON.message && !error.responseJSON.errors){
+            errorList += `<li> <strong>- </strong> ${error.responseJSON.message}</li>`;
        }
         
         let html = `<div class="alert alert-danger alert-dismissible alert-mg-b-0" role="alert">

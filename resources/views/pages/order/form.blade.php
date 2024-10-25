@@ -95,7 +95,7 @@
                                     <label>Date of Death</label>
                                     <div class="input-group date nk-int-st">
                                         <span class="input-group-addon"></span>
-                                        <input type="text" class="input-form form-control" readonly value="{{isset($order) ? date('d/m/Y', strtotime($order->date_of_death)) : ''}}" name="date_of_death">
+                                        <input type="text" class="input-form form-control" readonly value="{{isset($order) && $order->date_of_death ? date('d/m/Y', strtotime($order->date_of_death)) : ''}}" name="date_of_death">
                                     </div>
                                 </div>
                             </div>

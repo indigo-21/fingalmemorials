@@ -45,7 +45,7 @@ class OrderController extends Controller
                $data = ["customerData.title_id"      => "<strong>Title</strong>",
                         "customerData.firstname"     => "<strong>First Name</strong>",
                         "customerData.middlename"    => "<strong>Middle Name</strong>",
-                        "customerData.surname"       => "<strong>Surname</strong>",
+                        "customerData.surname"       => "<strong>Last Name</strong>",
                         "customerData.mobile"        => "<strong>Mobile No.</strong>",
                         "customerData.telno"         => "<strong>Tel No.</strong>",
                         "customerData.email"         => "<strong>Email</strong>",
@@ -121,6 +121,7 @@ class OrderController extends Controller
                 "file"                  => "<strong>Document</strong>",
                 "description"           => "<strong>Description</strong>",
                 "document_type_id"      => "<strong>Document Type</strong>",
+                "payment"               => "<strong>Credit Amount</strong>",
             ];
 
            break;
@@ -206,7 +207,7 @@ class OrderController extends Controller
                     "account_type_id"     => ['required'],
                     "date_received"       => ['required'],
                     "payment_type_id"     => ['required'],
-                    "reason"              => ['nullable','min:5','max:50'],
+                    "reason"              => ['required','min:5','max:50'],
                     "payment"             => ['required','numeric','min:1'],
                 ];
             break;
@@ -218,6 +219,8 @@ class OrderController extends Controller
             case 'account_posting_credit':
                 $data = [
                     "date_received"       => ['required'],
+                    "reason"              => ['required','min:5','max:50'],
+                    "payment"             => ['required','numeric','min:1'],
                 ];
             break;
             
@@ -290,29 +293,42 @@ class OrderController extends Controller
             "orders.*", 
         ]);
 
-        $query->whereMonth('orders.order_date', $month)
-        ->whereYear('orders.order_date', $year);
-
+        
         if ($search_field == 'invoice_no') {
             $query->addSelect('account_postings.invoice_number AS invoice_number');
         }
 
-        if ($order_type != 0) {
-            $query->where('order_type_id', $order_type);
-        }
+        // if ($order_type != 0) {
+        //     $query->orWhere('order_type_id', $order_type);
+        // }
 
-        if ($branch != 0) {
-            $query->where('branch_id', $branch);
-        }
+        // if ($branch != 0) {
+        //     $query->orWhere('branch_id', $branch);
+        // }
 
-        if ($invoice_status != 0) {
-            $query->where('status_id', $invoice_status);
-        }
+        // if ($invoice_status != 0) {
+        //     $query->orWhere('status_id', $invoice_status);
+        // }
 
-        if ($search_field && $search_input ) {
+        if ($search_field && $search_input && $invoice_status == 0 && $branch == 0 && $order_type == 0) {
             $query->where($search_column, $search_input);
-        }
 
+        }else {
+            $query->whereMonth('orders.order_date', $month)
+                    ->whereYear('orders.order_date', $year);
+            if(!$search_field && !$search_input && $invoice_status != 0 && $branch == 0 && $order_type == 0){
+                $query->where('status_id', $invoice_status);
+
+            }else if(!$search_field && !$search_input && $invoice_status == 0 && $branch != 0 && $order_type == 0){
+                $query->where('branch_id', $branch);
+    
+            }else if(!$search_field && !$search_input && $invoice_status == 0 && $branch == 0 && $order_type != 0){
+                $query->where('order_type_id', $order_type);
+    
+            }
+
+        }
+        
         $result = !$data ? $query->get() : response()->json($query->get());
        
         return $result;
@@ -841,6 +857,8 @@ class OrderController extends Controller
         if($data["date_of_death"]){
             $date_of_death                  = DateTime::createFromFormat("d/m/Y", $data["date_of_death"]);
             $orderData->date_of_death       = $date_of_death->format("Y-m-d H:i:s");
+        }else{
+            $orderData->date_of_death       = NULL;
         }
         // Setting the column values
         $orderData->order_type_id           = $data["order_type_id"];    
@@ -1015,7 +1033,7 @@ class OrderController extends Controller
                     $ruleType = "account_posting_credit";
                 break;
         }
-
+    
         // VALIDATION
         $request->validate(self::formRule($ruleType), [], self::changeAttributes($ruleType) );
 
@@ -1046,8 +1064,24 @@ class OrderController extends Controller
                 break;
             case '2':
                 # REFUND
-                $accountPostingData->nominal                = "0000";
+                $payment_amount = floatval(str_replace(",", "",$request->payment));  
+
+                // Validate if there was an existing Payment(Credit) value
+                $totalCredits   = AccountPosting::where("order_id",$request->order_id)->sum("credit");
+                $hasCredits     = $totalCredits > 0;
+                if(!$hasCredits ){
+                    abort(400, 'No <strong>Payments</strong> found.');
+                }else if($payment_amount > $totalCredits){
+                    abort(400, '<strong>Refund Amount</strong> is greater than the payment total.');
+                }
+
+                // Validate if there was an existing Payment(Credit) value
+            
+                $accountPostingData->nominal               = "0000";
+                // FOR THE MEANTIME DEBIT MUNA YUNG REFUND
                 $accountPostingData->debit                 = str_replace(",", "",$request->payment); 
+
+                $accountPostingData->reasons               = $request->reason;
 
                 break;
             case '3':
@@ -1067,7 +1101,9 @@ class OrderController extends Controller
             case '4':
                 # CREDITS
                 $accountPostingData->nominal          = "0001";
+                // $accountPostingData->debit            = str_replace(",", "",$request->payment);
                 $accountPostingData->debit            = str_replace(",", "",$request->payment); 
+
                 $accountPostingData->description      = "Credits To: $request->invoice_to - Order No. $order_id";
                 $accountPostingData->reasons           = $request->reason;
 
@@ -1127,7 +1163,8 @@ class OrderController extends Controller
 
         if($from === "job-detail"){
             
-            $order_data->value  = floatval($order_value);
+            $order_data->value      = floatval($order_value);
+            $order_data->balance    = floatval($order_balance);
             $order_data->save() || dd("Error: Updating Order Value"); 
 
         }else{
@@ -1320,6 +1357,7 @@ class OrderController extends Controller
             // Setting Data's on the Email
             $data   = [
                 "customer"    => Customer::findOrFail($orderData->customer_id),
+                "order"       => $orderData,
                 "email_body"  => $email_body,
             ];
             self::attachment_email($email_to, $data ,$attachments);

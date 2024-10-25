@@ -90,14 +90,15 @@
     <table class="top-content" style="">
         <tr>
             <td colspan="2">
-                <h1>Fingal Memorials</h1>
+                <h1>{{$order->branch->name}}</h1>
             </td>
         </tr>
         <tr>
             <td colspan="2" class="p-address">
-                <p>Malahide Road, Balgriffin Dublin D17DR58</p>
-                <p>Tel : 8484843</p>
-                <p>Email : info@fingalmemorials.ie</p>
+                <p>{{$order->branch->address1}} {{$order->branch->address2}} {{$order->branch->address2}} {{$order->branch->county}} {{$order->branch->town}} {{$order->branch->postcode}}</p>
+                <p>Phone : {{$order->branch->phone}} </p>
+                <p>Email : {{$order->branch->email}}</p>
+                <!-- <p>Email : info@fingalmemorials.ie</p> -->
             </td>
         </tr>
         <tr>

@@ -46,10 +46,11 @@ $(document).ready(function() {
                 </tr>
                 `;  
                 data.map((orderData, index) => {
+                    let splitDate   = orderData.order_date.split("-");
                     tableRow += `
                     <tr>
                         <td>${orderData.id}</td>
-                        <td>${orderData.order_date}</td>
+                        <td>${splitDate[2]}/${splitDate[1]}/${splitDate[0]}</td>
                         <td>${orderData.branch_name}</td>
                         <td>${orderData.order_type_name}</td>
                         <td>${orderData.order_headline}</td>

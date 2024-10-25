@@ -149,32 +149,36 @@
     <div class="data-table-area">
         <div class="container">
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
                     <div class="data-table-list">
                         <div class="table-responsive">
                             <table id="data-table-basic" class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Order No.</th>
-                                        <th>Date</th>
-                                        <th>Branch</th>
-                                        <th>Order Type</th>
-                                        <th>Customer</th>
-                                        <th>Created By</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                        <th style="font-size:90%;">Order No.</th>
+                                        <th style="font-size:90%;">Date</th>
+                                        <th style="font-size:90%;">Branch</th>
+                                        <th style="font-size:90%;">Order Type</th>
+                                        <th style="font-size:90%;">Customer</th>
+                                        <th style="font-size:90%;">Deceased Name</th>
+                                        <th style="font-size:90%;">Cemetery List</th>
+                                        <th style="font-size:90%;">Status</th>
+                                        <th style="font-size:90%;">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody id="order_table_row">
                                     @foreach($orders as $order)
                                     <tr>
-                                        <td><a href="{{url('order/edit/general-details')}}/{{$order->id}}">{{$order->id}}</a></td>
-                                        <td>{{ date('d/m/Y', strtotime($order->created_at))}}</td>
-                                        <td>{{$order->branch->name}}</td>
-                                        <td>{{$order->orderType->name}}</td>
-                                        <td>{{$order->customer->firstname}} {{$order->customer->middlename}} {{$order->customer->surname}}</td>
-                                        <td>{{$order->user->firstname}} {{$order->user->lastname}}</td>
-                                        <td>
+                                        <td style="font-size:90%;"><a href="{{url('order/edit/general-details')}}/{{$order->id}}">{{$order->id}}</a></td>
+                                        <td style="font-size:90%;">{{ date('d/m/Y', strtotime($order->created_at))}}</td>
+                                        <td style="font-size:90%;">{{$order->branch->name}}</td>
+                                        <td style="font-size:90%;">{{$order->orderType->name}}</td>
+                                        <td style="font-size:90%;">{{$order->customer->firstname}} {{$order->customer->middlename}} {{$order->customer->surname}}</td>
+                                        <td style="font-size:90%;">{{$order->deceased_name ? $order->deceased_name :  "-"}}</td>
+                                        <td style="font-size:90%;">{{isset($order->cemetery->name) ? $order->cemetery->name : "-" }}</td>
+                                        <!-- <td style="font-size:90%;">{{$order->user->firstname}} {{$order->user->lastname}}</td> -->
+                                        
+                                        <td style="font-size:90%;">
                                             @if($order->status_id == "1")
                                                 <div class="open-order">
                                                     Open Order
@@ -193,7 +197,7 @@
                                                 </div>
                                             @endif
                                         </td>
-                                        <td class="popover-cl-pro">
+                                        <td style="font-size:90%;" class="popover-cl-pro">
                                             <a href="{{url('order/edit/general-details')}}/{{$order->id}}" class="btn btn-primary" data-trigger="hover" data-toggle="popover" data-placement="bottom" data-content="Edit"><i class="fa fa-pencil"></i></a>
                                             <!-- <button class="btn btn-danger" data-trigger="hover" data-toggle="popover" data-placement="bottom" data-content="Delete"><i class="fa fa-trash"></i></button> -->
                                         </td>

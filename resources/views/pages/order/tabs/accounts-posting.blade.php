@@ -77,7 +77,11 @@
                     </div>
                     <div class="nk-int-st mb-20">
                         <label>Details</label>
-                        <input type="text" class="form-control" placeholder="Reason" disabled name="reason">
+                        <input type="text" class="form-control" placeholder="Details" disabled name="reason">
+                    </div>
+                    <div class="nk-int-st mb-20">
+                        <label>Reason</label>
+                        <input type="text" class="form-control" placeholder="Reason" name="reason">
                     </div>
                     <div class="nk-int-st" style="margin-bottom:20px;">
                         <label>Refund Amount</label>
@@ -134,6 +138,10 @@
                     <div class="nk-int-st mb-20">
                         <label>Reason</label>
                         <input type="text" class="form-control" placeholder="Reason" name="reason">
+                    </div>
+                    <div class="nk-int-st" style="margin-bottom:20px;">
+                        <label>Credit Amount</label>
+                        <input type="number" class="form-control" placeholder="Payment" name="payment">
                     </div>
                     <div class="row mt-20">
                         <div class="col-md-12 text-center">

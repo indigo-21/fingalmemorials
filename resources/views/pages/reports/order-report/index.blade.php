@@ -78,7 +78,7 @@
                                     @foreach($orderReports as $orderReport)
                                         <tr>
                                             <td>{{ $orderReport->id }}</td>
-                                            <td>{{ $orderReport->order_date }}</td>
+                                            <td>{{ isset($orderReport->order_date) ? date('d/m/Y', strtotime($orderReport->order_date)) : "-"   }}</td>
                                             <td>{{ $orderReport->branch_name }}</td>
                                             <td>{{ $orderReport->order_type_name }}</td>
                                             <td>{{ $orderReport->order_headline }}</td>

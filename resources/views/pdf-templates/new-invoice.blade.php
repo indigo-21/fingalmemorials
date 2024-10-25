@@ -129,7 +129,8 @@
             <td colspan="2" class="p-address">
                 <p>{{$order->branch->address1}} {{$order->branch->address2}} {{$order->branch->address2}} {{$order->branch->county}} {{$order->branch->town}} {{$order->branch->postcode}}</p>
                 <p>Phone : {{$order->branch->phone}} </p>
-                <p>Email : info@fingalmemorials.ie</p>
+                <p>Email : {{$order->branch->email}}</p>
+                <!-- <p>Email : info@fingalmemorials.ie</p> -->
             </td>
         </tr>
         <tr>

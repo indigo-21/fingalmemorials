@@ -85,6 +85,11 @@
                                     <input type="text" name="phone" class="form-control"
                                         value="{{ isset($branch) ? $branch->phone : old('phone')  }}" placeholder="Phone">
                                 </div>
+                                <div class="nk-int-st" style="margin-bottom:20px;">
+                                    <label>Email</label>
+                                    <input type="text" name="email" class="form-control"
+                                        value="{{ isset($branch) ? $branch->email : old('email')  }}" placeholder="Email">
+                                </div>
 
                             </div>
                         </div>
