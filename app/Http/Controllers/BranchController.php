@@ -104,7 +104,7 @@ class BranchController extends Controller
             "postcode"          => ['nullable','min:2','max:50','string'],
             "town"              => ['nullable','min:2','max:50','string'],
             "county"            => ['nullable','min:2','max:50','string'],
-            "phone"             => ['nullable','regex:/^[0-9*#+]+$/','min:2','max:20'],
+            "phone"             => ['nullable','regex:/^[0-9*#+-]+$/','min:2','max:20'],
             "email"             => ['nullable','email','string','min:5','max:900', Rule::unique('branches')->ignore($id ? $id : "")->whereNull('deleted_at')],
         ];
     }

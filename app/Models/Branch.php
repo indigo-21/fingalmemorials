@@ -21,6 +21,7 @@ class Branch extends Model
         'town',
         'county',
         'phone',        
+        'email',        
         'created_by',
         'updated_by',
         'deleted_by'
