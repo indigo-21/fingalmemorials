@@ -95,9 +95,12 @@ ul.notika-main-menu-dropdown .active {
     border-bottom: 1px solid #8981d8;
 }
 .btn-light {
-    color: #fff;
+    /* color: #fff;
     background-color: #b6bfe3;
-    border-color: #b6bfe3;
+    border-color: #b6bfe3; */
+    color: #8965dc;
+    background-color: #ffffff;
+    border: 2px solid #8965dc;
 }
 .btn-light:hover {
     color: #fff;
@@ -319,6 +322,24 @@ ul.order-tabs li.active a, .order-tabs li:focus a, .order-tabs li:hover a{
     animation: l3 1s infinite linear;
     margin: auto;
   }
+
+  .loader-button {
+    width: 20px;
+    padding: 8px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: white;
+    --_m: 
+      conic-gradient(#0000 10%,#8965DC),
+      linear-gradient(#8965DC 0 0) content-box;
+    -webkit-mask: var(--_m);
+            mask: var(--_m);
+    -webkit-mask-composite: source-out;
+            mask-composite: subtract;
+    animation: l3 1s infinite linear;
+    margin: auto;
+  }
+
   @keyframes l3 {to{transform: rotate(1turn)}}
 
   #job_details_buttons .form-btn, .account_posting_buttons .form-btn{

@@ -277,6 +277,7 @@ class OrderController extends Controller
 
         $query = Order::leftJoin("customers",       "orders.customer_id",   "=",    "customers.id")
                         ->leftJoin("order_types",   "orders.order_type_id" ,"=",    "order_types.id")
+                        ->leftJoin("cemeteries",    "orders.cemetery_id",   "=",    "cemeteries.id")
                         ->leftJoin("branches",      "orders.branch_id",     "=",    "branches.id")
                         ->leftJoin("users",         "orders.created_by",    "=",    "users.id");
 
@@ -285,10 +286,13 @@ class OrderController extends Controller
         }
 
         $query->select([
-            DB::raw("CONCAT(customers.firstname, ' ', customers.middlename, ' ', customers.surname) AS fullname"),
             DB::raw("DATE_FORMAT(orders.order_date, '%m/%d/%Y') AS order_date_format"),
+            "customers.firstname AS customer_firstname",
+            "customers.middlename AS customer_middlename",
+            "customers.surname AS customer_surname",
             "order_types.name AS order_type",
             "branches.name AS branch_name",
+            "cemeteries.name AS cemetery_name",
             DB::raw("CONCAT(users.firstname,' ', users.lastname) AS author_name"),
             "orders.*", 
         ]);
@@ -1045,7 +1049,8 @@ class OrderController extends Controller
         $accountPostingData->order_id           = $request->order_id;
         $accountPostingData->payment_type_id    = $request->payment_type_id;
         $accountPostingData->payment            = str_replace(",", "", $request->payment);
-        $accountPostingData->description        = $request->reason;
+        $accountPostingData->description        = $request->description;
+        
         
         // HERE
 
@@ -1077,7 +1082,7 @@ class OrderController extends Controller
 
                 // Validate if there was an existing Payment(Credit) value
             
-                $accountPostingData->nominal               = "0000";
+                $accountPostingData->nominal               = "SP";
                 // FOR THE MEANTIME DEBIT MUNA YUNG REFUND
                 $accountPostingData->debit                 = str_replace(",", "",$request->payment); 
 
@@ -1100,9 +1105,9 @@ class OrderController extends Controller
                 break;
             case '4':
                 # CREDITS
-                $accountPostingData->nominal          = "0001";
+                $accountPostingData->nominal          = "SC";
                 // $accountPostingData->debit            = str_replace(",", "",$request->payment);
-                $accountPostingData->debit            = str_replace(",", "",$request->payment); 
+                $accountPostingData->credit            = str_replace(",", "",$request->payment); 
 
                 $accountPostingData->description      = "Credits To: $request->invoice_to - Order No. $order_id";
                 $accountPostingData->reasons           = $request->reason;
@@ -1117,7 +1122,7 @@ class OrderController extends Controller
         // HERE
         $accountPostingData->account_type_id    = $request->account_type_id;
 
-        if($request->invoice_to){
+        if($request->invoice_to && !isset($request->reason)){
             $getInvoice     = AccountPosting::whereNotNull('invoice_number')->orderBy("id","desc")->first();
 
             $lastInvoice    = floatval($getInvoice ? $getInvoice->invoice_number : "0") + 1;
@@ -1171,8 +1176,10 @@ class OrderController extends Controller
             #ACCOUNT POSTING
 
             // ALTER THE VALUE OF THE BALANCE WHEN ITS REFUND
-            if($data->account_type_id == 2){
+            if($data->account_type_id == 2 ){
                 $order_balance = floatval($order_data->balance) + floatval($data->payment);
+            }else if($data->account_type_id == 4 ){
+                $order_balance = floatval($order_data->balance) - floatval($data->payment);
             }
             // END ALTER THE VALUE OF THE BALANCE WHEN ITS REFUND
 
@@ -1425,7 +1432,8 @@ class OrderController extends Controller
                     
                     
                     $data["jobDetails"]         = $jobDetails;
-                    $data["accountPostings"]    = AccountPosting::where("order_id", $order_id)->first();
+                    $data["accountPostings"]    = AccountPosting::where("order_id", $order_id)
+                                                                ->where("account_type_id", "3")->first();
                     $data["orderBalance"]       = $orderBalance == $jobValue ? 0 : $orderBalance;
                     $data["totalAdditional"]    = $totalAdditional;
                     $data["totalNet"]           = $totalNet;
@@ -1436,7 +1444,6 @@ class OrderController extends Controller
                     
 
                     $pdf                        = PDF::loadView("pdf-templates.new-invoice", $data);
-                
                     $filename                   = "Invoice-".$order_id.".pdf";
                     
                 break;

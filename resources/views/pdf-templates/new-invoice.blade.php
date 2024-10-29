@@ -152,16 +152,19 @@
     </table>
     <table class="content">
         <tbody class="main-content">
-
             @foreach($jobDetails as $jobDetail)
                 <tr>
-                    <td class="job">
-                        <p>{{ $jobDetail->headstone_shape }} - {{ $jobDetail->chipping_color }}
+                    <td colspan="2" style="border: 1px solid #000; padding:10px 20px;">
+                        <div style="display: flex;justify-content: center;align-items: center;">
+                            <div class="job">
+                            {{ $jobDetail->headstone_shape }} - {{ $jobDetail->chipping_color }}
+                            <br>
                             <small>{{$jobDetail->details_of_work}}</small>
-                        </p>
-                    </td>
-                    <td class="value">
-                        <p>{{number_format($jobDetail->job_cost, 2)}}</p>
+                            </div>
+                            <div class="value">
+                                <p>{{number_format($jobDetail->job_cost, 2)}}</p>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             @endforeach

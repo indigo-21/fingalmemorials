@@ -29,9 +29,9 @@
                                 <option value="{{$paymentType->id}}" 
 
                                         @if($hasInvoice)
-                                            reason="Payment Received by {{$paymentType->name}}"
+                                            description="Payment Received by {{$paymentType->name}}"
                                         @else
-                                            reason="Deposit paid by {{$paymentType->name}}"
+                                            description="Deposit paid by {{$paymentType->name}}"
                                         @endif
                                     
                                     >{{$paymentType->name}}</option>
@@ -40,7 +40,7 @@
                     </div>
                     <div class="nk-int-st mb-20">
                         <label>Details</label>
-                        <input type="text" class="form-control" placeholder="Details" disabled name="reason">
+                        <input type="text" class="form-control" placeholder="Details" disabled name="description">
                     </div>
                     <div class="nk-int-st" style="margin-bottom:20px;">
                         <label>Payment</label>
@@ -71,13 +71,13 @@
                         <select class="selectpicker payment-type" data-placeholder="Choose a Country..." name="payment_type_id">
                             <option disabled selected value="">- Select Payment Type</option>
                             @foreach($paymentTypes as $paymentType)
-                                <option value="{{$paymentType->id}}" reason="Refund paid by {{$paymentType->name}}">{{$paymentType->name}}</option>
+                                <option value="{{$paymentType->id}}" description="Refund paid by {{$paymentType->name}}">{{$paymentType->name}}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="nk-int-st mb-20">
                         <label>Details</label>
-                        <input type="text" class="form-control" placeholder="Details" disabled name="reason">
+                        <input type="text" class="form-control" placeholder="Details" disabled name="description">
                     </div>
                     <div class="nk-int-st mb-20">
                         <label>Reason</label>
@@ -166,12 +166,13 @@
                                     <th>Type</th>
                                     <th>Inv/Cred No.</th>
                                     <th>Details</th>
+                                    <th>Reasons</th>
                                     <th>Debit</th>
                                     <th>Credit</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="account-posting-body">
                                 @foreach($accountPostings as $accountPosting)
                                     <tr>
                                         <td>{{$loop->index + 1 }}</td>
@@ -200,11 +201,14 @@
                                         <td>{{$accountPosting->invoice_number ? $accountPosting->invoice_number : "-"}}</td>
                                         <td>
                                             @if($accountPosting->description)
-                                                <span class="reason" reasons="{{$accountPosting->reasons}}"> {{$accountPosting->description}}<span>
+                                                <span class="description" description="{{$accountPosting->description}}"> {{$accountPosting->description}}<span>
                                             @else
-                                                <span class="reason" reasons="{{$accountPosting->reasons}}"> Invoice Ord No. {{$accountPosting->order_id}}  <span>
+                                                <span class="description" description="{{$accountPosting->description}}"> Invoice Ord No. {{$accountPosting->order_id}}  <span>
                                             @endif
                                             
+                                        </td>
+                                        <td>
+                                            <span class="reason" reasons="{{$accountPosting->reasons}}"> {{$accountPosting->reasons ?? "-"}}  <span>
                                         </td>
                                         <td>{{number_format($accountPosting->debit, 2)}}</td>
                                         <td>{{number_format($accountPosting->credit,2)}}</td>

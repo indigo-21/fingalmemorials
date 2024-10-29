@@ -75,14 +75,15 @@ $(document).ready(function(){
 
                                 table_row       += `
                                                         <tr>
-                                                            <td><a href="${SYSTEM_URL}/order/edit/general-details/${data.id}">${data.id}</a></td>
-                                                            <td>${data.order_date_format}</td>
-                                                            <td>${data.branch_name}</td>
-                                                            <td>${data.order_type}</td>
-                                                            <td>${data.fullname}</td>
-                                                            <td>${data.author_name}</td>
-                                                            <td>${order_status}</td>
-                                                            <td class="popover-cl-pro">
+                                                            <td style="font-size:90%;text-align:center;"><a href="${SYSTEM_URL}/order/edit/general-details/${data.id}">${data.id}</a></td>
+                                                            <td style="font-size:90%;">${data.order_date_format}</td>
+                                                            <td style="font-size:90%;">${data.branch_name}</td>
+                                                            <td style="font-size:90%;">${data.order_type}</td>
+                                                            <td style="font-size:90%;">${data.customer_firstname} ${data.customer_middlename || ""} ${data.customer_surname}</td>
+                                                            <td style="font-size:90%;">${data.deceased_name || ""}</td>
+                                                            <td style="font-size:90%;">${data.cemetery_name || "-"}</td>
+                                                            <td style="font-size:90%;">${order_status}</td>
+                                                            <td class="popover-cl-pro" style="font-size:90%;">
                                                                 <a href="${SYSTEM_URL}/order/edit/general-details/${data.id}" class="btn btn-primary" data-trigger="hover" data-toggle="popover" data-placement="bottom" data-content="Edit"><i class="fa fa-pencil"></i></a>
                                                             </td>
                                                         </tr>

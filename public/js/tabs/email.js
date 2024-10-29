@@ -64,7 +64,10 @@ function sendOrderEmail(){
             contentType: false,
             processData: false,
             beforeSend: function(){
-                
+                $(".send-email").attr("disabled", true);
+                let divLoader = `
+                    <div class="loader-button"></div>`;
+                $(".loader-div").html(divLoader);
             },
             success:function(data){
                 let order_id = data;

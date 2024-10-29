@@ -19,8 +19,8 @@ $(document).ready(function(){
     });
 
     $(document).on("change",".payment-type", function(){
-        let reason  = $(this).find(":selected").attr("reason");
-        $(this).closest(".tab-form-content").find("[name=reason]").val(reason);
+        let description  = $(this).find(":selected").attr("description");
+        $(this).closest(".tab-form-content").find("[name=description]").val(description);
     });
 
     $(document).on("click", ".add-account-posting", function(){
@@ -134,6 +134,13 @@ $(document).ready(function(){
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             data,
+            beforeSend:function(){
+                let tableRow = `
+                <tr>
+                    <td  colspan="9"><div class="loader"></div></td>
+                </tr>`;
+                $(".account-posting-body").html(tableRow);
+            },
             url: `${SYSTEM_URL}/order/create/modifyAccountPosting`,
             success:function(data){
                 let order_id = data.order_id;

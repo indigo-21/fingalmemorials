@@ -169,7 +169,7 @@
                                 <tbody id="order_table_row">
                                     @foreach($orders as $order)
                                     <tr>
-                                        <td style="font-size:90%;"><a href="{{url('order/edit/general-details')}}/{{$order->id}}">{{$order->id}}</a></td>
+                                        <td style="font-size:90%;text-align:center;"><a href="{{url('order/edit/general-details')}}/{{$order->id}}">{{$order->id}}</a></td>
                                         <td style="font-size:90%;">{{ date('d/m/Y', strtotime($order->created_at))}}</td>
                                         <td style="font-size:90%;">{{$order->branch->name}}</td>
                                         <td style="font-size:90%;">{{$order->orderType->name}}</td>

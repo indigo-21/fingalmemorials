@@ -84,6 +84,20 @@
     </style>
 </head>
 
+@if(!isset($account_postings) && $accountPosting->account_type_id == 2)
+    @props([
+            'titleReceipt' => 'Refund',
+            'statementAmount' => $accountPosting->debit,
+        ])
+@else
+    @props([
+            'titleReceipt' => 'Payment',
+            'statementAmount' => $accountPosting->credit ?? '0',
+        ])
+@endif
+
+
+
 <body>
     <table class="top-content" style="">
         <tr>
@@ -101,7 +115,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <h3 class="title-receipt">Fingal Receipt Statement</h3>
+                <h3 class="title-receipt">{{$order->branch->name}} {{$titleReceipt}} Statement </h3>
             </td>
         </tr>
         <tr>
@@ -171,7 +185,7 @@
                                         <p>{{$accountPosting->payment_type->name}}</p>
                                     </td>
                                     <td>
-                                        <p>{{number_format($accountPosting->credit, 2)}}</p>
+                                        <p>{{number_format($statementAmount, 2)}}</p>
                                     </td>
                                     <td>
                                         <p>Deposit paid by {{$accountPosting->payment_type->name}}</p>

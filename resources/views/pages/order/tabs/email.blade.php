@@ -64,10 +64,13 @@
                 </div>
                 <div class="row mb-20">
                     <div class="col-md-12 text-center">
-                        <div class="form-btn">
-                            <button class="btn btn-light btn-icon-notika waves-effect" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-icon-notika waves-effect send-email"
-                                type="button">Send</button>
+                        <div class="form-btn" style="display: flex;align-items: center;justify-content: center;">
+                            <button class="btn btn-light btn-icon-notika waves-effect" style="margin-right:5px;" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-icon-notika waves-effect send-email" style="display: flex;align-items: center;justify-content: center;" type="button">
+                                <div>Send</div>
+                                    &nbsp;
+                                <div class="loader-div"></div>
+                            </button>
                         </div>
                     </div>
                 </div>
