@@ -219,7 +219,7 @@ class OrderController extends Controller
             case 'account_posting_credit':
                 $data = [
                     "date_received"       => ['required'],
-                    "reason"              => ['required','min:5','max:50'],
+                    "reason"              => ['required','min:2','max:50'],
                     "payment"             => ['required','numeric','min:1'],
                 ];
             break;
@@ -1238,13 +1238,14 @@ class OrderController extends Controller
                 ->withJobValue($jobValue);
     }
 
+
     public function printReceipt($order_id, $account_posting_id, $is_view = false ){
 
         $order          = Order::findOrFail($order_id);
         $customer       = Customer::findOrFail($order->customer_id);
         $accountPosting = AccountPosting::findOrFail($account_posting_id);
         $jobDetails     = JobDetail::where("order_id",$order_id)->get();
-
+        $isCreditNote   = $accountPosting->account_type_id == "4";
 
         $jobValue       = $jobDetails->sum("gross_amount");
         $payments       = AccountPosting::where("order_id",$order_id)->get()->sum("credit");
@@ -1255,7 +1256,9 @@ class OrderController extends Controller
             self::createPrintHistory($order_id,"Receipt", url('/order/receipt/')."/".$order_id."/".$account_posting_id );
         }
 
-        return view('pdf-templates.receipt')
+        $view_page  =  $isCreditNote ? "pdf-templates.credit-note" : "pdf-templates.receipt";
+
+        return view($view_page)
                 ->withOrder($order)
                 ->withCustomer($customer)
                 ->withJobValue($jobValue)
