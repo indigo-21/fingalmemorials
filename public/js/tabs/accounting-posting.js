@@ -31,6 +31,7 @@ $(document).ready(function(){
         let date_received       = thisForm.find("[name=date_received]").val();   
         let payment_type_id     = thisForm.find("[name=payment_type_id]").find(":selected").val();   
         let reason              = thisForm.find("[name=reason]").val();   
+        let description         = thisForm.find("[name=description]").val();   
         let payment             = thisForm.find("[name=payment]").val();   
         let invoice_to          = thisForm.find("[name=invoice_to]").val();
         let isInsert            = !account_posting_id ? true : false;
@@ -40,7 +41,7 @@ $(document).ready(function(){
         }
 
         let data = {
-            order_id,account_posting_id, account_type_id, date_received, payment_type_id,reason,payment,invoice_to
+            order_id,account_posting_id, account_type_id, date_received, payment_type_id,description,reason,payment,invoice_to
         };
         
         if($("#order-value").val() == "0.00"){

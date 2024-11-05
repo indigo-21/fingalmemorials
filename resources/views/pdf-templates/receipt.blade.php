@@ -172,7 +172,8 @@
                                             <p>{{number_format($account_posting->credit, 2)}}</p>
                                         </td>
                                         <td>
-                                            <p>Deposit paid by {{$account_posting->payment_type->name}}</p>
+                                            <p>{{$account_posting->description}}</p>
+                                            <!-- <p>Deposit paid by {{$account_posting->payment_type->name}}</p> -->
                                         </td>
                                     </tr>
                                 @endforeach
@@ -188,7 +189,8 @@
                                         <p>{{number_format($statementAmount, 2)}}</p>
                                     </td>
                                     <td>
-                                        <p>Deposit paid by {{$accountPosting->payment_type->name}}</p>
+                                        <!-- <p>Deposit paid by {{$accountPosting->payment_type->name}}</p> -->
+                                        <p>{{$accountPosting->description}}</p>
                                     </td>
                                 </tr>
                             @endif

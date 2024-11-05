@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Customer;
 use App\Models\OrderType;
@@ -1193,7 +1194,7 @@ class OrderController extends Controller
 
 
 
-    public function printInvoice( $order_id, $invoice_number, $is_view = false ){
+    public function printInvoice( $order_id, $invoice_number, $is_view = false, $is_download = false ){
       
         $order          = Order::findOrFail($order_id);
         $customer       = Customer::findOrFail($order->customer_id);
@@ -1223,24 +1224,30 @@ class OrderController extends Controller
            self::createPrintHistory($order_id, "Invoice", url('/order/invoice/')."/".$order_id."/".$invoice_number);
        }
         
-       // return view('pdf-templates.invoice')
-       return view('pdf-templates.new-invoice')
-                ->withOrder($order)
-                ->withCustomer($customer)
-                ->withJobDetails($jobDetails)
-                ->withAccountPostings($accountPostings->first())
-                ->withOrderBalance($orderBalance == $jobValue ? 0 : $orderBalance)
-                ->withTotalAdditional($totalAdditional)
-                ->withTotalNet($totalNet)
-                ->withTotalVat($totalVat)
-                ->withTotalZeroRated($totalZeroRated)
-                ->withTotalPayments($payments)
-                ->withJobValue($jobValue);
+       if($is_download){
+            self::createPdf($order_id, "invoice");
+            $filename   = "Invoice-".$order_id.".pdf";
+            $filepath   = Storage::path("pdf/" . $filename);
+            return Response::download($filepath)->deleteFileAfterSend(true);
+        }else{
+            return view('pdf-templates.new-invoice')
+                        ->withOrder($order)
+                        ->withCustomer($customer)
+                        ->withJobDetails($jobDetails)
+                        ->withAccountPostings($accountPostings->first())
+                        ->withOrderBalance($orderBalance == $jobValue ? 0 : $orderBalance)
+                        ->withTotalAdditional($totalAdditional)
+                        ->withTotalNet($totalNet)
+                        ->withTotalVat($totalVat)
+                        ->withTotalZeroRated($totalZeroRated)
+                        ->withTotalPayments($payments)
+                        ->withJobValue($jobValue);
+        }
     }
 
 
-    public function printReceipt($order_id, $account_posting_id, $is_view = false ){
-
+    public function printReceipt($order_id, $account_posting_id, $is_view = false, $is_download = false ){
+        
         $order          = Order::findOrFail($order_id);
         $customer       = Customer::findOrFail($order->customer_id);
         $accountPosting = AccountPosting::findOrFail($account_posting_id);
@@ -1256,15 +1263,59 @@ class OrderController extends Controller
             self::createPrintHistory($order_id,"Receipt", url('/order/receipt/')."/".$order_id."/".$account_posting_id );
         }
 
-        $view_page  =  $isCreditNote ? "pdf-templates.credit-note" : "pdf-templates.receipt";
 
-        return view($view_page)
-                ->withOrder($order)
-                ->withCustomer($customer)
-                ->withJobValue($jobValue)
-                ->withOrderBalance($orderBalance)
-                ->withAccountPosting($accountPosting);
+        $view_page  =  $isCreditNote ? "pdf-templates.credit-note" : "pdf-templates.receipt";
+        
+        // PASS TO VIEW DATA's
+        $data   = [
+            "order" => $order,
+            "customer" => $customer,
+            "jobValue" => $jobValue,
+            "orderBalance" => $orderBalance,
+            "accountPosting" => $accountPosting
+        ];
+
+        if($is_download){
+
+            switch ($accountPosting->account_type_id) {
+                case '4':
+                    # Credit
+                    $filename   = "Credit Statement-".$order_id."_".$account_posting_id.".pdf";
+                break;
+
+                case '2':
+                    # Refund
+                    $filename   = "Refund Statement-".$order_id."_".$account_posting_id.".pdf";
+                break;
+
+                default:
+                    # Payment
+                    
+                    $filename   = "Receipt Statement-".$order_id."_".$account_posting_id.".pdf";
+                break;
+            }
+            
+            // RETRIEVE WHAT TO LOAD VIEW
+            $pdf        = PDF::loadView($view_page, $data);
+            // SAVE THE PDF TO A FOLDER
+            $output     = $pdf->output();
+            Storage::put("pdf/".$filename, $output);
+            // DOWNLOAD FILE
+            $filepath   = Storage::path("pdf/" . $filename);
+            return Response::download($filepath)->deleteFileAfterSend(true);
+            
+        }else{
+            // return view($view_page)
+            //         ->withOrder($order)
+            //         ->withCustomer($customer)
+            //         ->withJobValue($jobValue)
+            //         ->withOrderBalance($orderBalance)
+            //         ->withAccountPosting($accountPosting);
+            return view($view_page, $data);
+        }
+
     }
+
 
     // THIS METHOD IS FOR DOCUMENT SECTION
     public function modifyDocument(Request $request){
@@ -1452,7 +1503,7 @@ class OrderController extends Controller
                 break;
 
                 case 'receipt':
-                        $data["account_postings"]    = AccountPosting::where("order_id", $order_id)
+                        $data["account_postings"]   = AccountPosting::where("order_id", $order_id)
                                                                         ->where("account_type_id", 1)
                                                                         ->get();
                         $pdf                        = PDF::loadView("pdf-templates.receipt", $data);
@@ -1467,8 +1518,6 @@ class OrderController extends Controller
                     break;
             }
             
-
-        
             if(Storage::exists("pdf/".$filename)){
                 Storage::delete(["pdf/".$filename]);
             }

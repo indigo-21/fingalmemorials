@@ -213,29 +213,37 @@
                                         <td>{{number_format($accountPosting->debit, 2)}}</td>
                                         <td>{{number_format($accountPosting->credit,2)}}</td>
                                         <td class="popover-cl-pro">
-                                            @if($accountPosting->account_type_id != "3")
-                                            <button class="btn btn-primary edit-account-posting" data-trigger="hover" data-toggle="popover"
-                                                    orderid="{{$accountPosting->order_id}}" 
-                                                    accountpostingid="{{$accountPosting->id}}"
-                                                    accounttypeid="{{$accountPosting->account_type_id}}"
-                                                    datereceived="{{ date('d/m/Y', strtotime($accountPosting->created_at)) }}"
-                                                    paymenttypeid="{{$accountPosting->payment_type_id}}"
-                                                    payment="{{$accountPosting->payment}}"
-                                            
-                                                data-placement="bottom" data-content="Edit"><i
-                                                    class="fa fa-pencil"></i></button>
-                                            @endif
+                                            <div class="d-flex justify-content-between align-items-center" style="display: flex;justify-content: space-evenly;align-items: center;height: 50px !important;">
+                                                @if($accountPosting->account_type_id != "3")
+                                                <button class="btn btn-primary edit-account-posting" data-trigger="hover" data-toggle="popover"
+                                                        orderid="{{$accountPosting->order_id}}" 
+                                                        accountpostingid="{{$accountPosting->id}}"
+                                                        accounttypeid="{{$accountPosting->account_type_id}}"
+                                                        datereceived="{{ date('d/m/Y', strtotime($accountPosting->created_at)) }}"
+                                                        paymenttypeid="{{$accountPosting->payment_type_id}}"
+                                                        payment="{{$accountPosting->payment}}"
+                                                
+                                                    data-placement="bottom" data-content="Edit"><i
+                                                        class="fa fa-pencil"></i></button>
+                                                @endif
 
-                                            @if($accountPosting->invoice_number)
-                                                <a class="btn btn-primary" target="_blank" href="{{url('/order/invoice/')}}/{{$accountPosting->order_id}}/{{$accountPosting->invoice_number}}" data-trigger="hover" data-toggle="popover"
+                                                @if($accountPosting->invoice_number)
+                                                    <a class="btn btn-primary" target="_blank" href="{{url('/order/invoice/')}}/{{$accountPosting->order_id}}/{{$accountPosting->invoice_number}}" data-trigger="hover" data-toggle="popover"
+                                                        data-placement="bottom" data-content="Print"><i
+                                                            class="fa fa-print"></i></a>
+                                                    <a class="btn btn-primary" target="_blank" href="{{url('/order/invoice/')}}/{{$accountPosting->order_id}}/{{$accountPosting->id}}/false/true" data-trigger="hover" data-toggle="popover"
+                                                    data-placement="bottom" data-content="Download"><i
+                                                        class="fa fa-download"></i></a>
+                                                @else
+                                                    <a class="btn btn-primary" target="_blank" href="{{url('/order/receipt/')}}/{{$accountPosting->order_id}}/{{$accountPosting->id}}" data-trigger="hover" data-toggle="popover"
                                                     data-placement="bottom" data-content="Print"><i
                                                         class="fa fa-print"></i></a>
-                                            @else
-                                                <a class="btn btn-primary" target="_blank" href="{{url('/order/receipt/')}}/{{$accountPosting->order_id}}/{{$accountPosting->id}}" data-trigger="hover" data-toggle="popover"
-                                                data-placement="bottom" data-content="Print"><i
-                                                    class="fa fa-print"></i></a>
-                                            @endif
-                                            
+                                                    <a class="btn btn-primary" target="_blank" href="{{url('/order/receipt/')}}/{{$accountPosting->order_id}}/{{$accountPosting->id}}/false/true" data-trigger="hover" data-toggle="popover"
+                                                    data-placement="bottom" data-content="Download"><i
+                                                        class="fa fa-download"></i></a>
+                                                @endif
+                                                
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach

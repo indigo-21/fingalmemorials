@@ -50,11 +50,11 @@ Route::group(['middleware'=> 'auth'], function(){
 	Route::get('/order/edit/{tab?}/{order_id?}', [OrderController::class, 'edit']);
 	Route::get('order/create/findCustomer/{id}', [OrderController::class, 'findCustomer']);
 
-	Route::get('/order/invoice/{order_id?}/{invoice_number?}/{is_view?}', [OrderController::class, 'printInvoice']);
-	Route::get('/order/receipt/{order_id?}/{job_posting_id?}/{is_view?}', [OrderController::class, 'printReceipt']);
+	Route::get('/order/invoice/{order_id?}/{invoice_number?}/{is_view?}/{is_download?}', [OrderController::class, 'printInvoice']);
+	Route::get('/order/receipt/{order_id?}/{account_posting_id?}/{is_view?}/{is_download?}', [OrderController::class, 'printReceipt']);
 	Route::get('/order/create-customer/{tab?}/{customerID?}', [OrderController::class, 'createWithCustomer']);
 	
-
+	
 	// Route::get('/',[UserController::class, 'index']);
 	
 	Route::get('/users',[UserController::class, 'index']);
