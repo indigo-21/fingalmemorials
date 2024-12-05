@@ -182,6 +182,18 @@ Route::middleware('guest')->group(function(){
 
 
 
+Route::get('/migrateDB', function (){
+	Artisan::call('migrate');
+	dd("Migrated Buddy");
+ }); 
+ 
+ Route::get('/seedDB', function (){
+	 Artisan::call('db:seed');
+	 dd("Seed na Buddy");
+  }); 
+
+
+
 
 
 
