@@ -19,7 +19,7 @@
                                 <div class="input-group date nk-int-st">
                                     <span class="input-group-addon"></span>
                                     <input type="text" class="input-form form-control" 
-                                        value=""
+                                        value="{{date("d/m/Y")}}"
                                         name="sage_date_start" >
                                 </div>
                             </div>
@@ -30,7 +30,7 @@
                                 <div class="input-group date nk-int-st">
                                     <span class="input-group-addon"></span>
                                     <input type="text" class="input-form form-control" 
-                                        value=""
+                                        value="{{date("d/m/Y",strtotime("+1 week"))}}"
                                         
                                         name="sage_date_end" >
                                 </div>
