@@ -92,7 +92,10 @@ $(document).ready(function(){
                 sageTable.clear(); 
                 if(data.length > 0){
                     data.forEach((sageData) => {
-                        let splitDate   = sageData.account_posting_date.split("-");
+                        let splitDate   = sageData.account_posting_date;
+                        let dateObj     = new Date(splitDate);
+                        let formatted   = dateObj.toLocaleDateString("en-GB"); 
+
                         let sage_type   = "SI", tax_type = "T1";
                         if(sageData.account_posting_nominal == "1201"){ 
                             sage_type = "SA"; tax_type = "T0"; 
@@ -103,7 +106,7 @@ $(document).ready(function(){
                         sageTable.row.add([
                             sage_type,
                             sageData.account_number,
-                            `${splitDate[2]}/${splitDate[1]}/${splitDate[0]}`,
+                            `${formatted}`,
                             sageData.order_id,
                             sageData.detail,
                             sageData.detail,
