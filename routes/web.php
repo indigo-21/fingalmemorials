@@ -144,6 +144,8 @@ Route::group(['middleware'=> 'auth'], function(){
 	Route::post('order-report/search',[OrderReportController::class, 'search'])->name('searchOrderReports');
 
 	Route::resource('sage-report', SageReportController::class);
+	Route::post('sage-report/search',[SageReportController::class, 'search'])->name('searchSageReports');
+
 	// Route::resource('sage-report', TitleController::class);
 	// Route::get("/order-report", function(){
 	// 	return view("pages/reports/order-report/index");
