@@ -93,7 +93,7 @@
                                             <td>{{date("d/m/Y", strtotime($sageReport->account_posting_date))}}</td>
                                             <td>{{$sageReport->order_id}}</td>
                                             <td>{{$sageReport->detail}}</td>
-                                            <td>{{$sageReport->detail}}</td>
+                                            <td>{{$sageReport->net_amount}}</td>
                                             <td>
                                                 @if($sageReport->account_posting_nominal == "1201")
                                                     <!-- 1201 - IS_PAYMENT_RECEIVED -->
@@ -106,7 +106,14 @@
                                                     T1
                                                 @endif 
                                             </td>
-                                            <td>{{$sageReport->vat_amount}}</td>
+                                            <td>
+                                                @if($sageReport->account_posting_nominal == "4100")
+                                                    <!-- 4100 - IS_INVOICE -->
+                                                    {{$sageReport->vat_amount}}
+                                                @else
+                                                    0.00
+                                                @endif 
+                                            </td>
                                             <td>{{$sageReport->created_by_user}}</td>
                                         </tr>
                                     @endforeach

@@ -5,9 +5,19 @@ $(document).ready(function(){
     initDataTables();
 
      $(document).on("click", "#searchSage", function(){
-        let start_date = $("[name=sage_date_start]").val();
-        let end_date    = $("[name=sage_date_end]").val();
-        getTableData(start_date, end_date);
+        let sage_date_start  = $("[name=sage_date_start]").val();
+        let sage_date_end    = $("[name=sage_date_end]").val();
+        
+        // getTableData(sage_date_start, sage_date_start);
+        
+        if(sage_date_start || sage_date_end){
+            let start_dates = sage_date_start.split("/");
+            let end_dates   = sage_date_end.split("/");
+            let start_date  = `${start_dates[1]}/${start_dates[0]}/${start_dates[2]}`;
+            let end_date    = `${end_dates[1]}/${end_dates[0]}/${end_dates[2]}`;
+            getTableData(start_date, end_date);
+        }
+
      });
 
      function getTableData(startDate, endDate){
@@ -95,12 +105,14 @@ $(document).ready(function(){
                         let splitDate   = sageData.account_posting_date;
                         let dateObj     = new Date(splitDate);
                         let formatted   = dateObj.toLocaleDateString("en-GB"); 
+                        let vat_amount  = sageData.vat_amount
 
                         let sage_type   = "SI", tax_type = "T1";
                         if(sageData.account_posting_nominal == "1201"){ 
                             sage_type = "SA"; tax_type = "T0"; 
                         }else if(sageData.account_posting_nominal == "2112"){ 
                             sage_type = "BR"; tax_type = "T9"; 
+                            vat_amount = 0;
                         }
                         
                         sageTable.row.add([
@@ -109,9 +121,9 @@ $(document).ready(function(){
                             `${formatted}`,
                             sageData.order_id,
                             sageData.detail,
-                            sageData.detail,
+                            numberFormat(sageData.net_amount),
                             tax_type,
-                            sageData.vat_amount,
+                            numberFormat(vat_amount),
                             sageData.created_by_user
                         ]);
                     });
@@ -146,3 +158,9 @@ $(document).ready(function(){
         });
      }
 });
+
+function numberFormat(numberValue){
+    let data = parseFloat(numberValue);
+    // return data.toLocaleString("en-US", { style: "currency", currency: "USD" });
+    return data.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}

@@ -109,8 +109,8 @@ class SageReportController extends Controller
     }
 
     public function getSageReports($data = false){
-        $start_date = $data ? $data["startDate"] : date("Y-m-d H:i:s");
-        $end_date   = $data ? $data["endDate"] : date("Y-m-d H:i:s",strtotime("+1 week"));
+        $start_date = $data ? $data["startDate"] : date("Y-m-d 00:00:00");
+        $end_date   = $data ? $data["endDate"] : date("Y-m-d 00:00:00",strtotime("+1 week"));
 
         // $data = AccountPosting::select([        "account_postingss.order_id as order_id",
         //                                         "account_postings.description as detail",
@@ -143,7 +143,7 @@ class SageReportController extends Controller
                                         ->where("account_postings.created_at", ">=", $start_date)  // e.g. '2024-02-12 00:00:00'
                                         ->where("account_postings.created_at", "<=", $end_date)    // e.g. '2025-04-09 00:00:00'
                                         ->get();
-
+        
         return $data;
     }
 }
