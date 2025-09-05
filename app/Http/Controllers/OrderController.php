@@ -163,7 +163,7 @@ class OrderController extends Controller
                             "orderData.date_of_death"             => ['nullable','date_format:d/m/Y'],
                             "orderData.order_headline"            => ['nullable','string','min:5','max:50'],
                             "orderData.cemetery_id"               => ['nullable'],
-                            "orderData.plot_grave"                => ['nullable','string','min:3','max:20'],
+                            "orderData.plot_grave"                => ['nullable','string','min:3'],
                             "orderData.grave_space_id"            => ['nullable'],
                             "orderData.special_instructions"      => ['nullable','string','min:5','max:150'],
                             "orderData.source_id"                 => ['nullable'],
