@@ -38,7 +38,7 @@
             </tr>
             <tr class="content">
                 <td>
-                    <h3>Dear {{$customer->title->name}} {{$customer->firstname}} {{$customer->surname}},</h3>
+                    <h3>Dear {{isset($customer->title->name) ? $customer->title->name : '' }} {{$customer->firstname}} {{$customer->surname}},</h3>
                     <p>{{$email_body}}</p>
                     <br>
                 </td>

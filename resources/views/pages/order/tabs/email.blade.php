@@ -10,7 +10,7 @@
             <form action="" enctype="multipart/form-data" class="email-form" orderid="{{ $order->id }}">
                 <div class="nk-int-st mb-20">
                     <label>Email To</label>
-                    <input type="text" class="form-control" placeholder="Email To" value="{{$customer->email}}" disabled name="email_to">
+                    <input type="text" class="form-control" placeholder="Email To" value="{{implode(', ', $emails)}}" disabled name="email_to">
                 </div>
                 <div class="nk-int-st mb-20">
                     <label>Message</label>

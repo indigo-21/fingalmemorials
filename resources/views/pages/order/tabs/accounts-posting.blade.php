@@ -109,7 +109,7 @@
                     </div>
                     <div class="nk-int-st mb-20">
                         <label>Invoice To</label>
-                        <input type="text" class="form-control" disabled placeholder="Reason" name="invoice_to" value="{{$customer->title->name}} {{$customer->firstname}} {{$customer->middlename}} {{$customer->surname}}">
+                        <input type="text" class="form-control" disabled placeholder="Reason" name="invoice_to" value="{{ isset($customer->title->name) ? $customer->title->name : ''}} {{$customer->firstname}} {{$customer->middlename}} {{$customer->surname}}">
                     </div>
                     <div class="row mt-20">
                         <div class="col-md-12 text-center">
@@ -133,7 +133,7 @@
                     </div>
                     <div class="nk-int-st mb-20">
                         <label>Credits To</label>
-                        <input type="text" class="form-control" disabled placeholder="Reason" name="invoice_to" value="{{$customer->title->name}} {{$customer->firstname}} {{$customer->middlename}} {{$customer->surname}}">
+                        <input type="text" class="form-control" disabled placeholder="Reason" name="invoice_to" value="{{ isset($customer->title->name) ? $customer->title->name : ''}} {{$customer->firstname}} {{$customer->middlename}} {{$customer->surname}}">
                     </div>
                     <div class="nk-int-st mb-20">
                         <label>Reason</label>

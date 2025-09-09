@@ -117,7 +117,7 @@
             </tr>
             <tr>
                 <td style="border: 1px solid #000; padding:10px 20px;">
-                    <p><b>Name: </b>{{$customer->title->name}} {{$customer->first_name}} {{$customer->middlename}} {{$customer->surname}} </p>
+                    <p><b>Name: </b>{{isset($customer->title->name) ? $customer->title->name : '' }} {{$customer->first_name}} {{$customer->middlename}} {{$customer->surname}} </p>
                     <p><b>Address: </b>{{$customer->address1}}, {{$customer->town}}, {{$customer->county}}, {{$customer->postcode}}  </p>
                 </td>
                 <td style="border: 1px solid #000; padding:10px 20px;">

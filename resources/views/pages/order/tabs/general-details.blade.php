@@ -237,7 +237,10 @@
                     <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;">
                         <label>Title:</label>
                         <select class="input-form selectpicker" name="title_id">
-                            <option selected disabled >- Title</option>
+                            <option selected disabled >- Title -</option>
+                            <option value="0"
+                                @if (isset($customer)) {{ $customer->title_id == "0" ? 'selected' : '' }} @endif
+                            >- None -</option>
                             @foreach ($titles as $title)
                                 <option value="{{ $title->id }}"
                                     @if (isset($customer)) {{ $customer->title_id == $title->id ? 'selected' : '' }} @endif>
@@ -273,10 +276,37 @@
                     </div>
                     <div class="nk-int-st mb-20">
                         <label>Email</label>
-                        <input type="text" class="input-form form-control " placeholder="Enter Email"
-                            @if (isset($customer)) value="{{ $customer->email }}" @endif name="email">
+                        <input type="text" class="input-form form-control email-input" placeholder="Enter Email"
+                            @if (isset($customer)) value="{{ $customer->customer_emails->first()->email }}" @endif name="email">
+                    </div>
+                    <div class="extra-email-container">
+                       @if (isset($customer))
+                           @if (count($customer->customer_emails) > 1)
+                                @foreach ( $customer->customer_emails as $customer_email)
+                                    @if ($customer->customer_emails->first()->id != $customer_email->id)
+                                        <div class="nk-int-st mb-20 extra-email">
+                                                <label>Email {{ $loop->iteration }} </label>
+                                                <div style="display:flex">
+                                                    <div class="left">
+                                                        <button type="button" class="btn btn-primary btn-icon-notika waves-effect remove_email">
+                                                            <i class="fa fa-minus-circle" aria-hidden="true"></i> 
+                                                        </button>
+                                                    </div>
+                                                    <div class="right" style="width:100%;">
+                                                        <input type="text" class="input-form form-control email-input" placeholder="Enter Email"
+                                                            value="{{$customer_email->email}}" name="email">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    @endif
+                                @endforeach
+                            @endif
+                       @endif
                     </div>
 
+                     <button type="button" id="add_email" class="btn btn-primary btn-icon-notika waves-effect">
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i> 
+                    </button>
                 </div>
                 <div class="col-12 col-md-6">
                     <div class="nk-int-st mb-20">

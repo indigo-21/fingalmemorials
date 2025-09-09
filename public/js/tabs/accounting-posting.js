@@ -92,6 +92,52 @@ $(document).ready(function(){
         changeButtons(div_id);
     });
 
+    $(document).on("click", ".delete-btn", function(){
+        let order_id        = $(this).attr("orderid");
+        let detail_of_work  = $("#payment_type option:selected").text();
+        let data            = { table: $(this).attr("from"), id: $(this).attr("accountpostingid")}
+             Swal.fire({
+                    icon: "warning",
+                    title:"Are you sure?",
+                    text: `Once deleted, you will not be able to recover ${detail_of_work}.`,
+                    showCancelButton: true,
+                    confirmButtonColor: '#8965dc',
+                    confirmButtonText: 'Yes, I am sure!',
+                    cancelButtonText: "No, cancel it!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                }).then((confirmation) => {
+                    if(confirmation.isConfirmed){
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            url: `${SYSTEM_URL}/order/softDeletes`,
+                            type: "POST",
+                            data,
+                            success:function(data){
+                                Swal.fire({
+                                    icon: "success",
+                                    title: `${detail_of_work} is deleted!`,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                }).then(function(){
+                                    window.location.href = `${SYSTEM_URL}/order/edit/accounts-posting/${order_id}`;
+                                    alterForm();
+                                    alterButton();
+                                });
+                            },
+                            error:function(error){
+                                errorMessage(error);
+                            }
+                        });
+                    }else{
+                        Swal("Cancelled", `${detail_of_work} is safe :)`, "error");
+                        
+                    }
+                });
+    })
+
 
 
     
@@ -106,6 +152,7 @@ $(document).ready(function(){
         if(!isInsert){
              html                   =  ` 
                                         <button class="btn btn-light btn-icon-notika waves-effect cancel-account-posting" isupdate="true" type="button">Cancel</button>
+                                        <button class="btn btn-danger btn-icon-notika waves-effect delete-btn" orderid="${order_id}" accountpostingid="${account_posting_id}" from="account-postings" type="button">Delete</button>
                                         <button class="btn btn-primary btn-icon-notika waves-effect add-account-posting" orderid="${order_id}" accountpostingid="${account_posting_id}" type="button">Update</button>
                                     `;
         }

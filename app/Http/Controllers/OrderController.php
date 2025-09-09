@@ -28,6 +28,7 @@ use App\Models\DocumentType;
 use App\Models\Document;
 use App\Models\PrintHistory;
 use App\Models\EmailHistory;
+use App\Models\CustomerEmail;
 use Carbon\Carbon;
 use DB;
 use Mail;
@@ -50,6 +51,10 @@ class OrderController extends Controller
                         "customerData.mobile"        => "<strong>Mobile No.</strong>",
                         "customerData.telno"         => "<strong>Tel No.</strong>",
                         "customerData.email"         => "<strong>Email</strong>",
+                        "customerData.email.2"       => "<strong>Email</strong>",
+                        "customerData.email.3"       => "<strong>Email</strong>",
+                        "customerData.email.4"       => "<strong>Email</strong>",
+                        "customerData.email.5"       => "<strong>Email</strong>",
                         "customerData.address1"      => "<strong>Address 1</strong>",
                         "customerData.address2"      => "<strong>Address 2</strong>",
                         "customerData.address3"      => "<strong>Address 3</strong>",
@@ -137,14 +142,14 @@ class OrderController extends Controller
         switch ($type) {
             case 'customer':
                 $data = [
-                        "customerData.title_id"      => ['required'],
+                        // "customerData.title_id"      => ['required'],
                         "customerData.firstname"     => ['nullable','string'],
                         "customerData.middlename"    => ['nullable','string'],
                         "customerData.surname"       => ['required','string'],
                         "customerData.mobile"        => ['nullable','string','min:5','max:900'],
                         "customerData.telno"         => ['nullable','string','min:5','max:900'],
                         // "customerData.email"         => ['required','email','string','min:5','max:900', Rule::unique('customers', 'email')->ignore($id ? $id : "")],
-                        "customerData.email"         => ['nullable','email','string','max:900'],
+                        "customerData.email.*"       => ['nullable','email','string','max:900'],
                         "customerData.address1"      => ['nullable','string','min:2','max:900'],
                         "customerData.address2"      => ['nullable','string','min:2','max:900'],
                         "customerData.address3"      => ['nullable','string','min:2','max:900'],
@@ -611,8 +616,20 @@ class OrderController extends Controller
 
         $url = 'pages.order.tabs.' . $tab;
 
-        $order          = Order::findOrFail($order_id);
-        $customer       = Customer::findOrFail($order->customer_id);
+        $order              = Order::findOrFail($order_id);
+        $customer           = Customer::findOrFail($order->customer_id);
+        $customer_emails    = $customer->customer_emails;
+        $emails             = [];
+
+        if($customer_emails){
+            foreach ($customer_emails as $key => $customer_email) {
+                $emails[] = $customer_email->email;
+            }
+        }
+
+
+
+        // dd($customer->customer_emails);
 
         // GENERAL DETAILS - JOB DETAILS DATA
         $jobDetails     = JobDetail::where("order_id",$order_id)->get();
@@ -769,6 +786,7 @@ class OrderController extends Controller
                     ->withBranches($branches)
                     ->withOrder($order)
                     ->withCustomer($customer)
+                    ->withEmails($emails)
                     ->withDocumentTypes($documentTypes)
                     ->withDocuments($documents)
                     ->withJobValue($jobValue)
@@ -813,6 +831,22 @@ class OrderController extends Controller
     {
         //
     }
+    
+    // INSERT or UPDAT in `customer_emails` Table
+    public function modifyCustomerEmails($data, $customer_id){
+        CustomerEmail::where("customer_id", $customer_id)->delete();
+
+        $email_data = [];
+
+        for ($i=0; $i < count($data) ; $i++) { 
+            $email_data[] = [
+                "customer_id" => $customer_id,
+                "email"       => $data[$i]
+            ];
+        }
+
+        CustomerEmail::insert($email_data);
+    }
 
     // INSERT OR UPDATE IN `customers` TABLE
     public function modifyCustomer($data, $customer_id = false){
@@ -827,7 +861,7 @@ class OrderController extends Controller
         $customerData->surname            = $data["surname"];
         $customerData->mobile             = $data["mobile"];
         $customerData->telno              = $data["telno"];
-        $customerData->email              = $data["email"];
+        // $customerData->email              = $data["email"];
         $customerData->address1           = $data["address1"];
         $customerData->address2           = $data["address2"];
         $customerData->address3           = $data["address3"];
@@ -844,6 +878,9 @@ class OrderController extends Controller
         
         $result     = $customerData->save() ? $customerData->id : dd("Error found: Back End Issue (Customer Data)");
         $result     = $isInsert ? $result : $customer_id;
+
+        self::modifyCustomerEmails($data["email"], $result);
+        
 
         return $result;
     }
@@ -1373,7 +1410,8 @@ class OrderController extends Controller
 
         $order_id               = $request->order_id;
         $orderData              = Order::findOrFail($order_id);
-        $email_to               = $request->email_to;
+        $email_to               = explode(",", $request->email_to);
+        // $email_to               = $request->email_to;
         $email_body             = $request->email_message;
         $hasOrderDetails        = $request->order_details === "true" ? 1 : 0;
         $hasOrderInscription    = $request->order_inscription === "true" ? 1 : 0;
@@ -1428,7 +1466,8 @@ class OrderController extends Controller
         $emailData          = new EmailHistory;
 
         $emailData->order_id                        = $order_id;
-        $emailData->email_to                        = $email_to;
+        $emailData->email_to                        = implode(", ", $email_to);
+        // $emailData->email_to                        = $email_to;
         $emailData->email_body                      = $email_body;
         $emailData->has_order_attachment            = $hasOrderDetails;
         $emailData->has_inscription_attachment      = $hasOrderInscription;
@@ -1557,6 +1596,28 @@ class OrderController extends Controller
                             $message->attach(public_path("order_attachment/".$attachments["additional_attachment"]));  
                         }
                     });    
+    }
+
+
+    public function softDeletes(Request $request){
+        $id     =   $request->id;
+
+        switch ($request->table) {
+            case 'job-details':
+                $data = $result = JobDetail::findOrFail($id);
+                break;
+            
+            default:
+                # account-postings
+                $data = $result = AccountPosting::findOrFail($id);
+                break;
+        }
+
+        $data->deleted_by = Auth::id();
+        $data->save();
+        $data->delete();
+
+        return Response::json($result);
     }
 
 }

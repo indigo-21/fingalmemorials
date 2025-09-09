@@ -26,7 +26,7 @@ function getEmailForm(){
     let formData                = new FormData;
     let emailForm               = $(".email-form");
     let order_id                = emailForm.attr("orderid");
-    let email_to                = emailForm.find("[name=email_to]").val();
+    let email_to                = emailForm.find("[name=email_to]").val().split(", ");
     let email_message           = emailForm.find("[name=email_message]").val();
     let order_details           = emailForm.find("[name=order_details]").is(":checked");
     let order_inscription       = emailForm.find("[name=order_inscription]").is(":checked");

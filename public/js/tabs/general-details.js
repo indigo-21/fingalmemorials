@@ -10,9 +10,9 @@ const DATE_STRING  = `${MONTH}/${DAY}/${YEAR}`;
 $(document).ready(function(){
 
     if(HAS_INVOICE){
-        $("#general-details").find("input").attr("disabled", true);
-        $("#general-details").find("textarea").attr("disabled", true);
-        $("#general-details").find("select").attr("disabled", true);
+        // $("#general-details").find("input").attr("disabled", true);
+        // $("#general-details").find("textarea").attr("disabled", true);
+        // $("#general-details").find("select").attr("disabled", true);
        
         // EXEPTION
         $("[name=order_complete]").attr("disabled", false);
@@ -27,10 +27,6 @@ $(document).ready(function(){
 
 
 });
-
-
-
-
 
 
 $(document).on("click", "[name=inscription_completed]",function(){
@@ -124,6 +120,19 @@ $(document).on("change","#input-cemetery",function(){
 
         
     });
+
+    $(document).on("click","#add_email", function(){
+        let html = emailContainer();
+
+        $(".extra-email-container").append(html);
+
+    }); 
+    
+    $(document).on("click", ".remove_email", function(){
+        $(this).closest(".extra-email").hide(1500,function(){
+            $(this).remove();
+        })
+    });
 // END Related on CUSTOMER DETAILS
 
 
@@ -151,12 +160,17 @@ $(document).on("change","#input-cemetery",function(){
             order_date:                 $("[name=order_date]").val(),
             special_instructions:       $("[name=special_instructions]").val(),
             notes:                      $("[name=notes]").val(),
-
         };
         return data;
     }
 
     function getCustomerDetails(){
+        let email_array = [];
+
+        $("[name=email]").map((index,item)=>{
+           email_array.push($(item).val());
+        });
+
         let data = {
             title_id:           $("[name=title_id]").val(),
             firstname:          $("[name=firstname]").val(),
@@ -164,7 +178,7 @@ $(document).on("change","#input-cemetery",function(){
             surname:            $("[name=surname]").val(),
             mobile:             $("[name=mobile]").val(),
             telno:              $("[name=telno]").val(),
-            email:              $("[name=email]").val(),
+            email:              email_array,
             account_number :    $("[name=account_number]").val(),
             address1:           $("[name=address1]").val(),
             address2:           $("[name=address2]").val(),
@@ -240,7 +254,7 @@ $(document).on("change","#input-cemetery",function(){
                 });
             },
             error:function(error){
-
+                errorMessage(error);
             }
         });
     });
@@ -271,7 +285,6 @@ function customerForm(disabled = true, hideCustomerForm = false){
 function errorMessage(error){
     let errorArray  = error.responseJSON.errors;
     let errorList   = "";
-
     $.each(errorArray, function(key, value){
         errorList += `<li> <strong>- </strong>${value[0]}</li>`;
     });
@@ -291,4 +304,27 @@ function errorMessage(error){
     document.getElementById('error_container').scrollIntoView({
         behavior: 'smooth'
     });
+}
+
+function emailContainer(){
+    let emailCount = $(".email-input").length;
+
+
+    let html = `
+                <div class="nk-int-st mb-20 extra-email">
+                    <label>Email ${emailCount + 1}</label>
+                    <div style="display:flex">
+                        <div class="left">
+                            <button type="button" class="btn btn-primary btn-icon-notika waves-effect remove_email">
+                                <i class="fa fa-minus-circle" aria-hidden="true"></i> 
+                            </button>
+                        </div>
+                        <div class="right" style="width:100%;">
+                            <input type="text" class="input-form form-control email-input" placeholder="Enter Email"
+                                value="" name="email">
+                        </div>
+                    </div>
+                </div>`;
+
+    return html;
 }

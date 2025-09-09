@@ -62,6 +62,54 @@ $(document).ready(function() {
         
     }); 
 
+    // EVENT FOR DELETING
+
+    $(document).on("click", ".delete-btn", function(){
+        let order_id        = $(this).attr("orderid");
+        let detail_of_work  = $("[name=details_of_work]").val();
+        let data            = { table: $(this).attr("from"), id: $(this).attr("jobdetailid")}
+             Swal.fire({
+                    icon: "warning",
+                    title:"Are you sure?",
+                    text: `Once deleted, you will not be able to recover ${detail_of_work}.`,
+                    showCancelButton: true,
+                    confirmButtonColor: '#8965dc',
+                    confirmButtonText: 'Yes, I am sure!',
+                    cancelButtonText: "No, cancel it!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                }).then((confirmed) => {
+                    if(confirmed){
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            url: `${SYSTEM_URL}/order/softDeletes`,
+                            type: "POST",
+                            data,
+                            success:function(data){
+                                Swal.fire({
+                                    icon: "success",
+                                    title: `${detail_of_work} is deleted!`,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                }).then(function(){
+                                    window.location.href = `${SYSTEM_URL}/order/edit/job-details/${order_id}`;
+                                    alterForm();
+                                    alterButton();
+                                });
+                            },
+                            error:function(error){
+                                errorMessage(error);
+                            }
+                        });
+                    }else{
+                        Swal("Cancelled", `${detail_of_work} is safe :)`, "error");
+                        
+                    }
+                });
+    })
+
     // BUTTONS ACTIONS
     $(document).on("click", ".edit-job-detail",function(){
         // Get Form Data
@@ -188,6 +236,7 @@ $(document).ready(function() {
         if(job_detail_id){
             html            = `<div class="form-btn">
                                     <button class="btn btn-light btn-icon-notika waves-effect edit-cancel" type="button">Cancel</button>
+                                    <button class="btn btn-danger btn-icon-notika waves-effect delete-btn" type="button" from="job-details" jobdetailid="${job_detail_id}" orderid="${order_id}" >Delete</button>
                                     <button class="btn btn-primary btn-icon-notika waves-effect update-job-detail" type="button" orderid="${order_id}" jobdetailid="${job_detail_id}">Update</button>
                                 </div>`;
         }
