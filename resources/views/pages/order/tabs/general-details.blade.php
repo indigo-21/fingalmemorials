@@ -277,7 +277,7 @@
                     <div class="nk-int-st mb-20">
                         <label>Email</label>
                         <input type="text" class="input-form form-control email-input" placeholder="Enter Email"
-                            @if (isset($customer)) value="{{ $customer->customer_emails->first()->email }}" @endif name="email">
+                            @if (isset($customer)) value="{{ $customer->customer_emails->first()->email ?? "" }}" @endif name="email">
                     </div>
                     <div class="extra-email-container">
                        @if (isset($customer))
