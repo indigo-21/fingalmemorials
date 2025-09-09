@@ -46,6 +46,7 @@ Route::group(['middleware'=> 'auth'], function(){
 	Route::match(['post', 'put'], 'order/create/modifyAccountPosting', [OrderController::class, 'modifyAccountPosting']);
 	Route::match(['post', 'put'], 'order/create/modifyDocument', [OrderController::class, 'modifyDocument']);
 	Route::match(['post', 'put'], 'order/create/sendOrderEmail', [OrderController::class, 'sendOrderEmail']);
+	Route::match(['post', 'put'], 'order/softDeletes', [OrderController::class, 'softDeletes']);
 	
 	Route::get('/order/edit/{tab?}/{order_id?}', [OrderController::class, 'edit']);
 	Route::get('order/create/findCustomer/{id}', [OrderController::class, 'findCustomer']);
@@ -181,6 +182,18 @@ Route::middleware('guest')->group(function(){
        return view("contact");
     });
 });
+
+
+
+Route::get('/migrateDB', function (){
+	Artisan::call('migrate');
+	dd("Migrated Buddy");
+ }); 
+ 
+ Route::get('/seedDB', function (){
+	 Artisan::call('db:seed');
+	 dd("Seed na Buddy");
+  }); 
 
 
 
