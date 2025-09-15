@@ -855,7 +855,7 @@ class OrderController extends Controller
     
         $customerData               = $isInsert ? new Customer : Customer::findOrFail($customer_id);
         // Setting the column values
-        $customerData->title_id           = $data["title_id"];
+        $customerData->title_id           = $data["title_id"] != 0 ? $data["title_id"] : NULL;
         $customerData->firstname          = $data["firstname"];
         $customerData->middlename         = $data["middlename"];
         $customerData->surname            = $data["surname"];

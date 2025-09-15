@@ -239,7 +239,7 @@
                         <select class="input-form selectpicker" name="title_id">
                             <option selected disabled >- Title -</option>
                             <option value="0"
-                                @if (isset($customer)) {{ $customer->title_id == "0" ? 'selected' : '' }} @endif
+                                @if (isset($customer)) {{ $customer->title_id == NULL ? 'selected' : '' }} @endif
                             >- None -</option>
                             @foreach ($titles as $title)
                                 <option value="{{ $title->id }}"
