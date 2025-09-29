@@ -68,7 +68,7 @@
                                         <th>Date</th>
                                         <th>Order No.</th>
                                         <th>Details</th>
-                                        <th>Net</th>
+                                        <th>Gross</th>
                                         <th>Tax</th>
                                         <th>VAT</th>
                                         <th>Created By</th>
