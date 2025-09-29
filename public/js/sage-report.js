@@ -121,7 +121,7 @@ $(document).ready(function(){
                             `${formatted}`,
                             sageData.order_id,
                             sageData.detail,
-                            numberFormat(sageData.net_amount),
+                            numberFormat(sageData.gross_amount),
                             tax_type,
                             numberFormat(vat_amount),
                             sageData.created_by_user

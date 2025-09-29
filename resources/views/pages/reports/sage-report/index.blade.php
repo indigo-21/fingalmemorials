@@ -93,7 +93,7 @@
                                             <td>{{date("d/m/Y", strtotime($sageReport->account_posting_date))}}</td>
                                             <td>{{$sageReport->order_id}}</td>
                                             <td>{{$sageReport->detail}}</td>
-                                            <td>{{$sageReport->net_amount}}</td>
+                                            <td>{{$sageReport->gross_amount}}</td>
                                             <td>
                                                 @if($sageReport->account_posting_nominal == "1201")
                                                     <!-- 1201 - IS_PAYMENT_RECEIVED -->

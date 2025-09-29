@@ -134,6 +134,7 @@ class SageReportController extends Controller
                                             DB::raw('(SELECT CONCAT(firstname, " ", lastname) FROM users WHERE users.id = account_postings.created_by) AS created_by_user'),
                                             DB::raw('(SELECT CONCAT(firstname, " ", lastname) FROM users WHERE users.id = account_postings.updated_by) AS updated_by_user'),
                                             DB::raw('(SELECT SUM(net_amount) FROM job_details WHERE job_details.order_id = account_postings.order_id) AS net_amount'),
+                                            DB::raw('(SELECT SUM(gross_amount) FROM job_details WHERE job_details.order_id = account_postings.order_id) AS gross_amount'),
                                             DB::raw('(SELECT SUM(vat_amount) FROM job_details WHERE job_details.order_id = account_postings.order_id) AS vat_amount'),
                                             DB::raw('(SELECT customers.account_number 
                                                     FROM customers 
