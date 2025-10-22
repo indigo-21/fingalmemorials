@@ -25,6 +25,51 @@ $(document).ready(function(){
         modifyDocument(order_id);
     });
 
+    $(document).on("click", ".delete-btn", function(){
+        let order_id                = $(this).attr("orderid");
+        let document_description    = $(this).attr("documentname");
+        let data                    = { table: $(this).attr("from"), id: $(this).attr("documentid")}
+             Swal.fire({
+                    icon: "warning",
+                    title:"Are you sure?",
+                    text: `Once deleted, you will not be able to recover ${document_description}.`,
+                    showCancelButton: true,
+                    confirmButtonColor: '#8965dc',
+                    confirmButtonText: 'Yes, I am sure!',
+                    cancelButtonText: "No, cancel it!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                }).then((confirmed) => {
+                    if(confirmed){
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            url: `${SYSTEM_URL}/order/softDeletes`,
+                            type: "POST",
+                            data,
+                            success:function(data){
+                                Swal.fire({
+                                    icon: "success",
+                                    title: `${document_description} is deleted!`,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                }).then(function(){
+                                    window.location.href = `${SYSTEM_URL}/order/edit/document/${order_id}`;
+                                    alterForm();
+                                    alterButton();
+                                });
+                            },
+                            error:function(error){
+                                errorMessage(error);
+                            }
+                        });
+                    }else{
+                        Swal("Cancelled", `${document_description} is safe :)`, "error");
+                        
+                    }
+                });
+    })
 
     function modifyDocument(order_id){
         let formData    =   new FormData;
@@ -68,8 +113,7 @@ $(document).ready(function(){
 
     }
 
-
-
+   
     function errorMessage(error){
         let errorArray  = error.responseJSON.errors;
         let errorList   = "";

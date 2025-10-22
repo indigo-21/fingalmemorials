@@ -235,7 +235,6 @@ class OrderController extends Controller
                 $data = [
                     "file"                  => ['required',"file"],
                     "description"           => ['required',"string","min:5","max:250"],
-                    // "document_type_id"      => ['required'],
                 ];
 
             break;
@@ -1013,7 +1012,11 @@ class OrderController extends Controller
         //   UPDATE ORDERS VALUE AND BALANCE
         $data   = self::updateOrderValueBalance($order_id, "job-detail", $result);
 
-        return response()->json($data);
+        if(!$data){
+            dd("Error: Updating Order Value");
+        }else{
+            return response()->json($data);
+        }
 
     }
 
@@ -1208,7 +1211,11 @@ class OrderController extends Controller
             
             $order_data->value      = floatval($order_value);
             $order_data->balance    = floatval($order_balance);
-            $order_data->save() || dd("Error: Updating Order Value"); 
+            // print_r(
+            //     ["value" => floatval($order_value), "balance" => floatval($order_balance)]
+            // );
+            // die;
+            $result                 = $order_data->save(); 
 
         }else{
             #ACCOUNT POSTING
@@ -1222,10 +1229,10 @@ class OrderController extends Controller
             // END ALTER THE VALUE OF THE BALANCE WHEN ITS REFUND
 
             $order_data->balance  = floatval($order_balance);
-            $order_data->save() || dd("Error: Updating Order Value"); 
+            $result               = $order_data->save(); 
         }
 
-
+        return $result;
 
     }
 
@@ -1601,21 +1608,27 @@ class OrderController extends Controller
 
     public function softDeletes(Request $request){
         $id     =   $request->id;
-
+        $from   = "documents";
         switch ($request->table) {
             case 'job-details':
-                $data = $result = JobDetail::findOrFail($id);
+                    $data = $result = JobDetail::findOrFail($id);
+                    $from = "job-detail";
                 break;
-            
+            case 'account-postings':
+                    $data = $result = AccountPosting::findOrFail($id);
+                    $from = "account-posting";
+                break;
             default:
-                # account-postings
-                $data = $result = AccountPosting::findOrFail($id);
+                    #type=documents
+                    $data = $result = Document::findOrFail($id);
+                    $from = "documents";
                 break;
         }
 
         $data->deleted_by = Auth::id();
         $data->save();
         $data->delete();
+        $from != "documents" && self::updateOrderValueBalance($result->order_id, $from, $data);
 
         return Response::json($result);
     }

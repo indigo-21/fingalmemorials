@@ -88,6 +88,7 @@ $(document).ready(function() {
                             type: "POST",
                             data,
                             success:function(data){
+                                console.log(data);
                                 Swal.fire({
                                     icon: "success",
                                     title: `${detail_of_work} is deleted!`,

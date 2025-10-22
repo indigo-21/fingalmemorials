@@ -6,7 +6,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-4 col-md-4">
+        <div class="col-lg-12 col-md-4">
             <form action="" enctype="multipart/form-data">
                 <!-- <div class="bootstrap-select fm-cmp-mg" style="margin-bottom:20px;">
                     <label>Document Type:</label>
@@ -19,14 +19,15 @@
                 </div> -->
                 <div class="nk-int-st mb-20">
                     <label>Description</label>
+                    <input type="hidden" class="form-control" name="document_id">
                     <input type="text" class="form-control" placeholder="Headline" name="document_description">
                 </div>
                 <div class="nk-int-st mb-20">
                     <label>Document</label>
-                    <input type="file" class="form-control" placeholder="Headline" name="file">
+                    <input type="file" class="form-control" placeholder="" name="file">
                 </div>
                 <div class="row mt-20">
-                    <div class="col-md-12 text-right">
+                    <div class="col-md-12 text-center" id="documents_buttons">
                         <div class="form-btn">
                             <button class="btn btn-light btn-icon-notika waves-effect" type="button">Cancel</button>
                             <button class="btn btn-primary btn-icon-notika waves-effect add-document"
@@ -36,7 +37,7 @@
                 </div>
             </form>
         </div>
-        <div class="col-lg-8 col-md-8">
+        <div class="col-lg-12 col-md-8">
             <div class="data-table-list">
                 <div class="table-responsive">
                     <table id="data-table-basic" class="table table-striped">
@@ -45,19 +46,24 @@
                                 <th>ID</th>
                                 <th>Document Type</th>
                                 <th>Description</th>
-                                <th>Document</th>
                                 <th>Created by</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="documents-body" orderid="{{ $order->id }}">
                             @foreach ($documents as $document)
                                 <tr>
                                     <td>{{ $loop->index + 1 }}</td>
                                     <td>{{ $document->documentType->name }}</td>
-                                    <td>{{ $document->description }}</td>
                                     <td><a href="{{ url('documents/' . $document->filename) }}"
-                                            target="_blank">{{ $document->filename }}</a></td>
+                                            target="_blank">{{ $document->description  }}</a></td>
                                     <td>{{ $document->user->firstname }} {{ $document->user->lastname }}</td>
+                                    <td>
+                                        <button class="btn btn-danger delete-btn" data-trigger="hover" from="documents" orderid="{{$order->id}}" documentid="{{$document->id}}" documentname="{{$document->description}}"
+                                                data-toggle="popover" data-placement="bottom" data-content="Edit">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

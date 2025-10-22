@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 use App\Models\AccountPosting;
 use App\Models\JobDetail;
 use Illuminate\Http\Request;
-use DB;
-use Response;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
+// use DB;
+// use Response;
 class SageReportController extends Controller
 {
     /**
