@@ -94,9 +94,9 @@
                                             <td>{{$sageReport->order_id}}</td>
                                             <td>{{$sageReport->detail}}</td>
                                             <td>
-                                                @if($sageReport->account_posting_nominal == "4100"):
+                                                @if($sageReport->account_posting_nominal == "4100")
                                                     {{$sageReport->net_amount}}
-                                                @else:
+                                                @else
                                                     {{$sageReport->gross_amount}}
                                                 @endif
                                             </td>
