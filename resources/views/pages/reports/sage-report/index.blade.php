@@ -94,11 +94,23 @@
                                             <td>{{$sageReport->order_id}}</td>
                                             <td>{{$sageReport->detail}}</td>
                                             <td>
-                                                @if($sageReport->account_posting_nominal == "4100")
+                                                
+                                                {{-- @if ($sageReport->account_posting_nominal == "4100"):
                                                     {{$sageReport->net_amount}}
-                                                @else
+                                                @else:
                                                     {{$sageReport->gross_amount}}
-                                                @endif
+                                                @endif --}}
+
+                                                    @if($sageReport->account_posting_nominal == "1201")
+                                                        <!-- 1201 - IS_PAYMENT_RECEIVED -->
+                                                        {{$sageReport->gross_amount}}
+                                                    @elseif($sageReport->account_posting_nominal == "2112")
+                                                        <!-- 2112 - IS_DEPOSIT -->
+                                                        {{$sageReport->gross_amount}}
+                                                    @else
+                                                        <!-- 4100 - IS_INVOICE -->
+                                                        {{$sageReport->net_amount}}
+                                                    @endif
                                             </td>
                                             <td>
                                                 @if($sageReport->account_posting_nominal == "1201")

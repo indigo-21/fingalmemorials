@@ -106,12 +106,17 @@ $(document).ready(function(){
                         let dateObj     = new Date(splitDate);
                         let formatted   = dateObj.toLocaleDateString("en-GB"); 
                         let vat_amount  = sageData.vat_amount
+        
 
-                        let sage_type   = "SI", tax_type = "T1";
+                        let sage_type   = "SI", tax_type = "T1", gross_net = sageData.net_amount;
                         if(sageData.account_posting_nominal == "1201"){ 
-                            sage_type = "SA"; tax_type = "T0"; 
+                            sage_type = "SA"; 
+                            tax_type = "T0";
+                            gross_net = sageData.gross_amount; 
                         }else if(sageData.account_posting_nominal == "2112"){ 
-                            sage_type = "BR"; tax_type = "T9"; 
+                            sage_type = "BR"; 
+                            tax_type = "T9"; 
+                            gross_net = sageData.gross_amount; 
                             vat_amount = 0;
                         }
                         
@@ -121,7 +126,7 @@ $(document).ready(function(){
                             `${formatted}`,
                             sageData.order_id,
                             sageData.detail,
-                            numberFormat(sageData.gross_amount),
+                            numberFormat(gross_net),
                             tax_type,
                             numberFormat(vat_amount),
                             sageData.created_by_user
